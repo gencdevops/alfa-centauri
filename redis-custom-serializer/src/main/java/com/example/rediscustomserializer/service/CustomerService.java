@@ -5,8 +5,7 @@ import com.example.rediscustomserializer.dto.request.CreateCustomerRequestDto;
 import com.example.rediscustomserializer.dto.request.UpdateCustomerRequest;
 import com.example.rediscustomserializer.dto.response.CustomerDto;
 import com.example.rediscustomserializer.exception.CustomerNotFoundException;
-import com.example.rediscustomserializer.model.enums.City;
-import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
