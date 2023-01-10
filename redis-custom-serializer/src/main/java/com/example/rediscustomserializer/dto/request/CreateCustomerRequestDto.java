@@ -4,6 +4,8 @@ package com.example.rediscustomserializer.dto.request;
 import com.example.rediscustomserializer.dto.response.CityDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 
 @NoArgsConstructor
 @Data
+@JsonTypeInfo(use = JsonTypeInfo.Id.NONE)
 public class CreateCustomerRequestDto {
     @NotBlank(message = "Name cannot empty")
     private String name;
