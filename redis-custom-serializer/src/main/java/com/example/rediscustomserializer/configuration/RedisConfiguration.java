@@ -43,13 +43,15 @@ public class RedisConfiguration {
     @Bean("shRedisTemplate")
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setKeySerializer(RedisSerializer.string());
-        template.setValueSerializer(RedisSerializer.java());
+        template.setKeySerializer(RedisSerializer.json());
+        template.setValueSerializer(RedisSerializer.json());
         template.setHashValueSerializer(RedisSerializer.java());
-        template.setHashKeySerializer(RedisSerializer.string());
+        template.setHashKeySerializer(RedisSerializer.json());
         template.setConnectionFactory(redisConnectionFactory());
         return template;
     }
+
+
 
     private RedisStandaloneConfiguration localRedisConnection(){
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();

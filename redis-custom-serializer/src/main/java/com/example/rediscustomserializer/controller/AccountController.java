@@ -5,6 +5,7 @@ import com.example.rediscustomserializer.dto.request.CreateAccountRequest;
 import com.example.rediscustomserializer.dto.request.UpdateAccountRequest;
 import com.example.rediscustomserializer.dto.response.AccountDto;
 import com.example.rediscustomserializer.service.AccountService;
+import groovy.util.logging.Slf4j;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/accounts")
 @AllArgsConstructor
+@Slf4j
 public class AccountController {
 
     private final AccountService accountService;
