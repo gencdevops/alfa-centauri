@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  custom-validation:
+    image: custom-validation
+    build: .
+    ports:
+      - "8080:8080"
