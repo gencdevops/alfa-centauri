@@ -1,6 +1,6 @@
-package com.example.kafkalogbackxml.configuration;
+package com.example.kafkaui.configuration;
 
-import com.example.kafkalogbackxml.dto.HelloRequest;
+import com.example.kafkaui.dto.HelloRequest;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -18,7 +18,7 @@ import java.util.Map;
 @Configuration
 public class KafkaConfig {
 
-    private String bootstrapServer = "127.0.0.1:9094";
+    private String bootstrapServer = "localhost:9094";
 
     @Bean
     public ProducerFactory<String, HelloRequest> producerUserFactory() {
@@ -41,7 +41,7 @@ public class KafkaConfig {
         deserializer.setRemoveTypeHeaders(false);
         deserializer.addTrustedPackages("*");
         deserializer.setUseTypeMapperForKey(true);
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9094");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9094");
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer);
         return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), deserializer);

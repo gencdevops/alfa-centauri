@@ -1,6 +1,6 @@
-package com.example.kafkalogbackxml.messaging;
+package com.example.kafkaui.messaging;
 
-import com.example.kafkalogbackxml.dto.HelloRequest;
+import com.example.kafkaui.dto.HelloRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.annotation.KafkaListener;

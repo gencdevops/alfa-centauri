@@ -1,7 +1,7 @@
-package com.example.kafkalogbackxml.controller;
+package com.example.kafkaui.controller;
 
-import com.example.kafkalogbackxml.dto.HelloRequest;
-import com.example.kafkalogbackxml.messaging.HelloProducer;
+import com.example.kafkaui.dto.HelloRequest;
+import com.example.kafkaui.messaging.HelloProducer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

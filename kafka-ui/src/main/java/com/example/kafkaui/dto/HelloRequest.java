@@ -1,4 +1,4 @@
-package com.example.kafkalogbackxml.dto;
+package com.example.kafkaui.dto;
 
 import lombok.*;
 
