@@ -1,0 +1,6 @@
+spring:
+  kafka:
+    bootstrap-servers:
+      - localhost:9094
+    template:
+      default-topic: turkcell.message.info
