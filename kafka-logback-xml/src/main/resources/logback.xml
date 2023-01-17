@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%date] %highlight([%level]) [%logger{10} %file:%line] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="kafkaAppender" class="com.turkcell.kafkalogbackxml.configuration.kafka.KafkaAppender">
+        <encoder class="com.turkcell.kafkalogbackxml.configuration.kafka.encoding.LayoutKafkaMessageEncoder">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>[%date] %highlight([%level]) [%logger{10} %file:%line] %msg%n</pattern>
+            </layout>
+        </encoder>
+        <topic>turkcell.message.logback</topic>
+        <producerConfig>bootstrap.servers=localhost:9094</producerConfig>
+    </appender>
+
+
+<!--    <logger name="org.apache.kafka" level="INFO"/>-->
+
+    <logger name="com.turkcell.kafkalogbackxml.controller.LogbackController" level="INFO">
+        <appender-ref ref="kafkaAppender" />
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+
+</configuration>
