@@ -12,13 +12,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Slf4j
 public class HelloProducer {
-
-    private static int MESSAGE_COUNT = 0;
-
     private final KafkaTemplate<String, HelloRequest> kafkaTemplate;
 
     public void produce(HelloRequest request) {
-        request.setMessageCount(++MESSAGE_COUNT);
+        HelloRequest.increaseCount();
         kafkaTemplate.send("turkcell.message.chat", request);
         log.info("produce -> " + request);
     }
