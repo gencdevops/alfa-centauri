@@ -1,6 +1,17 @@
 version: "3.8"
 services:
 
+  spring-kafka-ui:
+    container_name: spring-kafka-ui
+    image: spring-kafka-ui
+    build: .
+    ports:
+      - '8080:8080'
+    environment:
+      - KAFKA_SERVER=kafka:9092
+    depends_on:
+      - kafka
+
   kafka:
     image: 'bitnami/kafka:latest'
     container_name: kafka

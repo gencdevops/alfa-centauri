@@ -19,7 +19,7 @@ public class HelloProducer {
 
     public void produce(HelloRequest request) {
         request.setMessageCount(++MESSAGE_COUNT);
-        kafkaTemplate.send("turkcell.message.taner", request);
+        kafkaTemplate.send("turkcell.message.chat", request);
         log.info("produce -> " + request);
     }
 }
