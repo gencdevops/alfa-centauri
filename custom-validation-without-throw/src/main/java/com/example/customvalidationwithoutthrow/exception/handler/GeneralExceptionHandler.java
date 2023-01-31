@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,10 +38,21 @@ public class GeneralExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(433).body(ErrorBody.builder().errorCode(433).errorMessage(collect.toString()).build());
     }
 
+    @Schema(description = "Parameter is not valid")
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorBody> catchViolationException(ConstraintViolationException exception)  {
+        log.error(exception.getLocalizedMessage());
+        StringBuilder collect = exception.getConstraintViolations().stream().collect(StringBuilder::new, (stringBuilder, constraintViolation) -> {
+            stringBuilder.append(constraintViolation.getInvalidValue()).append(":").append(constraintViolation.getMessage());
+        }, StringBuilder::append);
+        return ResponseEntity.status(433).body(ErrorBody.builder().errorCode(433).errorMessage(collect.toString()).build());
+    }
+
     @Schema(description = "The user is already exist")
     @ExceptionHandler(UserAlreadyExistException.class)
     public ResponseEntity<ErrorBody> catchUserAlreadyExistException(UserAlreadyExistException exception)  {
         log.error(exception.getLocalizedMessage());
         return ResponseEntity.status(433).body(ErrorBody.builder().errorCode(433).errorMessage(exception.getLocalizedMessage()).build());
     }
+
 }
