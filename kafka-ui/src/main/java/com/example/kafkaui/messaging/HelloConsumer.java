@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class HelloConsumer {
 
-    @KafkaListener(topics = "turkcell.message.taner",  containerFactory = "kafkaListenerContainerFactory", groupId = "1")
+    @KafkaListener(topics = "turkcell.message.chat",  containerFactory = "kafkaListenerContainerFactory", groupId = "1")
     public void listener(@Payload HelloRequest request) {
         log.info("consume -> " + request);
     }

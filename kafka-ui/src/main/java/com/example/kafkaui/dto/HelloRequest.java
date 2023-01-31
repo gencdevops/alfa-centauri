@@ -11,6 +11,9 @@ public class HelloRequest {
 
     private String message;
     private Long senderId;
-    private int messageCount;
+    private static int messageCount = 0;
 
+    public static void increaseCount() {
+        messageCount++;
+    }
 }
