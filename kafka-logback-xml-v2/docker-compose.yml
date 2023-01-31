@@ -1,16 +1,31 @@
 version: "3.8"
 services:
 
-  spring-kafka-ui:
-    container_name: spring-kafka-ui
-    image: spring-kafka-ui
-    build: .
+#  spring-kafka-logback:
+#    container_name: spring-kafka-logback
+#    image: spring-kafka-logback
+#    build: .
+#    ports:
+#      - '8080:8080'
+#    environment:
+#      - KAFKA_SERVER=kafka:9092
+#      - DB_URL=jdbc:postgresql://postgres:5432/banka
+#      - DB_USERNAME=postgres
+#      - DB_PASSWORD=postgres
+#    depends_on:
+#      - kafka
+#      - postgres
+
+  postgres:
+    image: postgres:15-alpine
+    restart: always
     ports:
-      - '8080:8080'
+      - "5432:5432"
     environment:
-      - KAFKA_SERVER=kafka:9092
-    depends_on:
-      - kafka
+      POSTGRES_DB: banka
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
 
   kafka:
     image: 'bitnami/kafka:latest'
@@ -43,3 +58,9 @@ services:
       - SERVER_PORT=8082
     depends_on:
       - kafka
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - '8081:8080'
