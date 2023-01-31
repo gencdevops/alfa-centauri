@@ -27,13 +27,16 @@
         <producerConfig>bootstrap.servers=localhost:9094</producerConfig>
     </appender>
 
-        <logger name="org.apache.kafka" level="INFO"/>
+    <logger name="org.apache.kafka" level="INFO"/>
+
     <logger name="com.example.kafkalogbackxmlv2.service" level="INFO">
         <appender-ref ref="kafkaAppender" />
     </logger>
+
     <logger name="com.example.kafkalogbackxmlv2.exception.GeneralExceptionAdvisor" level="ERROR">
         <appender-ref ref="kafkaAppender2" />
     </logger>
+
     <root level="INFO">
         <appender-ref ref="STDOUT" />
     </root>
