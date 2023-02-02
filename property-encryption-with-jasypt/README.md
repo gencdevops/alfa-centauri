@@ -5,9 +5,7 @@ Jasypt is a library that provides simple encryption and decryption of configurat
 <h2>Step 1: Add Jasypt Dependency</h2>
 First, add the Jasypt library to your project by adding the following dependency to your <code>'build.gradle'</code> file:
 <br><br>
-<code>
-implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5"
-</code>
+<code>implementation "com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5"</code>
 <br><br>
 <h2>Step 2: Encrypt Properties</h2>
 Next, encrypt the properties you want to keep secure. You can use the Jasypt CLI tool to encrypt the values of your properties. To do this, you'll need to download the Jasypt distribution, extract the contents, and then run the encrypt.sh script.
