@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  jasypt-encryptor:
+    image: jasypt-encryptor
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - JASYPT_ENCRYPTOR_PASSWORD=mypassword
+    depends_on:
+      - db
+  db:
+    image: postgres:14-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: jasypt_example
