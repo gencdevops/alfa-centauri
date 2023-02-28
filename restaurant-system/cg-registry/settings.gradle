@@ -1,0 +1,3 @@
+rootProject.name = 'cg-registry'
+
+include("cg-restaurant-system")

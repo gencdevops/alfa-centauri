@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    username: 'ENC(0imNrlSiMZjS6bb24UN29FxBp2Gbh5Ii)'     #postgres
+    password: 'ENC(FXAfkOuW4XrvcPKYcPT7FA==)'             #12345
+    url: jdbc:postgresql://db/jasypt_example?useSSL=false
+
+jasypt:
+  encryptor:
+    algorithm: PBEWithMD5AndDES
+    iv-generator-classname: org.jasypt.iv.NoIvGenerator
+    password: mypassword
+
+encrypted:
+  value: 'ENC(nowznEXxjSFhWCukgZROcoN+x2qToE64)'
