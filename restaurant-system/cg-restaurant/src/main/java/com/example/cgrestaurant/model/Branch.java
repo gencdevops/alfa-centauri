@@ -1,21 +1,28 @@
 package com.example.cgrestaurant.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
+@Builder
 @EqualsAndHashCode
 @ToString
-//@Entity(name = "BRANCHES")
+@Entity(name = "BRANCHES")
 public class Branch {
 
     // Starbucks
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long branchId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID branchId;
 
     private String branchName;
 
@@ -23,6 +30,5 @@ public class Branch {
 
     private LocalDate updateDate;
 
-
-    private Long supplierId;
+    private UUID supplierId;
 }

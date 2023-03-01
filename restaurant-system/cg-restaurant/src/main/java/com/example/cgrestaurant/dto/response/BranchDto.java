@@ -1,4 +1,4 @@
 package com.example.cgrestaurant.dto.response;
 
-public class BranchDto {
+public record BranchDto(String branchName) {
 }

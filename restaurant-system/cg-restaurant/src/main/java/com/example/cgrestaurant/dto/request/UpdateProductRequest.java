@@ -5,8 +5,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
-public record CreateProductRequest(String productName, BigDecimal defaultPrice, UUID supplierId,
+public record UpdateProductRequest(String productName, BigDecimal defaultPrice,
                                    @Enumerated(EnumType.STRING) OrderStatus orderStatus) {
 }
