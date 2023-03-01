@@ -24,7 +24,7 @@ public class ProductController {
         return null;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<ProductDto>> getAllProducts() {
         return null;
     }

@@ -24,7 +24,7 @@ public class BranchController {
         return null;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<BranchDto>> getAllBranches() {
         return null;
     }

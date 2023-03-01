@@ -22,7 +22,7 @@ public class SupplierController {
         return null;
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<SupplierDto>> getAllSuppliers() {
         return null;
     }
