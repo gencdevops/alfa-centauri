@@ -1,6 +1,6 @@
 package com.example.cgrestaurant.model;
 
-import com.example.cgrestaurant.model.enums.Status;
+import com.example.cgrestaurant.model.enums.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -32,5 +32,5 @@ public class Product {
     private LocalDate updateDate;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private OrderStatus orderStatus;
 }

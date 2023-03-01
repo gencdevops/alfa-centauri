@@ -24,5 +24,6 @@ public class Supplier {
     private String supplierName;
 
     private LocalDate createDate;
+
     private LocalDate updateDate;
 }

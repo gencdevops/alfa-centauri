@@ -16,6 +16,7 @@ public class ProductPrice {
     private UUID productId;
 
     private UUID branchId;
+
     private BigDecimal productPrice;
 
 }
