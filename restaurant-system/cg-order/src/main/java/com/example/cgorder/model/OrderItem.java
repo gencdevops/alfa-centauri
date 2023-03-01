@@ -15,7 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class OrderItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID orderItemId;
 
     private Long productId;
