@@ -13,9 +13,9 @@ import java.util.UUID;
 //@Entity(name = "PRODUCT_PRICE")
 public class ProductPrice {
 
-    private UUID productId;
+    private Long productId;
 
-    private UUID branchId;
+    private Long branchId;
 
     private BigDecimal productPrice;
 

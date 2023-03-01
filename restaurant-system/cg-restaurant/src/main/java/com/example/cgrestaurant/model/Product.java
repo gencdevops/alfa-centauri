@@ -1,31 +1,30 @@
 package com.example.cgrestaurant.model;
 
 import com.example.cgrestaurant.model.enums.OrderStatus;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @EqualsAndHashCode
 @ToString
-@Entity(name = "PRODUCTS")
+//@Entity(name = "PRODUCTS")
 public class Product {
 
-    @Id
-    private UUID productId;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long productId;
 
-    @NotNull
     private String productName;
 
     private BigDecimal defaultPrice;
 
-    private UUID supplierId;
+    private Long supplierId;
 
     private LocalDate createDate;
 

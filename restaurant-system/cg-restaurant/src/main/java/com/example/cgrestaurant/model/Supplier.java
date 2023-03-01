@@ -1,25 +1,26 @@
 package com.example.cgrestaurant.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
 import java.util.UUID;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @EqualsAndHashCode
-@ToString
-@Entity(name = "SUPPLIERS")
+//@Entity(name = "suppliers")
 public class Supplier {
 
 // SHAYA
 
-    @Id
-    private UUID supplierId;
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long supplierId;
 
     private String supplierName;
 

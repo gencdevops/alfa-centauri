@@ -1,4 +1,4 @@
 package com.example.cgrestaurant.dto.request;
 
-public class CreateSupplierRequest {
+public record CreateSupplierRequest(String supplierName) {
 }
