@@ -1,21 +1,19 @@
-package com.example.cgorder.model;
+package com.example.cgorder.client;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@Builder
+public class OrderItemResponseDTO {
+
     private UUID orderItemId;
 
     private Long productId;
@@ -27,9 +25,4 @@ public class OrderItem {
     private BigDecimal unitPrice;
 
     private BigDecimal totalPrice;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", referencedColumnName = "orderId")
-    private Order order;
 }
-

@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "org.openapitools:openapi-generator-gradle-plugin:6.2.1"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.0.3'
@@ -31,11 +42,12 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.4'
+    implementation "org.springdoc:springdoc-openapi-ui:1.6.4"
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     compileOnly 'org.springframework.boot:spring-boot-starter-jdbc'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }

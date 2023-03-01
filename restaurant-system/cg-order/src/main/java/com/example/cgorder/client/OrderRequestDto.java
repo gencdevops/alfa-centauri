@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 public class OrderRequestDto {
-    private List<OrderItem> orderItems;
+    private List<OrderItemRequestDTO> orderItems;
 
     private BigDecimal totalPrice;
 }
