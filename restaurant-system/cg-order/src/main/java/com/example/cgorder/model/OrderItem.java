@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+
 import java.util.UUID;
 
 
@@ -18,6 +19,7 @@ import java.util.UUID;
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+
     private UUID orderItemId;
 
     private Long productId;
@@ -30,8 +32,10 @@ public class OrderItem {
 
     private BigDecimal totalPrice;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName = "orderId")
     private Order order;
+
 }
 
