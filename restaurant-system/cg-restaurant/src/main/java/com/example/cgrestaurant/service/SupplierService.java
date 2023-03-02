@@ -42,7 +42,7 @@ public class SupplierService {
     public List<SupplierDto> getAllSupplier() {
         return repository.findAll()
                 .stream()
-                .map(supplier -> mapper.toSupplierDto(supplier))
+                .map(mapper::toSupplierDto)
                 .toList();
     }
 

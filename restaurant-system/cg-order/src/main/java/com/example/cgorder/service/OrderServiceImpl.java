@@ -1,5 +1,6 @@
 package com.example.cgorder.service;
 
+import com.example.cgorder.client.OrderItemResponseDTO;
 import com.example.cgorder.client.OrderRequestDto;
 import com.example.cgorder.client.OrderResponseDto;
 import com.example.cgorder.exception.OrderNotFoundException;
@@ -35,7 +36,13 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDto getOrderById(UUID id) {
         Order orderEntity = orderRepository.findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
-        return orderMapper.toDto(orderEntity);
+
+        var orderResponseDtos =
+                orderEntity.getOrderItems().stream().map(orderItemMapper::toDto).toList();
+
+        var responseDto = orderMapper.toDto(orderEntity);
+        responseDto.setOrderItems(orderResponseDtos);
+        return responseDto;
     }
 
     @Override
