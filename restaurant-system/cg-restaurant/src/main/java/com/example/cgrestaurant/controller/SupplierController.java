@@ -4,6 +4,7 @@ import com.example.cgrestaurant.dto.request.CreateSupplierRequest;
 import com.example.cgrestaurant.dto.request.UpdateSupplierRequest;
 import com.example.cgrestaurant.dto.response.SupplierDto;
 import com.example.cgrestaurant.service.SupplierService;
+import com.example.cgrestaurant.service.TestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,10 +21,17 @@ import java.util.UUID;
 public class SupplierController {
 
     private final SupplierService service;
+    private final TestService testService;
+
+    @GetMapping("/test")
+    public String testtt() {
+        return testService.createOrderFeign();
+    }
 
     @PostMapping
-    public ResponseEntity<String> createSupplier(@RequestBody CreateSupplierRequest request) {
-        return ResponseEntity.ok(service.createSupplier(request));
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public String createSupplier(@RequestBody CreateSupplierRequest request) {
+        return service.createSupplier(request);
     }
 
     @GetMapping("/{id}")
