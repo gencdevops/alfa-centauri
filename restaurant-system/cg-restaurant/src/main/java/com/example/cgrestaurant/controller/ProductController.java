@@ -20,8 +20,9 @@ public class ProductController {
     private final ProductService service;
 
     @PostMapping
-    public ResponseEntity<String> createProduct(@RequestBody CreateProductRequest request) {
-        return ResponseEntity.ok(service.createProduct(request));
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public String createProduct(@RequestBody CreateProductRequest request) {
+        return service.createProduct(request);
     }
 
     @GetMapping("/{id}")
