@@ -1,6 +1,6 @@
 package com.example.cgrestaurant.model;
 
-import com.example.cgrestaurant.model.enums.OrderStatus;
+import com.example.cgrestaurant.model.enums.ProductStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -33,5 +33,5 @@ public class Product {
     private LocalDate updateDate;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    private ProductStatus productStatus;
 }

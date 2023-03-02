@@ -20,8 +20,9 @@ public class BranchController {
     private final BranchService service;
 
     @PostMapping
-    public ResponseEntity<String> createBranch(@RequestBody CreateBranchRequest request) {
-        return ResponseEntity.ok(service.createBranch(request));
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public String createBranch(@RequestBody CreateBranchRequest request) {
+        return service.createBranch(request);
     }
 
     @GetMapping("/{id}")
