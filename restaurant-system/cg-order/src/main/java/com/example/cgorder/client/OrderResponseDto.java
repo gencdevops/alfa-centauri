@@ -14,9 +14,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class OrderResponseDto {
-    private List<OrderItem> orderItems;
+    private List<OrderItemResponseDTO> orderItems;
 
     private BigDecimal totalPrice;
 }
