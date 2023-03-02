@@ -1,8 +1,7 @@
 package com.example.cgrestaurant.model;
 
-import com.example.cgrestaurant.model.enums.Status;
+import com.example.cgrestaurant.model.enums.OrderStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -12,15 +11,17 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
+@Builder
 @EqualsAndHashCode
 @ToString
 @Entity(name = "PRODUCTS")
 public class Product {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID productId;
 
-    @NotNull
     private String productName;
 
     private BigDecimal defaultPrice;
@@ -32,5 +33,5 @@ public class Product {
     private LocalDate updateDate;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private OrderStatus orderStatus;
 }
