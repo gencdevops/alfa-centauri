@@ -3,12 +3,18 @@ package com.example.cgorder.service;
 import com.example.cgorder.client.OrderRequestDto;
 import com.example.cgorder.client.OrderResponseDto;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 public interface OrderService {
-    OrderResponseDto save(OrderRequestDto orderRequestDto);
 
-    void delete(UUID id);
+    List<OrderResponseDto> getAllOrders();
 
-    OrderResponseDto update(OrderRequestDto orderRequestDto, UUID id);
+    OrderResponseDto getOrderById(UUID id);
+
+    OrderResponseDto createOrder(OrderRequestDto orderRequestDto);
+
+    void deleteOrder(UUID id);
+
 }
