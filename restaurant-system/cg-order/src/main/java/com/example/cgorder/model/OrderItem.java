@@ -19,7 +19,6 @@ import java.util.UUID;
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-
     private UUID orderItemId;
 
     private Long productId;
