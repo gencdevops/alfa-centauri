@@ -33,7 +33,7 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
-    implementation ("com.example:cg-common:1.0-SNAPSHOT")
+    implementation ("com.example:cg-common:1.0-SNAPSHOT") { changing = true }
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
