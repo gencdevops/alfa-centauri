@@ -1,0 +1,142 @@
+version: '3'
+services:
+  filebeat:
+    image: filebeat
+
+    networks:
+      - elk
+    volumes:
+      - /var/lib/docker:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $HOME/app:/var/app
+
+
+  logstash:
+    image: logstash
+    platform: linux/arm64/v8
+    ports:
+      - "5044:5044"
+
+    networks:
+      - elk
+    volumes:
+      - $HOME/app:/var/app
+    depends_on:
+      - elasticsearch
+
+  elasticsearch:
+    image: elasticsearch:6.8.7
+
+    environment:
+      - validate_after_inactivity=0
+      - discovery.type=single-node
+      - max_open_files=65536
+      - max_content_length_in_bytes=100000000
+      - transport.host=elasticsearch
+    volumes:
+      - $HOME/app:/var/app
+
+    networks:
+      - elk
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+
+  kibana:
+    image: kibana:6.8.7
+    platform: linux/x86_64
+    container_name: kibana
+
+    environment:
+      SERVER_NAME: kibana.example.org
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+    volumes:
+      - $HOME/app:/var/app
+    ports:
+      - "5601:5601"
+
+    networks:
+      - elk
+    depends_on:
+      - elasticsearch
+
+
+  ecommerce:
+
+    image: ecommerce
+    # assign a name to this containerr
+    container_name: ecommerce
+    ports:
+      - "8089:8089"
+    volumes:
+      - $HOME/app:/var/app
+    # connect this container to the user-defined network
+    networks:
+      - my-network
+    links:
+      - "logstash:logstash"
+
+    expose:
+      - "8089"
+    depends_on:
+      - kibana
+      - postgresql
+      - redis
+      - zookeeper
+      - broker
+
+    environment:
+      - spring.datasource.url=jdbc:postgresql://postgresql:5432/kullanat
+      - spring.redis.host=redis
+      - spring.redis.port=6379
+      - kafka.group.id=group_id
+      - kafka.bootstrap.servers=broker:29092
+      - kafka.consumer.group.id=group_id
+      - kafka.consumer.enable.auto.commit=true
+      - kafka.consumer.auto.commit.interval.ms=1000
+      - kafka.consumer.auto.offset.reset=earliest
+      - kafka.consumer.max.poll.records=1
+      - server.port=8089
+
+  postgresql:
+    image: postgres:11.1-alpine
+
+    platform: linux/x86_64
+
+    container_name: postgresql
+    volumes:
+      - ./postgresql/:/var/lib/postgresql/data/
+    networks:
+      - my-network
+    environment:
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=kullanat
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - ENV_REDIS_HOST=redis
+      - ENV_REDIS_PORT=6379
+    networks:
+      - my-network
+    ports:
+      - '127.0.0.1:6379:6379/tcp'
+
+    healthcheck:
+      test: redis-cli ping
+      interval: 3s
+      timeout: 5s
+      retries: 5
+
+    volumes:
+      - $HOME/app:/var/app
+    expose:
+      - "6379"
+
+networks:
+  my-network:
+  elk:

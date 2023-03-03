@@ -26,7 +26,6 @@ public class BranchService {
 
     public String createBranch(CreateBranchRequest request) {
         Branch created = mapper.toBranchFromCreateBranchRequest(request);
-        created.setCreateDate(LocalDate.now());
         created = repository.save(created);
         log.info("created: " + created);
         return "Branch başarıyla oluşturuldu. (" + created.getBranchId() + ")";
@@ -49,7 +48,6 @@ public class BranchService {
         repository.findById(id)
                 .map(branch -> {
                     branch.setBranchName(request.branchName());
-                    branch.setUpdateDate(LocalDate.now());
                     repository.save(branch);
                     return branch;
                 })

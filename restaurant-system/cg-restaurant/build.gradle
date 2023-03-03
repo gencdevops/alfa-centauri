@@ -21,6 +21,7 @@ repositories {
 
 ext {
     set('springCloudVersion', "2022.0.0")
+    snippetsDir =  file('build/generated-snippets')
 }
 
 dependencies {
@@ -35,11 +36,19 @@ dependencies {
 
     implementation ("com.example:cg-common:1.0-SNAPSHOT") { changing = true }
 
+
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.6'
+    implementation 'org.springdoc:springdoc-openapi:1.6.6'
+
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    implementation 'org.springframework.kafka:spring-kafka'
 }
 
 dependencyManagement {

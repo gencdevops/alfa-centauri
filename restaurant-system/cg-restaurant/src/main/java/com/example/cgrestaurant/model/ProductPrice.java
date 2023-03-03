@@ -11,7 +11,8 @@ import java.math.BigDecimal;
 @EqualsAndHashCode
 @ToString
 @Embeddable
-//@Entity(name = "PRODUCT_PRICE")
+//@Entity(name = "PRODUCT_PRICE")\@EntityView(User.class)
+
 public class ProductPrice {
 
 //    @ManyToOne

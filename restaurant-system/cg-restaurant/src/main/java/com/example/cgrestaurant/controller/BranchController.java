@@ -5,6 +5,7 @@ import com.example.cgrestaurant.dto.request.UpdateBranchRequest;
 import com.example.cgrestaurant.dto.response.BranchDto;
 import com.example.cgrestaurant.service.BranchService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/branch")
 public class BranchController {
+
+
 
     private final BranchService service;
 
