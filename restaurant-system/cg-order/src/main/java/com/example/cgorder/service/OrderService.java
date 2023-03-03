@@ -1,5 +1,6 @@
 package com.example.cgorder.service;
 
+import com.example.cgorder.client.CardDto;
 import com.example.cgorder.client.OrderRequestDto;
 import com.example.cgorder.client.OrderResponseDto;
 
@@ -13,7 +14,7 @@ public interface OrderService {
 
     OrderResponseDto getOrderById(UUID id);
 
-    OrderResponseDto createOrder(OrderRequestDto orderRequestDto);
+    OrderResponseDto createOrder(OrderRequestDto orderRequestDto, CardDto cardDto);
 
     void deleteOrder(UUID id);
 

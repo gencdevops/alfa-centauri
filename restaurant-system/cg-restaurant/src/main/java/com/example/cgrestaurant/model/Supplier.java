@@ -1,12 +1,14 @@
 package com.example.cgrestaurant.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -16,10 +18,11 @@ import java.util.UUID;
 @Builder
 @EqualsAndHashCode
 @ToString
+@EntityListeners(AuditingEntityListener.class)
 @Entity(name = "suppliers")
 public class Supplier {
 
-// SHAYA
+// SHAYA CHAIN
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -28,7 +31,16 @@ public class Supplier {
 
     private String supplierName;
 
-    private LocalDate createDate;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdDateTime;
 
-    private LocalDate updateDate;
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime changeDayLastTime;
+
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Branch> branches;
+
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Product> products;
 }
