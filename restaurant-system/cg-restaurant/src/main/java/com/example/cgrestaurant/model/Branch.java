@@ -11,13 +11,10 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Builder
-@EqualsAndHashCode
-@ToString
+@Data
 @EntityListeners(AuditingEntityListener.class)
-@Entity(name = "BRANCHES")
+@Entity()
 public class Branch {
 
     // Starbucks
@@ -37,4 +34,6 @@ public class Branch {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id", referencedColumnName = "supplierId")
     private Supplier supplier;
+
+
 }

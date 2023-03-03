@@ -27,7 +27,6 @@ public class SupplierService {
 
     public String createSupplier(CreateSupplierRequest request) {
         Supplier created = mapper.toSupplierFromCreateSupplierRequest(request);
-        created.setCreateDate(LocalDate.now());
         created = repository.save(created);
         log.info("created: " + created);
         return "Supplier başarıyla oluşturuldu. (" + created.getSupplierId() + ")";
@@ -50,7 +49,6 @@ public class SupplierService {
         repository.findById(id)
                 .map(supplier -> {
                     supplier.setSupplierName(request.supplierName());
-                    supplier.setUpdateDate(LocalDate.now());
                     repository.save(supplier);
                     return supplier;
                 })

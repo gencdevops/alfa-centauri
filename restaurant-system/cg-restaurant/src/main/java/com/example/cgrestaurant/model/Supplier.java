@@ -12,12 +12,9 @@ import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
-@Getter
 @AllArgsConstructor
-@Setter
 @Builder
-@EqualsAndHashCode
-@ToString
+@Data
 @EntityListeners(AuditingEntityListener.class)
 @Entity(name = "suppliers")
 public class Supplier {
