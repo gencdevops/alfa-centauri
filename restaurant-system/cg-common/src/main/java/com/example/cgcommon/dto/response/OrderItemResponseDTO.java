@@ -1,18 +1,19 @@
-package com.example.cgrestaurant.dto.feign;
+package com.example.cgcommon.dto.response;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderItem {
+@Builder
+public class OrderItemResponseDTO {
+
     private UUID orderItemId;
 
     private Long productId;
@@ -24,7 +25,4 @@ public class OrderItem {
     private BigDecimal unitPrice;
 
     private BigDecimal totalPrice;
-
-    private Order order;
 }
-

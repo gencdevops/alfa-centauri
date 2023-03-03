@@ -21,12 +21,6 @@ import java.util.UUID;
 public class SupplierController {
 
     private final SupplierService service;
-    private final TestService testService;
-
-    @GetMapping("/test")
-    public String testtt() {
-        return testService.createOrderFeign();
-    }
 
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
