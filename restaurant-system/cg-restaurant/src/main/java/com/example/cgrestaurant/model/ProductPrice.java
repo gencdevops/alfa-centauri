@@ -1,5 +1,6 @@
 package com.example.cgrestaurant.model;
 
+import jakarta.persistence.Embeddable;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -9,12 +10,17 @@ import java.math.BigDecimal;
 @Getter
 @EqualsAndHashCode
 @ToString
+@Embeddable
 //@Entity(name = "PRODUCT_PRICE")
 public class ProductPrice {
 
-    private Long productId;
+//    @ManyToOne
+//    @JoinColumn(name = "prodcut_id")
+    private Product productId;
 
-    private Long branchId;
+//    @ManyToOne
+//    @JoinColumn(name = "branch_id")
+    private Branch branchId;
 
     private BigDecimal productPrice;
 

@@ -1,5 +1,6 @@
 package com.example.cgorder.service;
 
+import com.example.cgorder.client.CardDto;
 import com.example.cgorder.client.OrderItemResponseDTO;
 import com.example.cgorder.client.OrderRequestDto;
 import com.example.cgorder.client.OrderResponseDto;
@@ -46,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponseDto createOrder(OrderRequestDto orderRequestDto) {
+    public OrderResponseDto createOrder(OrderRequestDto orderRequestDto, CardDto cardDto) {
         var order = orderMapper.toEntity(orderRequestDto);
         var orderItemList = orderRequestDto.getOrderItems().stream().map(orderItemMapper::toEntity).toList();
         order.setOrderItems(orderItemList);

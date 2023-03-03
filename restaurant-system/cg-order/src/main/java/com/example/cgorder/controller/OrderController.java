@@ -1,5 +1,6 @@
 package com.example.cgorder.controller;
 
+import com.example.cgorder.client.CardDto;
 import com.example.cgorder.client.OrderRequestDto;
 import com.example.cgorder.client.OrderResponseDto;
 import com.example.cgorder.service.OrderService;
@@ -38,8 +39,8 @@ public class OrderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<OrderResponseDto> createOrder(@RequestBody @Valid OrderRequestDto order) {
-        OrderResponseDto createdOrder = orderService.createOrder(order);
+    public ResponseEntity<OrderResponseDto> createOrder(@RequestBody @Valid OrderRequestDto order, CardDto cardDto) {
+        OrderResponseDto createdOrder = orderService.createOrder(order, cardDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
 

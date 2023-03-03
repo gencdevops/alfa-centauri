@@ -1,12 +1,12 @@
 package com.example.cgrestaurant.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -16,6 +16,7 @@ import java.util.UUID;
 @Builder
 @EqualsAndHashCode
 @ToString
+@EntityListeners(AuditingEntityListener.class)
 @Entity(name = "BRANCHES")
 public class Branch {
 
@@ -26,9 +27,14 @@ public class Branch {
 
     private String branchName;
 
-    private LocalDate createDate;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdDateTime;
 
-    private LocalDate updateDate;
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime changeDayLastTime;
 
-    private UUID supplierId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "supplier_id", referencedColumnName = "supplierId")
+    private Supplier supplier;
 }
