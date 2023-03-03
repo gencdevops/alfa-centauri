@@ -25,7 +25,6 @@ public class ProductService {
 
     public String createProduct(CreateProductRequest request) {
         Product created = mapper.toProductFromCreateProductRequest(request);
-        created.setCreateDate(LocalDate.now());
         created = repository.save(created);
         log.info("created: " + created);
         return "Product başarıyla oluşturuldu. (" + created.getProductId() + ")";
@@ -48,7 +47,6 @@ public class ProductService {
         repository.findById(id)
                 .map(product -> {
                     product.setProductName(request.productName());
-                    product.setUpdateDate(LocalDate.now());
                     repository.save(product);
                     return product;
                 })

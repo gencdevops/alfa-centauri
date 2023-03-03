@@ -13,8 +13,7 @@ public class OutBoxRetryTask {
     }
 
 
-    // TODO : KARSI servis down olduysa kafkaya basamama durumu handle edilecek
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 10000)
     public void retry() {
         outBoxRetryService.retry();
     }
