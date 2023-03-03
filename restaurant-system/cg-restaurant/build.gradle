@@ -45,6 +45,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.hibernate.validator:hibernate-validator'
 
 
     testImplementation 'org.springframework.kafka:spring-kafka-test'

@@ -13,13 +13,10 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Builder
-@EqualsAndHashCode
-@ToString
+@Data
 @EntityListeners(AuditingEntityListener.class)
-@Entity(name = "PRODUCTS")
+@Entity()
 public class Product {
 
     @Id
@@ -43,4 +40,6 @@ public class Product {
 
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;
+
+
 }
