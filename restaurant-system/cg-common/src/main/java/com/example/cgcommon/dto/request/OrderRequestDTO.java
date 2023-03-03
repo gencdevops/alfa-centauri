@@ -1,4 +1,4 @@
-package com.example.cgrestaurant.dto.feign;
+package com.example.cgcommon.dto.request;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class OrderRequestDto {
+public class OrderRequestDTO {
     private List<OrderItemRequestDTO> orderItems;
 
     private BigDecimal totalPrice;

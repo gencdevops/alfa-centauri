@@ -31,7 +31,7 @@ public class ProductService {
         return "Product başarıyla oluşturuldu. (" + created.getProductId() + ")";
     }
 
-    public ProductDto getProductById(UUID id) {
+    public ProductDto getProductById(Long id) {
         return repository.findById(id)
                 .map(mapper::toProductDto)
                 .orElseThrow(() -> new ProductNotFoundException("Product bulunamadı."));
@@ -44,7 +44,7 @@ public class ProductService {
                 .toList();
     }
 
-    public String updateProduct(UUID id, UpdateProductRequest request) {
+    public String updateProduct(Long id, UpdateProductRequest request) {
         repository.findById(id)
                 .map(product -> {
                     product.setProductName(request.productName());
@@ -56,7 +56,7 @@ public class ProductService {
         return "Product başarıyla güncellendi.";
     }
 
-    public String deleteProduct(UUID id) {
+    public String deleteProduct(Long id) {
         return repository.findById(id)
                 .map(product -> {
                     repository.deleteById(id);

@@ -1,4 +1,4 @@
-package com.example.cgrestaurant.dto.feign;
+package com.example.cgcommon.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,16 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderItemResponseDTO {
-
-    private UUID orderItemId;
-
+public class OrderItemRequestDTO {
     private Long productId;
 
     private String productName;
