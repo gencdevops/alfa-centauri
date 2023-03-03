@@ -31,7 +31,6 @@ public class OrderItem {
 
     private BigDecimal totalPrice;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName = "orderId")
     private Order order;
