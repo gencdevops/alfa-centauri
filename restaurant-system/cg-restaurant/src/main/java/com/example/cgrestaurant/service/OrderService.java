@@ -26,7 +26,8 @@ public class OrderService {
                 .map(product -> productService.getProductByName(product.getProductName())).toList();
 
 
-        OrderItemRequestDTO orderItemRequestDTO = OrderItemRequestDTO
+        OrderItemRequestDTO orderItemRequestDTO = OrderItemRequestDTO.builder()
+                .build();
 
 
 
