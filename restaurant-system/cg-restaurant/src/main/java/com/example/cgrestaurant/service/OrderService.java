@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,18 +23,29 @@ public class OrderService {
 
     public OrderResponseDTO placeOrder(RestaurantOrderRequestDto restaurantOrderRequestDto) {
 
-        List<Product> productList = restaurantOrderRequestDto.restaurantOrderItemRequestDtos().stream()
-                .map(product -> productService.getProductByName(product.getProductName())).toList();
+        List<OrderItemRequestDTO> orderItemRequestDTOS = restaurantOrderRequestDto.restaurantOrderItemRequestDtos().stream().map(restaurantOrderItemRequestDto -> {
+            Product productByName = productService.getProductByName(restaurantOrderItemRequestDto.getProductName());
 
+            return OrderItemRequestDTO.builder()
+                    .productName(restaurantOrderItemRequestDto.getProductName())
+                    .quantity(restaurantOrderItemRequestDto.getQuantity())
+                    .unitPrice(productByName.getDefaultPrice())
+                    .totalPrice(productByName.getDefaultPrice().multiply(BigDecimal.valueOf(restaurantOrderItemRequestDto.getQuantity())))
+                    .build();
+        }).toList();
 
-        OrderItemRequestDTO orderItemRequestDTO = OrderItemRequestDTO.builder()
+        BigDecimal totalPrice = orderItemRequestDTOS.stream()
+                .map(OrderItemRequestDTO::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        //  Product  --> order items
+        PlaceOrderRequestDTO dto = PlaceOrderRequestDTO.builder()
+                .orderItems(orderItemRequestDTOS)
+                .totalPrice(totalPrice)
+                .cardInfo(restaurantOrderRequestDto.cardInfoDto())
                 .build();
-
-
-
-
-        return null;
+        return orderFeignClient.placeOrder(dto);
     }
 
-    public void OrderO()
+//    public void OrderO()
 }
