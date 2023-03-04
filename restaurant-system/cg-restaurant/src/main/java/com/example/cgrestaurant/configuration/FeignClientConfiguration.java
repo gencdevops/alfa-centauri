@@ -25,10 +25,8 @@ public class FeignClientConfiguration {
         return new FeignErrorDecoder();
     }
 
-        @Bean
-        Logger.Level feignLoggerLevel() {
-            return Logger.Level.BASIC;
-        }
+    @Bean
+    Logger.Level feignLoggerLevel() {
+        return Logger.Level.BASIC;
     }
-
 }
