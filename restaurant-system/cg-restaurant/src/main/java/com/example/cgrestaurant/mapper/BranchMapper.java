@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 @Mapper(implementationName = "BranchMapperImpl", componentModel = "spring", imports = Branch.class)
 public interface BranchMapper {
 
-    Branch toBranchFromCreateBranchRequest(CreateBranchRequestDto request);
+    Branch convertBranchFromCreateBranchRequestDto(CreateBranchRequestDto request);
 
-    BranchResponseDto toBranchDto(Branch branch);
+    BranchResponseDto convertBranchResponseDtoFromBrach(Branch branch);
 }

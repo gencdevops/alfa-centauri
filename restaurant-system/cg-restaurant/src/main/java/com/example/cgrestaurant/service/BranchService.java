@@ -21,10 +21,10 @@ public class BranchService {
 
     private final BranchRepository repository;
 
-    private final BranchMapper mapper;
+    private final BranchMapper branchMapper;
 
     public String createBranch(CreateBranchRequestDto request) {
-        Branch created = mapper.toBranchFromCreateBranchRequest(request);
+        Branch created = branchMapper.convertBranchFromCreateBranchRequestDto(request);
         created = repository.save(created);
         log.info("created: " + created);
         return "Branch başarıyla oluşturuldu. (" + created.getBranchId() + ")";
@@ -32,33 +32,30 @@ public class BranchService {
 
     public BranchResponseDto getBranchById(UUID id) {
         return repository.findById(id)
-                .map(mapper::toBranchDto)
+                .map(branchMapper::convertBranchResponseDtoFromBrach)
                 .orElseThrow(() -> new BranchNotFoundException("Branch bulunamadı."));
     }
 
     public List<BranchResponseDto> getAllBranch() {
         return repository.findAll()
                 .stream()
-                .map(mapper::toBranchDto)
+                .map(branchMapper::convertBranchResponseDtoFromBrach)
                 .toList();
     }
 
-    public String updateBranch(UUID id, UpdateBranchRequestDto request) {
-        repository.findById(id)
-                .map(branch -> {
-                    branch.setBranchName(request.branchName());
-                    repository.save(branch);
-                    return branch;
-                })
-                .orElseThrow(() -> new BranchNotFoundException("Branch bulunamadı."));
-        return "Branch başarıyla güncellendi.";
+    public BranchResponseDto updateBranch(UUID id, UpdateBranchRequestDto request) {
+        Branch branch = repository.findById(id).orElseThrow(() -> new BranchNotFoundException("Branch bulunamadı."));
+        branch.setBranchName(request.branchName());
+
+      return   branchMapper.convertBranchResponseDtoFromBrach(repository.save(branch));
     }
 
     public String deleteBranch(UUID id) {
         return repository.findById(id)
                 .map(branch -> {
                     repository.deleteById(id);
-                    return id + ": nolu branch başarıyla silindi.";})
+                    return id + ": nolu branch başarıyla silindi.";
+                })
                 .orElseThrow(() -> new BranchNotFoundException("Branch bulunamadı."));
     }
 }

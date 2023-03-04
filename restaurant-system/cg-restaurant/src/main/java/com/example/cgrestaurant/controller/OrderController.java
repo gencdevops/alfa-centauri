@@ -18,10 +18,7 @@ public class OrderController {
 
     private final OrderFeignClient feignClient;
 
-    @GetMapping("/test")
-    public ResponseEntity<String> feignTestToOrder() {
-        return feignClient.getDummyString();
-    }
+
 
 
 

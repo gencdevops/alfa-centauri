@@ -1,6 +1,7 @@
 package com.example.cgrestaurant.service;
 
-import com.example.cgcommon.dto.request.OrderRequestDTO;
+
+import com.example.cgrestaurant.dto.request.PlaceOrderRequestDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class OrderService {
 
 
-    public void createOrder(OrderRequestDTO request) {
+    public void placeOrder(PlaceOrderRequestDTO placeOrderRequestDTO) {
 
     }
 }

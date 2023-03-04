@@ -1,8 +1,8 @@
 package com.example.cgorder.service;
 
-import com.example.cgorder.client.CardDto;
-import com.example.cgorder.client.OrderRequestDto;
-import com.example.cgorder.client.OrderResponseDto;
+
+import com.example.cgorder.dto.OrderResponseDto;
+import com.example.cgorder.dto.PlaceOrderRequestDTO;
 import com.example.cgorder.exception.OrderNotFoundException;
 import com.example.cgorder.mapper.OrderItemMapper;
 import com.example.cgorder.mapper.OrderMapper;
@@ -16,7 +16,6 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -35,32 +34,13 @@ public class OrderServiceImpl implements OrderService {
     private final OrderOutBoxService orderOutBoxService;
 
     @Override
-    public List<OrderResponseDto> getAllOrders() {
-        List<Order> orders = orderRepository.findAll();
-        return orders.stream().map(orderMapper::toDto).toList();
-    }
-
-    @Override
-    public OrderResponseDto getOrderById(UUID id) {
-        Order orderEntity = orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
-
-        var orderResponseDtos =
-                orderEntity.getOrderItems().stream().map(orderItemMapper::toDto).toList();
-
-        var responseDto = orderMapper.toDto(orderEntity);
-        responseDto.setOrderItems(orderResponseDtos);
-        return responseDto;
-    }
-
-    @Override
     @Transactional
-    public OrderResponseDto createOrder(OrderRequestDto orderRequestDto, CardDto cardDto) {
-        var order = orderMapper.toEntity(orderRequestDto);
+    public OrderResponseDto placeOrder(PlaceOrderRequestDTO placeOrderRequestDTO) {
+        var order = orderMapper.convertOrderFromPlaceOrderRequestDTO(placeOrderRequestDTO);
 
         // TODO : order'dan orderOutbox Mapper yazilacak
 
-        var orderItemList = orderRequestDto.getOrderItems().stream().map(orderItemMapper::toEntity).toList();
+        var orderItemList = placeOrderRequestDTO.getOrderItems().stream().map(orderItemMapper::convertOrderItemFromOrderItemRequestDTO).toList();
         order.setOrderItems(orderItemList);
         order.setOrderStatus(OrderStatus.RECEIVED);
 
@@ -82,14 +62,9 @@ public class OrderServiceImpl implements OrderService {
 
 
         orderOutBoxService.deleteOrderOutbox(orderOutbox.getOrderOutboxId());
-        return orderMapper.toDto(orderRepository.save(order));
+        return orderMapper.convertPlaceOrderRequestDTOFromOrder(orderRepository.save(order));
     }
 
-    @Override
-    public void deleteOrder(UUID id) {
-        Order orderEntity = orderRepository.findById(id)
-                .orElseThrow(() -> new OrderNotFoundException("Order not found with id: " + id));
-        orderRepository.delete(orderEntity);
-    }
+
 
 }

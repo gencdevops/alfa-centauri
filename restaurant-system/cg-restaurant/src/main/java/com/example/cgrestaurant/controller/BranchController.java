@@ -71,8 +71,9 @@ public class BranchController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateBranchById(@Validated @PathVariable UUID id, @RequestBody UpdateBranchRequestDto request) {
+    public ResponseEntity<BranchResponseDto> updateBranchById(@Validated @PathVariable UUID id, @RequestBody UpdateBranchRequestDto request) {
         return ResponseEntity.ok(service.updateBranch(id, request));
+
     }
     @Operation(summary = "Delete Branch")
     @ApiResponses(value = {
