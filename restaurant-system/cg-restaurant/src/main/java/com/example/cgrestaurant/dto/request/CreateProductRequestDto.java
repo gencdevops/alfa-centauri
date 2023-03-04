@@ -7,6 +7,6 @@ import jakarta.persistence.Enumerated;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public record CreateProductRequest(String productName, BigDecimal defaultPrice, UUID supplierId,
-                                   @Enumerated(EnumType.STRING) ProductStatus productStatus) {
+public record CreateProductRequestDto(String productName, BigDecimal defaultPrice, UUID supplierId,
+                                      @Enumerated(EnumType.STRING) ProductStatus productStatus) {
 }

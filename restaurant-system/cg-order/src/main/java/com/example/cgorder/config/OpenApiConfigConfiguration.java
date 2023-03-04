@@ -5,8 +5,10 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-public class OpenApiConfig {
+@Configuration
+public class OpenApiConfigConfiguration {
 
     @Bean
     public OpenAPI customOpenAPI(@Value("cg-order") String description,

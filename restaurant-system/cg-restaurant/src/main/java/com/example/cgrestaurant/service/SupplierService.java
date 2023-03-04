@@ -1,8 +1,8 @@
 package com.example.cgrestaurant.service;
 
-import com.example.cgrestaurant.dto.request.CreateSupplierRequest;
-import com.example.cgrestaurant.dto.request.UpdateSupplierRequest;
-import com.example.cgrestaurant.dto.response.SupplierDto;
+import com.example.cgrestaurant.dto.request.CreateSupplierRequestDto;
+import com.example.cgrestaurant.dto.request.UpdateSupplierRequestDto;
+import com.example.cgrestaurant.dto.response.SupplierResponseDto;
 import com.example.cgrestaurant.exception.SupplierNotFoundException;
 import com.example.cgrestaurant.mapper.SupplierMapper;
 import com.example.cgrestaurant.model.Supplier;
@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,27 +24,27 @@ public class SupplierService {
 
     private final SupplierMapper mapper;
 
-    public String createSupplier(CreateSupplierRequest request) {
+    public String createSupplier(CreateSupplierRequestDto request) {
         Supplier created = mapper.toSupplierFromCreateSupplierRequest(request);
         created = repository.save(created);
         log.info("created: " + created);
         return "Supplier başarıyla oluşturuldu. (" + created.getSupplierId() + ")";
     }
 
-    public SupplierDto getSupplierById(UUID id) {
+    public SupplierResponseDto getSupplierById(UUID id) {
         return repository.findById(id)
                 .map(mapper::toSupplierDto)
                 .orElseThrow(() -> new SupplierNotFoundException("Supplier bulunamadı."));
     }
 
-    public List<SupplierDto> getAllSupplier() {
+    public List<SupplierResponseDto> getAllSupplier() {
         return repository.findAll()
                 .stream()
                 .map(mapper::toSupplierDto)
                 .toList();
     }
 
-    public String updateSupplier(UUID id, UpdateSupplierRequest request) {
+    public String updateSupplier(UUID id, UpdateSupplierRequestDto request) {
         repository.findById(id)
                 .map(supplier -> {
                     supplier.setSupplierName(request.supplierName());

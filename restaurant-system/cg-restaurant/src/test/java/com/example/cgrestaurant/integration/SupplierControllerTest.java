@@ -1,7 +1,7 @@
 package com.example.cgrestaurant.integration;
 
 import com.example.cgrestaurant.controller.SupplierController;
-import com.example.cgrestaurant.dto.request.CreateSupplierRequest;
+import com.example.cgrestaurant.dto.request.CreateSupplierRequestDto;
 import com.example.cgrestaurant.repository.SupplierRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class SupplierControllerTest extends BaseIntegrationTest{
 
     @Test
     void createSupplier() throws Exception {
-        CreateSupplierRequest request = CreateSupplierRequest.builder()
+        CreateSupplierRequestDto request = CreateSupplierRequestDto.builder()
                 .supplierName("Shaya")
                 .build();
 

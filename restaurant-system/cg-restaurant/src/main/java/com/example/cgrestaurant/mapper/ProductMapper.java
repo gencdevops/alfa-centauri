@@ -1,7 +1,7 @@
 package com.example.cgrestaurant.mapper;
 
-import com.example.cgrestaurant.dto.request.CreateProductRequest;
-import com.example.cgrestaurant.dto.response.ProductDto;
+import com.example.cgrestaurant.dto.request.CreateProductRequestDto;
+import com.example.cgrestaurant.dto.response.ProductResponseDto;
 import com.example.cgrestaurant.model.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 public interface ProductMapper {
 
     @Mapping(target = "supplier", ignore = true)
-    Product toProductFromCreateProductRequest(CreateProductRequest request);
+    Product toProductFromCreateProductRequest(CreateProductRequestDto request);
 
-    ProductDto toProductDto(Product product);
+    ProductResponseDto toProductDto(Product product);
 }
