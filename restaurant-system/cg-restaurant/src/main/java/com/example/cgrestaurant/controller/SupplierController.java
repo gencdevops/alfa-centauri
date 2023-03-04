@@ -22,7 +22,7 @@ import java.util.UUID;
 import static com.example.cgrestaurant.contants.RestaurantConstants.*;
 
 @RequiredArgsConstructor
-@Tag(name = "Branch Related APIs")
+@Tag(name = "Supplier Related APIs")
 @RestController
 @Slf4j
 @RequestMapping(API_PREFIX + API_VERSION_V1 + API_SUPPLIERS)
@@ -50,7 +50,7 @@ public class SupplierController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<SupplierResponseDto> getSupplierById(@PathVariable UUID id) {
-        return ResponseEntity.ok(supplierService.getSupplierById(id));
+        return ResponseEntity.ok(supplierService.getSupplierByIdConvertedSupplierResponseDto(id));
     }
 
     @Operation(summary = "Get All Suppliers  Branch")
@@ -71,7 +71,7 @@ public class SupplierController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateSupplierById(@PathVariable UUID id, @RequestBody UpdateSupplierRequestDto request) {
+    public ResponseEntity<SupplierResponseDto> updateSupplierById(@Valid @PathVariable UUID id, @RequestBody UpdateSupplierRequestDto request) {
         return ResponseEntity.ok(supplierService.updateSupplier(id, request));
     }
 
@@ -83,7 +83,8 @@ public class SupplierController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public String deleteSupplierById(@PathVariable UUID id) {
-        return supplierService.deleteSupplier(id);
+    public ResponseEntity<Void> deleteSupplierById(@PathVariable UUID id) {
+        supplierService.deleteSupplier(id);
+        return ResponseEntity.noContent().build();
     }
 }

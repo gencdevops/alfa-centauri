@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
@@ -33,6 +34,7 @@ public class Supplier {
     private LocalDateTime createdDateTime;
 
     @Column(columnDefinition = "TIMESTAMP")
+    @UpdateTimestamp
     private LocalDateTime changeDayLastTime;
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

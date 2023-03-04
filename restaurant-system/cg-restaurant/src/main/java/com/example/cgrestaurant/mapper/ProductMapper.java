@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 public interface ProductMapper {
 
     @Mapping(target = "supplier", ignore = true)
-    Product toProductFromCreateProductRequest(CreateProductRequestDto request);
+    Product convertProductFromCreateProductRequestDto(CreateProductRequestDto request);
 
-    ProductResponseDto toProductDto(Product product);
+    ProductResponseDto convertProductResponseDtoFromProduct(Product product);
 }

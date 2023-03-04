@@ -3,8 +3,10 @@ package com.example.cgrestaurant.service;
 import com.example.cgrestaurant.dto.request.CreateSupplierRequestDto;
 import com.example.cgrestaurant.dto.request.UpdateSupplierRequestDto;
 import com.example.cgrestaurant.dto.response.SupplierResponseDto;
+import com.example.cgrestaurant.exception.ProductNotFoundException;
 import com.example.cgrestaurant.exception.SupplierNotFoundException;
 import com.example.cgrestaurant.mapper.SupplierMapper;
+import com.example.cgrestaurant.model.Product;
 import com.example.cgrestaurant.model.Supplier;
 import com.example.cgrestaurant.repository.SupplierRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +33,13 @@ public class SupplierService {
         return supplierMapper.convertSupplierResponseDtoFromSupplier(created);
     }
 
-    public SupplierResponseDto getSupplierById(UUID id) {
+    public SupplierResponseDto getSupplierByIdConvertedSupplierResponseDto(UUID id) {
+        return supplierMapper.convertSupplierResponseDtoFromSupplier(getSupplierByID(id));
+    }
+
+    public Supplier getSupplierByID(UUID id) {
         return supplierRepository.findById(id)
-                .map(supplierMapper::convertSupplierResponseDtoFromSupplier)
-                .orElseThrow(() -> new SupplierNotFoundException("Supplier bulunamadı."));
+                .orElseThrow(() -> new SupplierNotFoundException("Supplier not found."));
     }
 
     public List<SupplierResponseDto> getAllSupplier() {
@@ -44,24 +49,14 @@ public class SupplierService {
                 .toList();
     }
 
-    public String updateSupplier(UUID id, UpdateSupplierRequestDto request) {
-        supplierRepository.findById(id)
-                .map(supplier -> {
-                    supplier.setSupplierName(request.supplierName());
-                    supplierRepository.save(supplier);
-                    return supplier;
-                })
-                .orElseThrow(() -> new SupplierNotFoundException("Supplier bulunamadı."));
-        return "Supplier başarıyla güncellendi.";
+    public SupplierResponseDto updateSupplier(UUID id, UpdateSupplierRequestDto updateSupplierRequestDto) {
+        Supplier supplier = supplierRepository.findById(id).orElseThrow(() -> new SupplierNotFoundException("Supplier not found."));
+       supplier.setSupplierName(updateSupplierRequestDto.supplierName());
+        return   supplierMapper.convertSupplierResponseDtoFromSupplier(supplierRepository.save(supplier));
     }
 
-    public String deleteSupplier(UUID id) {
-        supplierRepository.findById(id)
-                .map(supplier -> {
-                    supplierRepository.deleteById(id);
-                    return supplier; })
-                .orElseThrow(() -> new SupplierNotFoundException("Supplier bulunamadı."));
-        return id + ": nolu supplier başarıyla silindi.";
+    public void deleteSupplier(UUID id) {
+       supplierRepository.deleteById(id);
     }
 
 }

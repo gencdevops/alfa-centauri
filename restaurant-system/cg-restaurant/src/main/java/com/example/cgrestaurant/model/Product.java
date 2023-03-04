@@ -1,9 +1,12 @@
 package com.example.cgrestaurant.model;
 
 import com.example.cgrestaurant.model.enums.ProductStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
@@ -16,7 +19,7 @@ import java.util.UUID;
 @Builder
 @Data
 @EntityListeners(AuditingEntityListener.class)
-@Entity()
+@Entity
 public class Product {
 
     @Id
@@ -36,6 +39,7 @@ public class Product {
     private LocalDateTime createdDateTime;
 
     @Column(columnDefinition = "TIMESTAMP")
+    @UpdateTimestamp
     private LocalDateTime changeDayLastTime;
 
     @Enumerated(EnumType.STRING)

@@ -1,4 +1,4 @@
-package com.example.cgrestaurant.dto.request;
+package com.example.cgrestaurant.dto.request.order;
 
 import com.example.cgcommon.model.CardInfoDto;
 import lombok.Builder;
