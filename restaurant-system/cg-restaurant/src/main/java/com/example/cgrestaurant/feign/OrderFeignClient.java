@@ -2,6 +2,7 @@ package com.example.cgrestaurant.feign;
 
 import com.example.cgcommon.dto.request.OrderRequestDTO;
 import com.example.cgcommon.dto.response.OrderResponseDTO;
+import com.example.cgrestaurant.configuration.FeignClientConfiguration;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 @FeignClient(name = "cg-order")
-public interface OrderFeignClient {
+public interface OrderFeignClient{
 
     // ##################  TEST  ######################################################
     @GetMapping("/api/dummy")

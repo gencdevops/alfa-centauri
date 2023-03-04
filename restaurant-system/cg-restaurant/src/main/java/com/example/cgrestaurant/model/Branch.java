@@ -22,6 +22,7 @@ public class Branch {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID branchId;
 
+    @Column(unique=true)
     private String branchName;
 
     @CreationTimestamp

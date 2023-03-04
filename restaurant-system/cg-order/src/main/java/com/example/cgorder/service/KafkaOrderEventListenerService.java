@@ -33,15 +33,14 @@ public class KafkaOrderEventListenerService {
             attempts = "5",
             topicSuffixingStrategy = TopicSuffixingStrategy.SUFFIX_WITH_INDEX_VALUE,
             backoff = @Backoff(delay = 1000, multiplier = 2.0),
-            exclude = {SerializationException.class, DeserializationException.class}
-
+            exclude = {SerializationException.class, DeserializationException.class, JsonProcessingException.class}
     )
     @KafkaListener(topics = "${spring.kafka.consumer.topic}", groupId = "${spring.kafka.group.id}")
     public void handleMessage(String order, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) throws JsonProcessingException {
         Order orderString = objectMapper.readValue(order, Order.class);
         log.info(")");
         Optional<Order> orderOptional = orderRepository.findById(orderString.getOrderId());
-        orderOptional.ifPresent(this::updateOrderFromOrderOutboxRetry);
+        orderOptional.ifPresent(this::updateOrderFromOrderOutboxRetryScheduler);
     }
 
     @DltHandler
@@ -52,7 +51,7 @@ public class KafkaOrderEventListenerService {
     }
 
 
-    private void updateOrderFromOrderOutboxRetry(Order order) {
+    private void updateOrderFromOrderOutboxRetryScheduler(Order order) {
         order.setOrderStatus(OrderStatus.PREPARING);
         orderRepository.save(order);
     }
