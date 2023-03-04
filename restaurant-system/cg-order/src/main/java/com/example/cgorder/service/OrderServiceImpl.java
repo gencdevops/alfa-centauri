@@ -30,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemMapper orderItemMapper;
 
     private final ObjectMapper objectMapper;
+
     private final ProducerService producerService;
 
     private final OrderOutBoxService orderOutBoxService;

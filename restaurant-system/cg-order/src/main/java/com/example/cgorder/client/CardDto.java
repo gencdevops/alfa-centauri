@@ -1,13 +1,26 @@
 package com.example.cgorder.client;
 
+import com.example.cgorder.validation.annotation.ExpireYear;
+import org.hibernate.validator.constraints.CreditCardNumber;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
 public record CardDto(
-    String holderName,
+        @NotBlank(message = "Kart sahibi adı boş olamaz.")
+        String holderName,
 
-    String cardNumber,
+        @CreditCardNumber(message = "Geçersiz kart numarası.")
+        String cardNumber,
 
-    Short expireYear,
+        @ExpireYear(message = "Geçersiz son kullanma yılıb")
+        String expireYear,
 
-    Short expireMonth,
+        @Pattern(regexp = "^(0?[1-9]|1[0-2])$", message = "Geçersiz son kullanma ayı.")
+        String expireMonth,
 
-    String cvc
-){}
+        @Size(min = 3, max = 4, message = "Geçersiz CVC.")
+        String cvc
+) {
+}

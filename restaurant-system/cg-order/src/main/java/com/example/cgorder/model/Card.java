@@ -22,7 +22,7 @@ public class Card {
     private UUID id;
     private String holderName;
     private String cardNumber;
-    private Short expireYear;
-    private Short expireMonth;
+    private String expireYear;
+    private String expireMonth;
     private String cvc;
 }
