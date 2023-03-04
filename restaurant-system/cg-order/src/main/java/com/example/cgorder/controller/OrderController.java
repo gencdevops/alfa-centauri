@@ -5,6 +5,11 @@ import com.example.cgorder.dto.OrderResponseDto;
 import com.example.cgorder.dto.PlaceOrderRequestDTO;
 import com.example.cgorder.service.OrderService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -12,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.UUID;
 
 import static com.example.cgorder.constants.OrderConstants.*;
 
@@ -25,6 +28,14 @@ public class OrderController {
     private final OrderService orderService;
 
 
+    @Operation(summary = "Create order")
+    @ApiResponses(value =
+    @ApiResponse(
+            responseCode = "200",
+            description = "Place order",
+            content = @Content(
+                    schema = @Schema(implementation = OrderResponseDto.class),
+                    mediaType = "application/json")))
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<OrderResponseDto> placeOrder(@RequestBody @Valid PlaceOrderRequestDTO placeOrderRequestDTO) {
