@@ -14,7 +14,7 @@ import java.util.UUID;
 @Builder
 @Data
 @EntityListeners(AuditingEntityListener.class)
-@Entity()
+@Entity
 public class Branch {
 
     // Starbucks

@@ -20,35 +20,35 @@ import java.util.UUID;
 @Service
 public class SupplierService {
 
-    private final SupplierRepository repository;
+    private final SupplierRepository supplierRepository;
 
-    private final SupplierMapper mapper;
+    private final SupplierMapper supplierMapper;
 
-    public String createSupplier(CreateSupplierRequestDto request) {
-        Supplier created = mapper.toSupplierFromCreateSupplierRequest(request);
-        created = repository.save(created);
+    public SupplierResponseDto createSupplier(CreateSupplierRequestDto request) {
+        Supplier created = supplierMapper.convertSupplierFromCreateSupplierRequestDto(request);
+        created = supplierRepository.save(created);
         log.info("created: " + created);
-        return "Supplier başarıyla oluşturuldu. (" + created.getSupplierId() + ")";
+        return supplierMapper.convertSupplierResponseDtoFromSupplier(created);
     }
 
     public SupplierResponseDto getSupplierById(UUID id) {
-        return repository.findById(id)
-                .map(mapper::toSupplierDto)
+        return supplierRepository.findById(id)
+                .map(supplierMapper::convertSupplierResponseDtoFromSupplier)
                 .orElseThrow(() -> new SupplierNotFoundException("Supplier bulunamadı."));
     }
 
     public List<SupplierResponseDto> getAllSupplier() {
-        return repository.findAll()
+        return supplierRepository.findAll()
                 .stream()
-                .map(mapper::toSupplierDto)
+                .map(supplierMapper::convertSupplierResponseDtoFromSupplier)
                 .toList();
     }
 
     public String updateSupplier(UUID id, UpdateSupplierRequestDto request) {
-        repository.findById(id)
+        supplierRepository.findById(id)
                 .map(supplier -> {
                     supplier.setSupplierName(request.supplierName());
-                    repository.save(supplier);
+                    supplierRepository.save(supplier);
                     return supplier;
                 })
                 .orElseThrow(() -> new SupplierNotFoundException("Supplier bulunamadı."));
@@ -56,9 +56,9 @@ public class SupplierService {
     }
 
     public String deleteSupplier(UUID id) {
-        repository.findById(id)
+        supplierRepository.findById(id)
                 .map(supplier -> {
-                    repository.deleteById(id);
+                    supplierRepository.deleteById(id);
                     return supplier; })
                 .orElseThrow(() -> new SupplierNotFoundException("Supplier bulunamadı."));
         return id + ": nolu supplier başarıyla silindi.";

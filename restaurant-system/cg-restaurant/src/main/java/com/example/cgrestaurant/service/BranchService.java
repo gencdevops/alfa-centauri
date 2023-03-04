@@ -19,41 +19,41 @@ import java.util.UUID;
 @Service
 public class BranchService {
 
-    private final BranchRepository repository;
+    private final BranchRepository branchRepository;
 
     private final BranchMapper branchMapper;
 
-    public String createBranch(CreateBranchRequestDto request) {
-        Branch created = branchMapper.convertBranchFromCreateBranchRequestDto(request);
-        created = repository.save(created);
-        log.info("created: " + created);
-        return "Branch başarıyla oluşturuldu. (" + created.getBranchId() + ")";
+    public BranchResponseDto createBranch(CreateBranchRequestDto createBranchRequestDto) {
+        Branch createdBranch = branchMapper.convertBranchFromCreateBranchRequestDto(createBranchRequestDto);
+        createdBranch = branchRepository.save(createdBranch);
+        log.info("created branch : " + createdBranch);
+        return branchMapper.convertBranchResponseDtoFromBranch(createdBranch);
     }
 
     public BranchResponseDto getBranchById(UUID id) {
-        return repository.findById(id)
-                .map(branchMapper::convertBranchResponseDtoFromBrach)
+        return branchRepository.findById(id)
+                .map(branchMapper::convertBranchResponseDtoFromBranch)
                 .orElseThrow(() -> new BranchNotFoundException("Branch bulunamadı."));
     }
 
     public List<BranchResponseDto> getAllBranch() {
-        return repository.findAll()
+        return branchRepository.findAll()
                 .stream()
-                .map(branchMapper::convertBranchResponseDtoFromBrach)
+                .map(branchMapper::convertBranchResponseDtoFromBranch)
                 .toList();
     }
 
     public BranchResponseDto updateBranch(UUID id, UpdateBranchRequestDto request) {
-        Branch branch = repository.findById(id).orElseThrow(() -> new BranchNotFoundException("Branch bulunamadı."));
+        Branch branch = branchRepository.findById(id).orElseThrow(() -> new BranchNotFoundException("Branch bulunamadı."));
         branch.setBranchName(request.branchName());
 
-      return   branchMapper.convertBranchResponseDtoFromBrach(repository.save(branch));
+      return   branchMapper.convertBranchResponseDtoFromBranch(branchRepository.save(branch));
     }
 
     public String deleteBranch(UUID id) {
-        return repository.findById(id)
+        return branchRepository.findById(id)
                 .map(branch -> {
-                    repository.deleteById(id);
+                    branchRepository.deleteById(id);
                     return id + ": nolu branch başarıyla silindi.";
                 })
                 .orElseThrow(() -> new BranchNotFoundException("Branch bulunamadı."));

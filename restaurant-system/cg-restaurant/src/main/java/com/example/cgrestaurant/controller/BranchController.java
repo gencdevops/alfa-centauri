@@ -37,8 +37,8 @@ public class BranchController {
     })
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public String createBranch(@Validated  @RequestBody CreateBranchRequestDto request) {
-        return service.createBranch(request);
+    public ResponseEntity<BranchResponseDto> createBranch(@Validated  @RequestBody CreateBranchRequestDto createBranchRequestDto) {
+        return ResponseEntity.ok(service.createBranch(createBranchRequestDto));
     }
 
     @Operation(summary = "Retrieve branch according to branch ID")
@@ -54,7 +54,7 @@ public class BranchController {
 
     @Operation(summary = "Get All Branch")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully Branch Created"),
+            @ApiResponse(responseCode = "200", description = "Successfully"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })

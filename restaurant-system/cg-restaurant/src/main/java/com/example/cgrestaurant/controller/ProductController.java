@@ -23,7 +23,7 @@ import static com.example.cgrestaurant.contants.RestaurantConstants.*;
 @RequestMapping(API_PREFIX + API_VERSION_V1 + API_PRODUCTS)
 public class ProductController {
 
-    private final ProductService service;
+    private final ProductService productService;
 
     @Operation(summary = "Update  Branch")
     @ApiResponses(value = {
@@ -34,7 +34,7 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     public String createProduct(@RequestBody CreateProductRequestDto request) {
-        return service.createProduct(request);
+        return productService.createProduct(request);
     }
 
     @Operation(summary = "Update  Branch")
@@ -45,7 +45,7 @@ public class ProductController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getProductById(id));
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 
     @Operation(summary = "Update  Branch")
@@ -56,7 +56,7 @@ public class ProductController {
     })
     @GetMapping
     public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
-        return ResponseEntity.ok(service.getAllProduct());
+        return ResponseEntity.ok(productService.getAllProduct());
     }
 
     @Operation(summary = "Update  Branch")
@@ -67,7 +67,7 @@ public class ProductController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<String> updateProductById(@PathVariable Long id, @RequestBody UpdateProductRequestDto request) {
-        return ResponseEntity.ok(service.updateProduct(id, request));
+        return ResponseEntity.ok(productService.updateProduct(id, request));
     }
 
     @Operation(summary = "Update  Branch")
@@ -79,6 +79,6 @@ public class ProductController {
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public String deleteProductById(@PathVariable Long id) {
-        return service.deleteProduct(id);
+        return productService.deleteProduct(id);
     }
 }

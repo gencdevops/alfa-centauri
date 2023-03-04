@@ -11,7 +11,7 @@ public final class RestaurantConstants {
     public static final String API_BRANCHES = "/branches";
     public static final String API_ORDER = "/orders"; //TODO : order veya orders mi
     public static final String API_PRODUCTS = "/products";
-    public static final String API_SUPPLIERS = "/Suppliers";
+    public static final String API_SUPPLIERS = "/suppliers";
 
 
 }
