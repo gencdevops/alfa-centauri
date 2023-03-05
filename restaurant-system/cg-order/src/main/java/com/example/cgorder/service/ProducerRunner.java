@@ -74,7 +74,6 @@ public class ProducerRunner implements ApplicationRunner {
         System.out.println(String.format("Create Payment Result: %s", response));
 
 
-        //orderServiceDummy.createAndSuccessPayment();
     }
 }
 
