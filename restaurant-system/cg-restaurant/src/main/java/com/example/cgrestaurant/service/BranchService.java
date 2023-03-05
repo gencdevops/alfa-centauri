@@ -28,7 +28,6 @@ public class BranchService {
 
     public BranchResponseDto createBranch(CreateBranchRequestDto createBranchRequestDto) {
         Branch createdBranch = branchMapper.convertBranchFromCreateBranchRequestDto(createBranchRequestDto);
-        createdBranch.setSupplier(supplierService.getSupplierByID(createBranchRequestDto.supplierId()));
         createdBranch = branchRepository.save(createdBranch);
         log.info("created branch : " + createdBranch);
         return branchMapper.convertBranchResponseDtoFromBranch(createdBranch);
