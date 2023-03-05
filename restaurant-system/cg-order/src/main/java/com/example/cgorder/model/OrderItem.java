@@ -21,7 +21,7 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID orderItemId;
 
-    private Long productId;
+    private UUID productId;
 
     private String productName;
 

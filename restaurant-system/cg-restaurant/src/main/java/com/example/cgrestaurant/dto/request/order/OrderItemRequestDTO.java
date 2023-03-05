@@ -13,8 +13,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 public class OrderItemRequestDTO {
-
-    private String productName;
     private Integer quantity;
     private BigDecimal unitPrice;
     private BigDecimal totalPrice;

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
-@FeignClient(name = "cg-order")
+@FeignClient(name = "cg-order" , url = "http://localhost:8474")
 public interface OrderFeignClient{
 
     @PostMapping("/api/v1/orders/place-order")

@@ -7,14 +7,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class RestaurantOrderItemRequestDto {
 
-    @NotNull(message = "productName field is mandatory")
-    private String productName;
+    @NotNull(message = "Product id field is mandatory")
+    private UUID productId;
 
     @NotNull(message = "quantity field is mandatory")
     @PositiveOrZero(message = "quantity field must be positive or zero")

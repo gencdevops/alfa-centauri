@@ -69,7 +69,7 @@ class BranchServiceTest {
     void shouldReturnBranchResponseWhenExistById() {
         UUID id = UUID.randomUUID();
         Branch branch = Branch.builder()
-                .branchId(id)
+                .id(id)
                 .branchName(RandomStringUtils.random(5))
                 .build();
 
@@ -100,7 +100,7 @@ class BranchServiceTest {
         UUID id = UUID.randomUUID();
         String branchName = RandomStringUtils.random(5);
         Branch branch = Branch.builder()
-                .branchId(id)
+                .id(id)
                 .branchName(branchName)
                 .build();
 

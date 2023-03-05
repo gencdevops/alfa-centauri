@@ -18,9 +18,6 @@ public class OrderItemRequestDTO {
     @NotNull(message = "productId field is mandatory")
     private UUID productId;
 
-    @NotNull(message = "productName field is mandatory")
-    private String productName;
-
     @NotNull(message = "quantity field is mandatory")
     @PositiveOrZero(message = "quantity field must be positive or zero")
     private Integer quantity;
@@ -32,4 +29,5 @@ public class OrderItemRequestDTO {
     @NotNull(message = "totalPrice field is mandatory")
     @PositiveOrZero(message = "totalPrice field must be positive or zero")
     private BigDecimal totalPrice;
+
 }

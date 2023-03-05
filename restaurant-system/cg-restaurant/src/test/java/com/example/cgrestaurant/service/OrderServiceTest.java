@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -43,7 +44,7 @@ class OrderServiceTest {
     void shouldThrowExceptionWhenProductNotFound() {
         List<RestaurantOrderItemRequestDto> dtoList = new ArrayList<>();
         dtoList.add(RestaurantOrderItemRequestDto.builder().productName(RandomStringUtils.random(10)).quantity(1).build());
-        RestaurantOrderRequestDto restaurantOrderRequestDto = new RestaurantOrderRequestDto(dtoList, null);
+        RestaurantOrderRequestDto restaurantOrderRequestDto = new RestaurantOrderRequestDto(dtoList, null, null);
 
         when(productService.getProductByName(anyString())).thenThrow(new ProductNotFoundException("Product not found"));
 
@@ -64,11 +65,9 @@ class OrderServiceTest {
 
         Product product1 = Product.builder()
                 .productName(randomProduct)
-                .defaultPrice(defaultPrice1)
                 .build();
         Product product2 = Product.builder()
                 .productName(randomProduct2)
-                .defaultPrice(defaultPrice2)
                 .build();
 
         when(productService.getProductByName(randomProduct)).thenReturn(product1);
@@ -87,7 +86,7 @@ class OrderServiceTest {
         ArgumentCaptor<PlaceOrderRequestDTO> placeOrderRequestDTOCaptor = ArgumentCaptor.forClass(PlaceOrderRequestDTO.class);
         List<RestaurantOrderItemRequestDto> itemRequestDTOs = Arrays.asList(itemRequestDTO1, itemRequestDTO2);
 
-        RestaurantOrderRequestDto requestDto = new RestaurantOrderRequestDto(itemRequestDTOs, cardInfoDTO);
+        RestaurantOrderRequestDto requestDto = new RestaurantOrderRequestDto(itemRequestDTOs, UUID.randomUUID(), cardInfoDTO);
 
         // when
         OrderResponseDTO responseDTO = orderService.placeOrder(requestDto);

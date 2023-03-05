@@ -37,6 +37,7 @@ public class OrderService {
         PlaceOrderRequestDTO placeOrderRequestDTO = PlaceOrderRequestDTO.builder()
                 .orderItems(orderItemRequestDTOS)
                 .totalPrice(totalPrice)
+                .branchId(restaurantOrderRequestDto.branchId())
                 .cardInfo(restaurantOrderRequestDto.cardInfoDto())
                 .build();
         return orderFeignClient.placeOrder(placeOrderRequestDTO);
@@ -45,12 +46,11 @@ public class OrderService {
 
     private OrderItemRequestDTO fillOrderItemRequestDtoWithProductInfo(RestaurantOrderItemRequestDto restaurantOrderItemRequestDto,
                                                                        UUID branchID) {
-        Product product = productService.getProductByName(restaurantOrderItemRequestDto.getProductName());
+        Product product = productService.findByProductId(restaurantOrderItemRequestDto.getProductId());
          ProductPriceResponseDto productPrice = productService.getProductPrice(product.getId(), branchID);
 
 
         return OrderItemRequestDTO.builder()
-                .productName(restaurantOrderItemRequestDto.getProductName())
                 .quantity(restaurantOrderItemRequestDto.getQuantity())
                 .unitPrice(productPrice.price())
                 .totalPrice(productPrice.price()

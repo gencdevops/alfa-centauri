@@ -94,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
 
         for (OrderItemRequestDTO orderItem : orderItems) {
             ProductPriceResponseDto productPrice = productIdPriceMap.get(orderItem.getProductId());
-            
+
             if(Objects.isNull(productPrice)){
                 throw new ProductPriceNotFoundException();
             }

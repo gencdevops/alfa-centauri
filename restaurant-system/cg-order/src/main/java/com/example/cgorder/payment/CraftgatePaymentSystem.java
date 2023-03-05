@@ -47,7 +47,6 @@ public class CraftgatePaymentSystem implements PaymentSystem {
 
             paymentItems.add(
                     PaymentItem.builder()
-                            .name(orderItemRequestDTO.getProductName())
                             .price(orderItemRequestDTO.getUnitPrice())
                             .externalId(UUID.randomUUID().toString())
                             .build()

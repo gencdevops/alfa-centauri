@@ -22,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -49,7 +50,7 @@ class OrderServiceImplTest {
     @Test
     void placeOrder() throws JsonProcessingException {
         OrderItemRequestDTO orderItemRequestDTO = OrderItemRequestDTO.builder()
-                .productId(1L)
+                .productId(UUID.randomUUID())
                 .quantity(1)
                 .build();
 

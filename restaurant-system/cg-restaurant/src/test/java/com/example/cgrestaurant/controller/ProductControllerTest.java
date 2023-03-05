@@ -34,7 +34,6 @@ class ProductControllerTest extends BaseIntegrationTest {
                 Product.builder()
                         .productName(RandomStringUtils.random(10))
                         .productStatus(ProductStatus.ACTIVE)
-                        .defaultPrice(BigDecimal.ONE)
                         .build());
     }
 
@@ -61,7 +60,7 @@ class ProductControllerTest extends BaseIntegrationTest {
     @Test
     void shouldReturnProductWhenExist() throws Exception {
 
-       this.mockMvc.perform(get(BASE_PRODUCT_ENDPOINT + "/" + alreadyExistProduct.getProductId())
+       this.mockMvc.perform(get(BASE_PRODUCT_ENDPOINT + "/" + alreadyExistProduct.getId())
                .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.productName").value(alreadyExistProduct.getProductName()))
@@ -84,7 +83,7 @@ class ProductControllerTest extends BaseIntegrationTest {
                 ProductStatus.PASSIVE
         );
 
-        this.mockMvc.perform(put(BASE_PRODUCT_ENDPOINT + "/" + alreadyExistProduct.getProductId())
+        this.mockMvc.perform(put(BASE_PRODUCT_ENDPOINT + "/" + alreadyExistProduct.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(updateProductRequestDto)))
                 .andExpect(jsonPath("$.productName").value(updateProductRequestDto.productName()))

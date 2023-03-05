@@ -54,12 +54,12 @@ public class ProductService {
     public ProductResponseDto getProductById(UUID id) {
         return productRepository.findById(id)
                 .map(productMapper::convertProductResponseDtoFromProduct)
-                .orElseThrow(() -> new ProductNotFoundException("Product npt found."));
+                .orElseThrow(() -> new ProductNotFoundException("Product not found."));
     }
 
-    public Product getProductByName(String productName) {
-        return productRepository.findByProductName(productName)
-                .orElseThrow(() -> new ProductNotFoundException("Product npt found."));
+    public Product findByProductId(UUID productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found."));
     }
 
 

@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -46,7 +47,6 @@ class OrderControllerTest extends BaseIntegrationTest {
                 Product.builder()
                         .productName(RandomStringUtils.random(10))
                         .productStatus(ProductStatus.ACTIVE)
-                        .defaultPrice(BigDecimal.ONE)
                         .build());
     }
 
@@ -58,7 +58,7 @@ class OrderControllerTest extends BaseIntegrationTest {
 
         CardInfoDto cardInfoDto = CardInfoDto.builder().build();
         RestaurantOrderRequestDto restaurantOrderRequestDto = new RestaurantOrderRequestDto(
-                List.of(restaurantOrderItemRequestDto), cardInfoDto
+                List.of(restaurantOrderItemRequestDto), UUID.randomUUID(), cardInfoDto
         );
 
         OrderItemResponseDTO orderItemResponseDTO = OrderItemResponseDTO.builder()
