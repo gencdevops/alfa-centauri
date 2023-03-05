@@ -3,11 +3,9 @@ package com.example.cgorder.service;
 
 import com.example.cgorder.dto.OrderResponseDto;
 import com.example.cgorder.dto.PlaceOrderRequestDTO;
-import com.example.cgorder.exception.OrderNotFoundException;
 import com.example.cgorder.exception.OrderPayloadDeserializeException;
 import com.example.cgorder.mapper.OrderItemMapper;
 import com.example.cgorder.mapper.OrderMapper;
-import com.example.cgorder.model.Order;
 import com.example.cgorder.model.OrderOutbox;
 import com.example.cgorder.model.OrderStatus;
 import com.example.cgorder.repository.OrderRepository;
@@ -17,8 +15,6 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @AllArgsConstructor
 @Service
@@ -58,9 +54,7 @@ public class OrderServiceImpl implements OrderService {
             // TODO : burada exception handlerda yakalayalim mi? mappera alinca MapStruct icerisinde kontrol et
             throw new OrderPayloadDeserializeException(e.getMessage());
         }
-
         producerService.sendMessage(order);
-
 
         orderOutBoxService.deleteOrderOutbox(orderOutbox.getOrderOutboxId());
         return orderMapper.convertPlaceOrderRequestDTOFromOrder(orderRepository.save(order));
