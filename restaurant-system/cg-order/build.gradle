@@ -51,6 +51,12 @@ dependencies {
     implementation 'io.craftgate:craftgate:1.0.36'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.0'
 
+
+    // junit 5
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+
     testImplementation 'org.springframework.kafka:spring-kafka-test'
     implementation 'org.springframework.kafka:spring-kafka'
 
