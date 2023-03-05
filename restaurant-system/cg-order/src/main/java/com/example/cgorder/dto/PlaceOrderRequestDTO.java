@@ -8,11 +8,12 @@ import lombok.Data;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
 public class PlaceOrderRequestDTO {
-   @NotNull
+    @NotNull
     private List<OrderItemRequestDTO> orderItems;
 
     @NotNull(message = "Total price field is mandatory")
@@ -22,4 +23,7 @@ public class PlaceOrderRequestDTO {
 
     @NotNull(message = "Card info field is mandatory")
     private CardInfoDto cardInfo;
+
+    @NotNull
+    private UUID branchId;
 }

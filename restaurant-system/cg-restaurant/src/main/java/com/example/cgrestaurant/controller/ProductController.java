@@ -1,5 +1,8 @@
 package com.example.cgrestaurant.controller;
 
+import com.example.cgcommon.dto.response.ProductPriceResponseDto;
+import com.example.cgcommon.request.ProductPricesRequestDto;
+import com.example.cgrestaurant.dto.CreateProductPriceRequestDto;
 import com.example.cgrestaurant.dto.request.CreateProductRequestDto;
 import com.example.cgrestaurant.dto.request.UpdateProductRequestDto;
 import com.example.cgrestaurant.dto.response.ProductResponseDto;
@@ -47,7 +50,7 @@ public class ProductController {
     })
     @GetMapping("/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public ProductResponseDto getProductById(@PathVariable Long id) {
+    public ProductResponseDto getProductById(@PathVariable UUID id) {
         return productService.getProductById(id);
     }
 
@@ -71,8 +74,24 @@ public class ProductController {
     })
     @PutMapping("/{id}")
     @ResponseStatus(value = HttpStatus.OK)
-    public ProductResponseDto updateProductById(@Valid @PathVariable Long id, @RequestBody UpdateProductRequestDto request) {
+    public ProductResponseDto updateProductById(@Valid @PathVariable UUID id, @RequestBody UpdateProductRequestDto request) {
         return productService.updateProduct(id, request);
+    }
+
+
+    @PutMapping("/{id}/branches/{branchId}/product-prices")
+    public ResponseEntity<Void> createProductPrice(@Valid @PathVariable UUID id, @PathVariable UUID branchId,
+                                                   @RequestBody CreateProductPriceRequestDto request) {
+        productService.createProductPrice(id, branchId, request);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+
+    @GetMapping("/branches/{branchId}/product-prices")
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<ProductPriceResponseDto> getProductPrices(@Valid  @PathVariable UUID branchId,
+                                                          @RequestBody ProductPricesRequestDto productPricesRequestDto) {
+        return productService.getProductPrices( branchId , productPricesRequestDto);
     }
 
     @Operation(summary = "Update  Branch")
@@ -83,8 +102,8 @@ public class ProductController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public ResponseEntity<Void> deleteProductById(@PathVariable Long id) {
-         productService.deleteProduct(id);
+    public ResponseEntity<Void> deleteProductById(@PathVariable UUID id) {
+        productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
 

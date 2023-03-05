@@ -2,6 +2,7 @@ package com.example.cgrestaurant.service;
 
 
 import com.example.cgcommon.dto.response.OrderResponseDTO;
+import com.example.cgcommon.dto.response.ProductPriceResponseDto;
 import com.example.cgrestaurant.dto.request.RestaurantOrderItemRequestDto;
 import com.example.cgrestaurant.dto.request.RestaurantOrderRequestDto;
 import com.example.cgrestaurant.dto.request.order.OrderItemRequestDTO;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -25,7 +27,7 @@ public class OrderService {
     public OrderResponseDTO placeOrder(RestaurantOrderRequestDto restaurantOrderRequestDto) {
 
         List<OrderItemRequestDTO> orderItemRequestDTOS = restaurantOrderRequestDto.restaurantOrderItemRequestDtos().stream()
-                .map(this::fillOrderItemRequestDtoWithProductInfo)
+                .map(item -> fillOrderItemRequestDtoWithProductInfo(item, restaurantOrderRequestDto.branchId()))
                 .toList();
 
         BigDecimal totalPrice = orderItemRequestDTOS.stream()
@@ -42,15 +44,19 @@ public class OrderService {
     }
 
 
-    private OrderItemRequestDTO fillOrderItemRequestDtoWithProductInfo(RestaurantOrderItemRequestDto restaurantOrderItemRequestDto) {
-        Product productByName = productService.getProductByName(restaurantOrderItemRequestDto.getProductName());
+    private OrderItemRequestDTO fillOrderItemRequestDtoWithProductInfo(RestaurantOrderItemRequestDto restaurantOrderItemRequestDto,
+                                                                       UUID branchID) {
+        Product product = productService.getProductByName(restaurantOrderItemRequestDto.getProductName());
+         ProductPriceResponseDto productPrice = productService.getProductPrice(product.getId(), branchID);
+
 
         return OrderItemRequestDTO.builder()
                 .productName(restaurantOrderItemRequestDto.getProductName())
                 .quantity(restaurantOrderItemRequestDto.getQuantity())
-                .unitPrice(productByName.getDefaultPrice())
-                .totalPrice(productByName.getDefaultPrice().
-                        multiply(BigDecimal.valueOf(restaurantOrderItemRequestDto.getQuantity())))
+                .unitPrice(productPrice.price())
+                .totalPrice(productPrice.price()
+                        .multiply(BigDecimal.valueOf(restaurantOrderItemRequestDto.getQuantity())))
                 .build();
+
     }
 }

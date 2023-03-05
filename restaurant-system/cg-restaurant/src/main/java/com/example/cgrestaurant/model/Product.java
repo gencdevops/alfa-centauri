@@ -23,23 +23,15 @@ import java.util.UUID;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
 
     private String productName;
 
-    private BigDecimal defaultPrice;
-
-
     private UUID supplierId;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdDateTime;
 
-    @Column(columnDefinition = "TIMESTAMP")
-    @UpdateTimestamp
-    private LocalDateTime changeDayLastTime;
 
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +16,7 @@ import java.math.BigDecimal;
 @Builder
 public class OrderItemRequestDTO {
     @NotNull(message = "productId field is mandatory")
-    private Long productId;
+    private UUID productId;
 
     @NotNull(message = "productName field is mandatory")
     private String productName;

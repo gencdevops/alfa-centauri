@@ -79,7 +79,7 @@ class SupplierServiceTest {
 
         SupplierResponseDto responseDto = service.updateSupplier(id, updateSupplierRequestDto);
 
-        assertEquals(id, supplier.getSupplierId());
+        assertEquals(id, supplier.getKd());
         assertEquals(updatedSupplierName, supplier.getSupplierName());
         assertEquals(updatedSupplierName, responseDto.supplierName());
 

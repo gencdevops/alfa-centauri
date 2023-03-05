@@ -1,11 +1,15 @@
 package com.example.cgrestaurant.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -14,16 +18,19 @@ import java.util.UUID;
 @Builder
 @Data
 @EntityListeners(AuditingEntityListener.class)
-@Entity(name = "suppliers")
-public class Supplier {
+@Entity
+public class ProductPrice {
 
-// SHAYA CHAIN
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    private UUID priceId;
 
-    private String supplierName;
+
+    private UUID productId;
+    private UUID branchId;
+
+    private BigDecimal price;
 
     @CreationTimestamp
     @Column(updatable = false)
@@ -32,6 +39,4 @@ public class Supplier {
     @Column(columnDefinition = "TIMESTAMP")
     @UpdateTimestamp
     private LocalDateTime changeDayLastTime;
-
-
 }

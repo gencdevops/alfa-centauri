@@ -12,7 +12,7 @@ public record CreateBranchRequestDto(
         @NotNull(message = "Branch name cannot be null")
         String branchName,
         @Nullable
-        @PositiveOrZero(message = "Branch proce field must be positive or zero")
+        @PositiveOrZero(message = "Branch price field must be positive or zero")
         BigDecimal branchPrice,
 
         @NotNull(message = "Supplier id name cannot be null")

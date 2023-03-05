@@ -38,7 +38,7 @@ class BranchServiceTest {
     @Test
     void shouldReturnBranchResponseWhenCreateBranch() {
         String branchName = RandomStringUtils.random(5);
-        CreateBranchRequestDto requestDto = new CreateBranchRequestDto(branchName, UUID.randomUUID());
+        CreateBranchRequestDto requestDto = new CreateBranchRequestDto(branchName,null, UUID.randomUUID());
         Branch branch = new Branch();
         Supplier supplier = new Supplier();
 

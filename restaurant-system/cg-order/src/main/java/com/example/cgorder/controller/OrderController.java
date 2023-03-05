@@ -38,9 +38,9 @@ public class OrderController {
                     mediaType = "application/json")))
     @PostMapping("/place-order")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<OrderResponseDto> placeOrder(@RequestBody @Valid PlaceOrderRequestDTO placeOrderRequestDTO) {
+    public OrderResponseDto placeOrder(@RequestBody @Valid PlaceOrderRequestDTO placeOrderRequestDTO) {
 
-        return ResponseEntity.ok(orderService.placeOrder(placeOrderRequestDTO));
+        return orderService.placeOrder(placeOrderRequestDTO);
     }
 
 }
