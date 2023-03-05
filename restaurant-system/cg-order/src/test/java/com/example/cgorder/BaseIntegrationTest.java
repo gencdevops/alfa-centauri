@@ -6,6 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.List;
+
 @AutoConfigureMockMvc
 @ActiveProfiles("application-integration")
 @ExtendWith({SpringExtension.class})
