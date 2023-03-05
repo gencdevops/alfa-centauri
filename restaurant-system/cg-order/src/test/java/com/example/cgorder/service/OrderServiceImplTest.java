@@ -6,7 +6,6 @@ import com.example.cgorder.dto.OrderResponseDto;
 import com.example.cgorder.dto.PlaceOrderRequestDTO;
 import com.example.cgorder.mapper.OrderItemMapper;
 import com.example.cgorder.mapper.OrderMapper;
-import com.example.cgorder.model.Card;
 import com.example.cgorder.model.Order;
 import com.example.cgorder.model.OrderItem;
 import com.example.cgorder.model.OrderOutbox;
@@ -19,20 +18,18 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceImplTest {
+
 
     @InjectMocks
     private OrderServiceImpl orderService;
@@ -50,7 +47,7 @@ class OrderServiceImplTest {
     private ArgumentCaptor<OrderOutbox> orderOutboxCaptor;
 
     @Test
-    void ok() throws JsonProcessingException {
+    void placeOrder() throws JsonProcessingException {
         OrderItemRequestDTO orderItemRequestDTO = OrderItemRequestDTO.builder()
                 .productId(1L)
                 .quantity(1)
@@ -86,6 +83,5 @@ class OrderServiceImplTest {
 
         assertEquals(expectedOrderResponseDto, actualOrderResponseDto);
         assertEquals(order.getOrderId(), orderOutboxCaptor.getValue().getOrderOutboxId());
-
     }
 }

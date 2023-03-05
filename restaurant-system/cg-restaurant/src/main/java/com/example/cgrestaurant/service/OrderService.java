@@ -25,7 +25,6 @@ public class OrderService {
     private final ProductService productService;
 
     public OrderResponseDTO placeOrder(RestaurantOrderRequestDto restaurantOrderRequestDto) {
-
         List<OrderItemRequestDTO> orderItemRequestDTOS = restaurantOrderRequestDto.restaurantOrderItemRequestDtos().stream()
                 .map(item -> fillOrderItemRequestDtoWithProductInfo(item, restaurantOrderRequestDto.branchId()))
                 .toList();

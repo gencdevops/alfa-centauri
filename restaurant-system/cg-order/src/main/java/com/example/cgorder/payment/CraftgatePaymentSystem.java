@@ -23,9 +23,8 @@ public class CraftgatePaymentSystem implements PaymentSystem {
     private Craftgate craftgate;
 
     @PostConstruct
-    public void initPaymentSystem(/*@Value("payment.craftgate.apiKey") String apiKey, @Value("payment.craftgate.secretKey") String secretKey*/) {
+    public void initPaymentSystem() {
         this.craftgate = new Craftgate("sandbox-MkOuIWzmHFxsIKCaDzSVsARStdmJqlrc", "sandbox-JsgPbznSePymfcSiDHelyQzMknDqAYNJ", "https://sandbox-api.craftgate.io");
-        //this.craftgate = new Craftgate(apiKey, secretKey, "https://sandbox-api.craftgate.io");
     }
 
     @Override

@@ -44,6 +44,7 @@ class SupplierServiceTest {
                 .supplierName("Test Supplier")
                 .build();
 
+        when(supplierRepository.findById(id)).thenReturn(java.util.Optional.of(supplier));
         when(supplierRepository.findById(id)).thenReturn(Optional.of(supplier));
         when(supplierMapper.convertSupplierResponseDtoFromSupplier(supplier)).thenReturn(new SupplierResponseDto(supplier.getSupplierName()));
 
@@ -58,6 +59,7 @@ class SupplierServiceTest {
     @Test
     void shouldThrowExceptionWhenSupplierIdDoesNotExist() {
 
+        when(supplierRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.empty());
         when(supplierRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
 
         assertThrows(SupplierNotFoundException.class, () -> service.getSupplierByIdConvertedSupplierResponseDto(UUID.randomUUID()));

@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
@@ -27,15 +28,14 @@ import java.util.Collections;
 import java.util.Objects;
 
 
-@Service
-@Profile("prod")
+@Component
 public class SlackReportingService {
     @Value("${slack.web.hook.base.url}")
     private String webHookBaseUrl;
     @Value("${slack.backend.errors.channel}")
     private String errorsChannel;
 
-    private final RestTemplate restTemplate = getInstance();
+    private final RestTemplate restTemplate = getInstance(); // todo rest template kullanılmalı mı ?
 
     private final Logger logger = LoggerFactory.getLogger(SlackReportingService.class);
 
