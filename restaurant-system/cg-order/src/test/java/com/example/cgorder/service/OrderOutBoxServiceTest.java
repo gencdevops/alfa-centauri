@@ -26,13 +26,13 @@ class OrderOutBoxServiceTest {
     void shouldSaveOutboxRecord() {
         OrderOutbox orderOutbox = new OrderOutbox();
         orderOutboxService.saveOrderOutbox(orderOutbox);
-        Mockito.verify(orderOutboxRepository, times(1)).save(eq(orderOutbox));
+        Mockito.verify(orderOutboxRepository, times(1)).save(orderOutbox);
     }
 
     @Test
     void shouldDeleteOutboxRecord() {
         UUID orderOutboxId = UUID.randomUUID();
         orderOutboxService.deleteOrderOutbox(orderOutboxId);
-        Mockito.verify(orderOutboxRepository, times(1)).deleteById(eq(orderOutboxId));
+        Mockito.verify(orderOutboxRepository, times(1)).deleteById(orderOutboxId);
     }
 }

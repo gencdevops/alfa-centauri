@@ -35,7 +35,7 @@ public class SlackReportingService {
     @Value("${slack.backend.errors.channel}")
     private String errorsChannel;
 
-    private final RestTemplate restTemplate = getInstance(); // todo rest template kullanılmalı mı ?
+    private final RestTemplate restTemplate = getInstance();
 
     private final Logger logger = LoggerFactory.getLogger(SlackReportingService.class);
 
