@@ -36,7 +36,7 @@ public class OrderController {
             content = @Content(
                     schema = @Schema(implementation = OrderResponseDto.class),
                     mediaType = "application/json")))
-    @PostMapping
+    @PostMapping("/place-order")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<OrderResponseDto> placeOrder(@RequestBody @Valid PlaceOrderRequestDTO placeOrderRequestDTO) {
 

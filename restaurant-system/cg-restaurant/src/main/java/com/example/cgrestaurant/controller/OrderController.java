@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +24,9 @@ public class OrderController {
 
     @Operation(summary = "Order Operations")
     @PostMapping("/place-order")
-    public ResponseEntity<OrderResponseDTO> placeOrder(@Valid @RequestBody RestaurantOrderRequestDto restaurantOrderRequestDto) {
-        return ResponseEntity.ok(orderService.placeOrder(restaurantOrderRequestDto));
+    @ResponseStatus(value = HttpStatus.OK)
+    public OrderResponseDTO placeOrder(@Valid @RequestBody RestaurantOrderRequestDto restaurantOrderRequestDto) {
+        return orderService.placeOrder(restaurantOrderRequestDto);
     }
 
 }

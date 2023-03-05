@@ -15,6 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,7 +39,7 @@ class BranchServiceTest {
     @Test
     void shouldReturnBranchResponseWhenCreateBranch() {
         String branchName = RandomStringUtils.random(5);
-        CreateBranchRequestDto requestDto = new CreateBranchRequestDto(branchName, UUID.randomUUID());
+        CreateBranchRequestDto requestDto = new CreateBranchRequestDto(branchName, BigDecimal.ONE, UUID.randomUUID());
         Branch branch = new Branch();
         Supplier supplier = new Supplier();
 

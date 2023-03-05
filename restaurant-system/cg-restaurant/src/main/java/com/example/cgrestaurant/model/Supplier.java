@@ -37,9 +37,5 @@ public class Supplier {
     @UpdateTimestamp
     private LocalDateTime changeDayLastTime;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Branch> branches;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Product> products;
 }

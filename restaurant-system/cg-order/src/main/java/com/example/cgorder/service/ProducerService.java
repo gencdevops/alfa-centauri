@@ -22,7 +22,6 @@ public class ProducerService {
     public void sendMessage(Order order) {
         try {
             log.info("Order sendMessage()   {}", order);
-            //TODO :  buraya retry mekanizmasi kurulacak - retry sonunda başarısız olursa slack ile dummy kanala bas
             kafkaTemplate.send(producerTopic,  order);
         }catch (Exception e){
             slackReportingService.sendErrorMessage("Order Outbox Retry Error", e);

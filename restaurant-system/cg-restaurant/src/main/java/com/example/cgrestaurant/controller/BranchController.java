@@ -30,14 +30,14 @@ public class BranchController {
 
     @Operation(summary = "Create a Branch")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully Branch Created"),
+            @ApiResponse(responseCode = "201", description = "Successfully Branch Created"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
-    public ResponseEntity<BranchResponseDto> createBranch(@Valid @RequestBody CreateBranchRequestDto createBranchRequestDto) {
-        return ResponseEntity.ok(service.createBranch(createBranchRequestDto));
+    public BranchResponseDto createBranch(@Valid @RequestBody CreateBranchRequestDto createBranchRequestDto) {
+        return service.createBranch(createBranchRequestDto);
     }
 
     @Operation(summary = "Retrieve branch according to branch ID")
@@ -47,8 +47,9 @@ public class BranchController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<BranchResponseDto> getBranchById(@NotNull @PathVariable UUID id) {
-        return ResponseEntity.ok(service.getBranchById(id));
+    @ResponseStatus(value = HttpStatus.OK)
+    public BranchResponseDto getBranchById(@NotNull @PathVariable UUID id) {
+        return service.getBranchById(id);
     }
 
     @Operation(summary = "Get All Branch")
@@ -58,8 +59,9 @@ public class BranchController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping
-    public ResponseEntity<List<BranchResponseDto>> getAllBranches() {
-        return ResponseEntity.ok(service.getAllBranch());
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<BranchResponseDto> getAllBranches() {
+        return service.getAllBranch();
     }
 
 
@@ -70,8 +72,9 @@ public class BranchController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<BranchResponseDto> updateBranchById(@Valid @PathVariable UUID id, @RequestBody UpdateBranchRequestDto request) {
-        return ResponseEntity.ok(service.updateBranch(id, request));
+    @ResponseStatus(value = HttpStatus.OK)
+    public BranchResponseDto updateBranchById(@Valid @PathVariable UUID id, @RequestBody UpdateBranchRequestDto request) {
+        return service.updateBranch(id, request);
 
     }
 

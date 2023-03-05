@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "cg-order")
 public interface OrderFeignClient{
 
-
-    @PostMapping
+    @PostMapping("/api/v1/orders/place-order")
     OrderResponseDTO placeOrder(@RequestBody PlaceOrderRequestDTO placeOrderRequestDTO);
-
-
 
     }
