@@ -15,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -84,6 +86,31 @@ class SupplierServiceTest {
         verify(supplierRepository).findById(id);
         verify(supplierRepository).save(supplier);
     }
+
+    @Test
+    void shouldReturnGetAllSupplier() {
+        Supplier supplier = Supplier.builder()
+                .supplierId(UUID.randomUUID())
+                .supplierName(RandomStringUtils.randomAlphabetic(10))
+                .build();
+
+
+        ArrayList<Supplier> suppliers = new ArrayList<>();
+        suppliers.add(supplier);
+
+        when(supplierRepository.findAll()).thenReturn(suppliers);
+        when(supplierMapper.convertSupplierResponseDtoFromSupplier(supplier))
+                .thenReturn(new SupplierResponseDto(supplier.getSupplierName()));
+
+
+        List<SupplierResponseDto> responseDtos = service.getAllSupplier();
+
+        assertEquals(1, responseDtos.size());
+        assertEquals(supplier.getSupplierName(), responseDtos.get(0).supplierName());
+
+        verify(supplierRepository).findAll();
+    }
+
     @Test
     void shouldReturnSupplierResponseDtoWhenCreateSupplier() {
         CreateSupplierRequestDto requestDto = CreateSupplierRequestDto.builder()
