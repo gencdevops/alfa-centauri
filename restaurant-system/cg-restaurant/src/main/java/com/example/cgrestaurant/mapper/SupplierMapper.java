@@ -8,7 +8,7 @@ import org.mapstruct.Mapper;
 @Mapper(implementationName = "SupplierMapperImpl", componentModel = "spring", imports = Supplier.class)
 public interface SupplierMapper {
 
-    Supplier toSupplierFromCreateSupplierRequest(CreateSupplierRequestDto request);
+    Supplier convertSupplierFromCreateSupplierRequestDto(CreateSupplierRequestDto request);
 
-    SupplierResponseDto toSupplierDto(Supplier supplier);
+    SupplierResponseDto convertSupplierResponseDtoFromSupplier(Supplier supplier);
 }

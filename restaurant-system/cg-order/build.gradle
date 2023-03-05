@@ -33,7 +33,7 @@ repositories {
 
 ext {
     set('springCloudVersion', "2022.0.0")
-    snippetsDir =  file('build/generated-snippets')
+//    snippetsDir =  file('build/generated-snippets')
     set('log4j2.version','2.17.0')
 }
 
@@ -46,7 +46,8 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-    implementation "org.springdoc:springdoc-openapi-ui:1.6.4"
+    //implementation "org.springdoc:springdoc-openapi-ui:1.6.4"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.0"
     implementation 'io.craftgate:craftgate:1.0.36'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.0.0'
 
@@ -57,9 +58,6 @@ dependencies {
 
 
     implementation ("com.example:cg-common:1.0-SNAPSHOT") { changing = true }
-
-
-
 
 
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.6'
@@ -81,6 +79,5 @@ dependencyManagement {
 }
 
 tasks.named('test') {
-    outputs.dir snippetsDir
     useJUnitPlatform()
 }

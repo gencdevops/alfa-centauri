@@ -3,8 +3,10 @@ package com.example.cgrestaurant.service;
 import com.example.cgrestaurant.dto.request.CreateSupplierRequestDto;
 import com.example.cgrestaurant.dto.request.UpdateSupplierRequestDto;
 import com.example.cgrestaurant.dto.response.SupplierResponseDto;
+import com.example.cgrestaurant.exception.ProductNotFoundException;
 import com.example.cgrestaurant.exception.SupplierNotFoundException;
 import com.example.cgrestaurant.mapper.SupplierMapper;
+import com.example.cgrestaurant.model.Product;
 import com.example.cgrestaurant.model.Supplier;
 import com.example.cgrestaurant.repository.SupplierRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,48 +22,41 @@ import java.util.UUID;
 @Service
 public class SupplierService {
 
-    private final SupplierRepository repository;
+    private final SupplierRepository supplierRepository;
 
-    private final SupplierMapper mapper;
+    private final SupplierMapper supplierMapper;
 
-    public String createSupplier(CreateSupplierRequestDto request) {
-        Supplier created = mapper.toSupplierFromCreateSupplierRequest(request);
-        created = repository.save(created);
+    public SupplierResponseDto createSupplier(CreateSupplierRequestDto request) {
+        Supplier created = supplierMapper.convertSupplierFromCreateSupplierRequestDto(request);
+        created = supplierRepository.save(created);
         log.info("created: " + created);
-        return "Supplier başarıyla oluşturuldu. (" + created.getSupplierId() + ")";
+        return supplierMapper.convertSupplierResponseDtoFromSupplier(created);
     }
 
-    public SupplierResponseDto getSupplierById(UUID id) {
-        return repository.findById(id)
-                .map(mapper::toSupplierDto)
-                .orElseThrow(() -> new SupplierNotFoundException("Supplier bulunamadı."));
+    public SupplierResponseDto getSupplierByIdConvertedSupplierResponseDto(UUID id) {
+        return supplierMapper.convertSupplierResponseDtoFromSupplier(getSupplierByID(id));
+    }
+
+    public Supplier getSupplierByID(UUID id) {
+        return supplierRepository.findById(id)
+                .orElseThrow(() -> new SupplierNotFoundException("Supplier not found."));
     }
 
     public List<SupplierResponseDto> getAllSupplier() {
-        return repository.findAll()
+        return supplierRepository.findAll()
                 .stream()
-                .map(mapper::toSupplierDto)
+                .map(supplierMapper::convertSupplierResponseDtoFromSupplier)
                 .toList();
     }
 
-    public String updateSupplier(UUID id, UpdateSupplierRequestDto request) {
-        repository.findById(id)
-                .map(supplier -> {
-                    supplier.setSupplierName(request.supplierName());
-                    repository.save(supplier);
-                    return supplier;
-                })
-                .orElseThrow(() -> new SupplierNotFoundException("Supplier bulunamadı."));
-        return "Supplier başarıyla güncellendi.";
+    public SupplierResponseDto updateSupplier(UUID id, UpdateSupplierRequestDto updateSupplierRequestDto) {
+        Supplier supplier = supplierRepository.findById(id).orElseThrow(() -> new SupplierNotFoundException("Supplier not found."));
+       supplier.setSupplierName(updateSupplierRequestDto.supplierName());
+        return   supplierMapper.convertSupplierResponseDtoFromSupplier(supplierRepository.save(supplier));
     }
 
-    public String deleteSupplier(UUID id) {
-        repository.findById(id)
-                .map(supplier -> {
-                    repository.deleteById(id);
-                    return supplier; })
-                .orElseThrow(() -> new SupplierNotFoundException("Supplier bulunamadı."));
-        return id + ": nolu supplier başarıyla silindi.";
+    public void deleteSupplier(UUID id) {
+       supplierRepository.deleteById(id);
     }
 
 }

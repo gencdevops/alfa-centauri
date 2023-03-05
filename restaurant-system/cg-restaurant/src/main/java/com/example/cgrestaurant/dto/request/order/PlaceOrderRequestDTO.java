@@ -1,5 +1,6 @@
-package com.example.cgcommon.dto.request;
+package com.example.cgrestaurant.dto.request.order;
 
+import com.example.cgcommon.model.CardInfoDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,8 +9,11 @@ import java.util.List;
 
 @Data
 @Builder
-public class OrderRequestDTO {
+public class PlaceOrderRequestDTO {
     private List<OrderItemRequestDTO> orderItems;
 
     private BigDecimal totalPrice;
+
+
+    private CardInfoDto cardInfo;
 }

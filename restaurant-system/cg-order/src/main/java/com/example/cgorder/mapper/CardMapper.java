@@ -1,12 +1,12 @@
 package com.example.cgorder.mapper;
 
-import com.example.cgorder.client.CardDto;
+import com.example.cgcommon.model.CardInfoDto;
 import com.example.cgorder.model.Card;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface CardMapper {
-    Card toEntity(CardDto cardDto);
+    Card convertCardFromCardInfoDto(CardInfoDto cardInfoDto);
 
-    CardDto toDto(Card card);
+    CardInfoDto convertCardInfoDtoFromCard(Card card);
 }

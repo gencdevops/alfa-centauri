@@ -1,21 +1,12 @@
 package com.example.cgorder.service;
 
-import com.example.cgorder.client.CardDto;
-import com.example.cgorder.client.OrderRequestDto;
-import com.example.cgorder.client.OrderResponseDto;
 
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.UUID;
+import com.example.cgorder.dto.OrderResponseDto;
+import com.example.cgorder.dto.PlaceOrderRequestDTO;
+import jakarta.validation.constraints.NotNull;
+
 
 public interface OrderService {
-
-    List<OrderResponseDto> getAllOrders();
-
-    OrderResponseDto getOrderById(UUID id);
-
-    OrderResponseDto createOrder(OrderRequestDto orderRequestDto, CardDto cardDto);
-
-    void deleteOrder(UUID id);
+    OrderResponseDto placeOrder(@NotNull PlaceOrderRequestDTO placeOrderRequestDTO);
 
 }

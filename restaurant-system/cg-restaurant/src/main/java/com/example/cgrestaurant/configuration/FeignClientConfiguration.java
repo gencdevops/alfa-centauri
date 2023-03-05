@@ -2,7 +2,6 @@ package com.example.cgrestaurant.configuration;
 
 
 import com.example.cgrestaurant.feign.FeignErrorDecoder;
-import com.example.cgrestaurant.feign.RetreiveMessageErrorDecoder;
 import feign.Logger;
 import feign.codec.ErrorDecoder;
 import org.springframework.beans.factory.ObjectFactory;

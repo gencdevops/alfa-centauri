@@ -1,4 +1,4 @@
-package com.example.cgorder.client;
+package com.example.cgorder.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

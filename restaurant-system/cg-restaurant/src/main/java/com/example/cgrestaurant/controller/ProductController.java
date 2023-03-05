@@ -8,33 +8,35 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.example.cgrestaurant.contants.RestaurantConstants.*;
 
 @RequiredArgsConstructor
-@Tag(name = "Branch Related APIs")
+@Tag(name = "Product Related APIs")
 @RestController
 @RequestMapping(API_PREFIX + API_VERSION_V1 + API_PRODUCTS)
 public class ProductController {
 
-    private final ProductService service;
+    private final ProductService productService;
 
-    @Operation(summary = "Update  Branch")
+    @Operation(summary = "Create  Product")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully Branch Updated"),
+            @ApiResponse(responseCode = "200", description = "Successfully Product Updated"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public String createProduct(@RequestBody CreateProductRequestDto request) {
-        return service.createProduct(request);
+    public ResponseEntity<ProductResponseDto> createProduct(@Valid @RequestBody CreateProductRequestDto createProductRequestDto) {
+        return ResponseEntity.ok(productService.createProduct(createProductRequestDto));
     }
 
     @Operation(summary = "Update  Branch")
@@ -45,29 +47,29 @@ public class ProductController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long id) {
-        return ResponseEntity.ok(service.getProductById(id));
+        return ResponseEntity.ok(productService.getProductById(id));
     }
 
-    @Operation(summary = "Update  Branch")
+    @Operation(summary = "Get ALl Products")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully Branch Updated"),
+            @ApiResponse(responseCode = "200", description = "Get all products"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping
     public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
-        return ResponseEntity.ok(service.getAllProduct());
+        return ResponseEntity.ok(productService.getAllProduct());
     }
 
-    @Operation(summary = "Update  Branch")
+    @Operation(summary = "Update  Product")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully Branch Updated"),
+            @ApiResponse(responseCode = "200", description = "Successfully Product Updated"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateProductById(@PathVariable Long id, @RequestBody UpdateProductRequestDto request) {
-        return ResponseEntity.ok(service.updateProduct(id, request));
+    public ResponseEntity<ProductResponseDto> updateProductById(@Valid @PathVariable Long id, @RequestBody UpdateProductRequestDto request) {
+        return ResponseEntity.ok(productService.updateProduct(id, request));
     }
 
     @Operation(summary = "Update  Branch")
@@ -78,7 +80,9 @@ public class ProductController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public String deleteProductById(@PathVariable Long id) {
-        return service.deleteProduct(id);
+    public ResponseEntity<Void> deleteProductById(@PathVariable Long id) {
+         productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
     }
+
 }

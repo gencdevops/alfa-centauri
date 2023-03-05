@@ -1,6 +1,4 @@
-package com.example.cgorder.client;
-
-import com.example.cgorder.model.OrderItem;
+package com.example.cgorder.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

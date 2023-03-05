@@ -27,6 +27,9 @@
             <version>1.18.20</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
+
+
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
