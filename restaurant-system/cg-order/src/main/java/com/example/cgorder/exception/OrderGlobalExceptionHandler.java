@@ -91,7 +91,23 @@ public class OrderGlobalExceptionHandler {
                             mediaType = "application/json"))})
     @ExceptionHandler(OrderNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorBody> branchNotFoundException( OrderNotFoundException exception) {
+    public ResponseEntity<ErrorBody> OrderNotFoundException( OrderNotFoundException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "500",
+                    description = "Order payload deserialize exception",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorBody.class),
+                            mediaType = "application/json"))})
+    @ExceptionHandler(OrderPayloadDeserializeException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorBody> orderPayloadDeserializeException( OrderPayloadDeserializeException exception) {
         return responseEntity(ErrorBody.builder()
                 .errorCode(HttpStatus.NOT_FOUND.value())
                 .errorDescription(exception.getMessage())
