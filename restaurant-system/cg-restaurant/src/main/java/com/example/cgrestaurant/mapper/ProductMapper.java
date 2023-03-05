@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(implementationName = "ProductMapperImpl", componentModel = "spring", imports = Product.class)
 public interface ProductMapper {
 
-    @Mapping(target = "supplier", ignore = true)
+
     Product convertProductFromCreateProductRequestDto(CreateProductRequestDto request);
 
     ProductResponseDto convertProductResponseDtoFromProduct(Product product);

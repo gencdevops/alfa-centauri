@@ -24,7 +24,7 @@ import java.util.UUID;
 @Slf4j
 public class ProducerRunner implements ApplicationRunner {
 
-    private final OrderServiceDummy orderServiceDummy;
+    //private final OrderServiceDummy orderServiceDummy;
 
 
     @Override
@@ -74,7 +74,6 @@ public class ProducerRunner implements ApplicationRunner {
         System.out.println(String.format("Create Payment Result: %s", response));
 
 
-        orderServiceDummy.createAndSuccessPayment();
     }
 }
 

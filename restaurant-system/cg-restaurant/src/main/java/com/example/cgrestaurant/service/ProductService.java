@@ -25,7 +25,6 @@ public class ProductService {
 
     public ProductResponseDto createProduct(CreateProductRequestDto createProductRequestDto) {
         Product createdProduct = productMapper.convertProductFromCreateProductRequestDto(createProductRequestDto);
-        createdProduct.setSupplier(supplierService.getSupplierByID(createProductRequestDto.supplierId()));
         createdProduct = productRepository.save(createdProduct);
         log.info("created supplier : " + createdProduct);
        return  productMapper.convertProductResponseDtoFromProduct(createdProduct);

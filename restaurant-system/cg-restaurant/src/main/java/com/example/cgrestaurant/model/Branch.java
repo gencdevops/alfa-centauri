@@ -8,6 +8,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.annotation.Nullable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -28,6 +30,8 @@ public class Branch {
     @Column(unique=true)
     private String branchName;
 
+    @Nullable
+    private BigDecimal branchPrice;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdDateTime;
@@ -36,10 +40,8 @@ public class Branch {
     @UpdateTimestamp
     private LocalDateTime changeDayLastTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id", referencedColumnName = "supplierId")
-    @JsonIgnoreProperties
-    private Supplier supplier;
+
+    private UUID supplierId;
 
 
 }

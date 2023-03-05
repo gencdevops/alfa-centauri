@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ProducerService {
     private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final SlackReportingService slackReportingService;
 
     @Value("${spring.kafka.producer.topic}")
     private  String producerTopic;
@@ -19,9 +20,12 @@ public class ProducerService {
 
 
     public void sendMessage(Order order) {
-        log.info("Order sendMessage()   {}", order);
-        //TODO :  buraya retry mekanizmasi kurulacak
-        kafkaTemplate.send(producerTopic,  order);
+        try {
+            log.info("Order sendMessage()   {}", order);
+            kafkaTemplate.send(producerTopic,  order);
+        }catch (Exception e){
+            slackReportingService.sendErrorMessage("Order Outbox Retry Error", e);
+        }
     }
 
 

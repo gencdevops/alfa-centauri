@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,14 +31,14 @@ public class SupplierController {
 
     @Operation(summary = "Create  Supplier")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully supplier created"),
+            @ApiResponse(responseCode = "201", description = "Successfully supplier created"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public ResponseEntity<SupplierResponseDto> createSupplier(@RequestBody @Valid CreateSupplierRequestDto createSupplierRequestDto) {
-        return ResponseEntity.ok(supplierService.createSupplier(createSupplierRequestDto));
+    public SupplierResponseDto createSupplier(@RequestBody @Valid CreateSupplierRequestDto createSupplierRequestDto) {
+        return supplierService.createSupplier(createSupplierRequestDto);
     }
 
     @Operation(summary = "Get Supplier According To Supplier ID")
@@ -49,8 +48,9 @@ public class SupplierController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<SupplierResponseDto> getSupplierById(@PathVariable UUID id) {
-        return ResponseEntity.ok(supplierService.getSupplierByIdConvertedSupplierResponseDto(id));
+    @ResponseStatus(value = HttpStatus.OK)
+    public SupplierResponseDto getSupplierById(@PathVariable UUID id) {
+        return supplierService.getSupplierByIdConvertedSupplierResponseDto(id);
     }
 
     @Operation(summary = "Get All Suppliers  Branch")
@@ -60,8 +60,9 @@ public class SupplierController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping
-    public ResponseEntity<List<SupplierResponseDto>> getAllSuppliers() {
-        return ResponseEntity.ok(supplierService.getAllSupplier());
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<SupplierResponseDto> getAllSuppliers() {
+        return supplierService.getAllSupplier();
     }
 
     @Operation(summary = "Update  Supplier")
@@ -71,8 +72,9 @@ public class SupplierController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<SupplierResponseDto> updateSupplierById(@Valid @PathVariable UUID id, @RequestBody UpdateSupplierRequestDto request) {
-        return ResponseEntity.ok(supplierService.updateSupplier(id, request));
+    @ResponseStatus(value = HttpStatus.OK)
+    public SupplierResponseDto updateSupplierById(@Valid @PathVariable UUID id, @RequestBody UpdateSupplierRequestDto request) {
+        return supplierService.updateSupplier(id, request);
     }
 
     @Operation(summary = "Delete  Supplier")

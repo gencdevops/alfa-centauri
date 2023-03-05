@@ -35,8 +35,8 @@ public class ProductController {
     })
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public ResponseEntity<ProductResponseDto> createProduct(@Valid @RequestBody CreateProductRequestDto createProductRequestDto) {
-        return ResponseEntity.ok(productService.createProduct(createProductRequestDto));
+    public ProductResponseDto createProduct(@Valid @RequestBody CreateProductRequestDto createProductRequestDto) {
+        return productService.createProduct(createProductRequestDto);
     }
 
     @Operation(summary = "Update  Branch")
@@ -46,8 +46,9 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDto> getProductById(@PathVariable Long id) {
-        return ResponseEntity.ok(productService.getProductById(id));
+    @ResponseStatus(value = HttpStatus.OK)
+    public ProductResponseDto getProductById(@PathVariable Long id) {
+        return productService.getProductById(id);
     }
 
     @Operation(summary = "Get ALl Products")
@@ -57,8 +58,9 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping
-    public ResponseEntity<List<ProductResponseDto>> getAllProducts() {
-        return ResponseEntity.ok(productService.getAllProduct());
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<ProductResponseDto> getAllProducts() {
+        return productService.getAllProduct();
     }
 
     @Operation(summary = "Update  Product")
@@ -68,8 +70,9 @@ public class ProductController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDto> updateProductById(@Valid @PathVariable Long id, @RequestBody UpdateProductRequestDto request) {
-        return ResponseEntity.ok(productService.updateProduct(id, request));
+    @ResponseStatus(value = HttpStatus.OK)
+    public ProductResponseDto updateProductById(@Valid @PathVariable Long id, @RequestBody UpdateProductRequestDto request) {
+        return productService.updateProduct(id, request);
     }
 
     @Operation(summary = "Update  Branch")

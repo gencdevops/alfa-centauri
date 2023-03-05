@@ -30,9 +30,8 @@ public class Product {
 
     private BigDecimal defaultPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "supplier_id", referencedColumnName = "supplierId")
-    private Supplier supplier;
+
+    private UUID supplierId;
 
     @CreationTimestamp
     @Column(updatable = false)
