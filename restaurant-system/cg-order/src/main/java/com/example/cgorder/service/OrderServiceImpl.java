@@ -61,12 +61,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponseDTO placeOrder(@NotNull PlaceOrderRequestDTO placeOrderRequestDTO, String idempotentKey) {
-        Optional<OrderIdempotent> orderIdempotent = idempotentRepository.findByKey(idempotentKey);
+       OrderIdempotent orderIdempotent = idempotentRepository.findByKey(idempotentKey).get();
 
-        if(orderIdempotent.isPresent() && orderIdempotent.get().getOrderIdemPotentStatus().equals(NOT_AVAILABLE)){
+        if(orderIdempotent.getOrderIdemPotentStatus().equals(NOT_AVAILABLE)){
             throw new OrderTooManyRequestException("Too many request");
         }
-        updateIdempotentStatus(orderIdempotent, OrderIdemPotentStatus.AVAILABLE);
+        updateIdempotentStatus(orderIdempotent, NOT_AVAILABLE);
 
         validateProductPrice(placeOrderRequestDTO.getBranchId(), placeOrderRequestDTO.getOrderItems());
         validateOrderStatus(placeOrderRequestDTO.getOrderItems());
