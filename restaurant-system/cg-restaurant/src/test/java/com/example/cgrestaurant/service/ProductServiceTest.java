@@ -1,5 +1,6 @@
 package com.example.cgrestaurant.service;
 
+import com.example.cgcommon.configuration.CacheClient;
 import com.example.cgcommon.dto.response.ProductPriceResponseDto;
 import com.example.cgcommon.model.ProductStatus;
 import com.example.cgcommon.request.ProductPricesRequestDto;
@@ -46,6 +47,9 @@ class ProductServiceTest {
     private ProductPriceRepository productPriceRepository;
     @Mock
     private ProductMapper productMapper;
+
+    @Mock
+    CacheClient cacheClient;
 
     @Test
     void shouldReturnResponseWhenCreateProduct() {
@@ -203,6 +207,7 @@ class ProductServiceTest {
 
         ProductPriceResponseDto result = productService.getProductPrice(productId, branchId);
         assertEquals(productPriceResponseDto, result);
+        assertEquals(productMapper.convertProductPriceResponseDtoFromProductPrice(productPrice), result);
     }
 
     @Test

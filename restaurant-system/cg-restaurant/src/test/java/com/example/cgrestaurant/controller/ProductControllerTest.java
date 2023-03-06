@@ -1,5 +1,6 @@
 package com.example.cgrestaurant.controller;
 
+import com.example.cgcommon.model.ProductStatus;
 import com.example.cgrestaurant.BaseIntegrationTest;
 import com.example.cgrestaurant.dto.request.CreateProductRequestDto;
 import com.example.cgrestaurant.dto.request.UpdateProductRequestDto;
@@ -52,7 +53,6 @@ class ProductControllerTest extends BaseIntegrationTest {
                 .content(mapper.writeValueAsString(createProductRequestDto)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.productName").value(createProductRequestDto.productName()))
-                .andExpect(jsonPath("$.defaultPrice").value(createProductRequestDto.defaultPrice()))
                 .andExpect(jsonPath("$.productStatus").value(createProductRequestDto.productStatus().name()));
     }
 
@@ -63,13 +63,12 @@ class ProductControllerTest extends BaseIntegrationTest {
                .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.productName").value(alreadyExistProduct.getProductName()))
-                .andExpect(jsonPath("$.defaultPrice").value("1.0"))
                 .andExpect(jsonPath("$.productStatus").value(alreadyExistProduct.getProductStatus().name()));
     }
 
     @Test
     void shouldReturnNotFoundWhenProductNotExist() throws Exception {
-        this.mockMvc.perform(get(BASE_PRODUCT_ENDPOINT + "/" + UUID.randomUUID().getLeastSignificantBits())
+        this.mockMvc.perform(get(BASE_PRODUCT_ENDPOINT + "/" + UUID.randomUUID())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
@@ -85,8 +84,20 @@ class ProductControllerTest extends BaseIntegrationTest {
         this.mockMvc.perform(put(BASE_PRODUCT_ENDPOINT + "/" + alreadyExistProduct.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(updateProductRequestDto)))
-                .andExpect(jsonPath("$.productName").value(updateProductRequestDto.productName()))
-                .andExpect(jsonPath("$.defaultPrice").value(updateProductRequestDto.defaultPrice()));
+                .andExpect(jsonPath("$.productName").value(updateProductRequestDto.productName()));
+    }
+
+    @Test
+    void shouldDeleteProduct() throws Exception {
+        UpdateProductRequestDto updateProductRequestDto = new UpdateProductRequestDto(
+                RandomStringUtils.randomAlphanumeric(10),
+                BigDecimal.ONE,
+                ProductStatus.PASSIVE
+        );
+
+        this.mockMvc.perform(delete(BASE_PRODUCT_ENDPOINT + "/" + alreadyExistProduct.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 
 }
