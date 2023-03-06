@@ -30,7 +30,7 @@ class KafkaOrderEventOperationsListenerServiceTest {
     KafkaOrderEventOperationsListenerService kafkaOrderEventOperationsListenerService;
 
     @Test
-    void handleMessage_Should_SetStatusAndSaveOrder() throws JsonProcessingException {
+    void shouldSetStatusAndSaveOrder() throws JsonProcessingException {
         UUID uuid = UUID.randomUUID();
 
         Order mockOrder = Mockito.spy(Order.class);
