@@ -15,5 +15,5 @@ public abstract class OrderMapper {
 
     public abstract Order convertOrderFromPlaceOrderRequestDTO(PlaceOrderRequestDTO orderRequestDto);
 
-    public abstract OrderResponseDTO convertPlaceOrderRequestDTOFromOrder(Order order);
+    public abstract OrderResponseDTO convertPlaceOrderResponseDTOFromOrder(Order order, String idempotentKey);
 }

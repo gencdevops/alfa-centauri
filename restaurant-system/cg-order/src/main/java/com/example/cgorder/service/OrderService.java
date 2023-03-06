@@ -8,5 +8,5 @@ import jakarta.validation.constraints.NotNull;
 
 public interface OrderService {
     OrderResponseDTO placeOrder(@NotNull PlaceOrderRequestDTO placeOrderRequestDTO, String idempotentKey);
-    String createIdempotentKey();
+    String checkIdempotentKey(String idempotentKey);
 }

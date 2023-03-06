@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class OrderService {
                 .map(OrderItemRequestDTO::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        String idempotentKey = orderFeignClient.createIdempotentKey();
+        String idempotentKey = orderFeignClient.createIdempotentKey(restaurantOrderRequestDto.idempotentKey());
 
 
         PlaceOrderRequestDTO placeOrderRequestDTO = PlaceOrderRequestDTO.builder()
