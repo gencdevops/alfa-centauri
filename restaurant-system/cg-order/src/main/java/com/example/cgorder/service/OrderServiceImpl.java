@@ -30,9 +30,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.SneakyThrows;
+import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -64,9 +67,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponseDTO placeOrder(@NotNull PlaceOrderRequestDTO placeOrderRequestDTO, String idempotentKey) {
-        OrderIdempotent orderIdempotent = idempotentRepository.findByKey(idempotentKey).get();
+       OrderIdempotent orderIdempotent = idempotentRepository.findByKey(idempotentKey).get();
 
-        if (orderIdempotent.getOrderIdemPotentStatus().equals(NOT_AVAILABLE)) {
+        if(orderIdempotent.getOrderIdemPotentStatus().equals(NOT_AVAILABLE)){
             throw new OrderTooManyRequestException("Too many request");
         }
         updateIdempotentStatus(orderIdempotent, NOT_AVAILABLE);
@@ -77,7 +80,7 @@ public class OrderServiceImpl implements OrderService {
         var order = orderMapper.convertOrderFromPlaceOrderRequestDTO(placeOrderRequestDTO);
 
         var orderItemList = placeOrderRequestDTO.getOrderItems().stream()
-                .map(orderItemMapper::convertOrderItemFromOrderItemRequestDTO).toList();
+                .map( orderItemMapper::convertOrderItemFromOrderItemRequestDTO).toList();
 
         order.setOrderItems(orderItemList);
         order.setOrderStatus(OrderStatus.RECEIVED);
@@ -109,14 +112,12 @@ public class OrderServiceImpl implements OrderService {
 
         Optional<OrderIdempotent> orderIdempotentDb = idempotentRepository.findByKey(orderIdempotent.getKey());
 
-        if (orderIdempotentDb.isEmpty()) {
-            idempotentRepository.save(orderIdempotent);
-            return orderIdempotent.getKey();
+       if(orderIdempotentDb.isEmpty()) {
+           idempotentRepository.save(orderIdempotent);
+           return orderIdempotent.getKey();
         }
         return orderIdempotentDb.get().getKey();
     }
-
-    ;
 
     public void updateIdempotentStatus(OrderIdempotent orderIdempotent, OrderIdemPotentStatus orderIdemPotentStatus) {
         orderIdempotent.setOrderIdemPotentStatus(orderIdemPotentStatus);
@@ -128,7 +129,7 @@ public class OrderServiceImpl implements OrderService {
                 .productIds(orderItems.stream().map(OrderItemRequestDTO::getProductId).toList())
                 .build();
 
-        List<ProductPriceResponseDto> productPrices = productFeignClient.getProductPrices(branchId, productPricesRequestDto);
+        List<ProductPriceResponseDto>  productPrices = productFeignClient.getProductPrices(branchId,productPricesRequestDto);
 
 
         Map<UUID, ProductPriceResponseDto> productIdPriceMap = productPrices.stream()
@@ -138,14 +139,14 @@ public class OrderServiceImpl implements OrderService {
         for (OrderItemRequestDTO orderItem : orderItems) {
             ProductPriceResponseDto productPrice = productIdPriceMap.get(orderItem.getProductId());
 
-            if (Objects.isNull(productPrice)) {
+            if(Objects.isNull(productPrice)){
                 throw new ProductPriceNotFoundException();
             }
-            if (!orderItem.getUnitPrice().equals(productPrice.price())) {
+            if(!orderItem.getUnitPrice().equals(productPrice.price())) {
                 throw new InConsistentProductPriceException("Product price not match");
             }
 
-            if (!orderItem.getTotalPrice().equals(productPrice.price().multiply(BigDecimal.valueOf(orderItem.getQuantity())))) {
+            if(!orderItem.getTotalPrice().equals(productPrice.price().multiply(BigDecimal.valueOf(orderItem.getQuantity())))) {
                 throw new InConsistentProductPriceException("Total price not match");
             }
 
@@ -153,30 +154,38 @@ public class OrderServiceImpl implements OrderService {
         }
 
     }
-
     public void validateOrderStatus(List<OrderItemRequestDTO> orderItems) {
-        List<ProductStatusCacheDto> cacheStatus = orderItems.stream().map(item -> {
-          return getProductStatusFromCache(item.getProductId().toString());
-        }).toList();
+     List<ProductStatusCacheDto> cacheStatus = orderItems.stream().map(orderItemRequestDTO ->
+             (ProductStatusCacheDto) cacheClient.get("status"))
+             .toList();
 
         for (ProductStatusCacheDto status : cacheStatus) {
-            if (status.getProductStatus().equals(ProductStatus.PASSIVE))
+            if(status.getProductStatus().equals(ProductStatus.PASSIVE))
                 throw new ProductPriceNotFoundException("Products status passive");
         }
 
 
+
     }
 
+}
 
-    @SneakyThrows
-    public ProductStatusCacheDto getProductStatusFromCache(String productId) {
-        Object o = cacheClient.get(productId);
+@RequestMapping("/or")
+@RestController
+@RequiredArgsConstructor
+class Rest {
+
+    private final CacheClient client;
+
+    @GetMapping("/cache")
+    public String cache() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        client.set("status_1", new ProductStatusCacheDto(UUID.randomUUID().toString(), ProductStatus.ACTIVE.name()));
+        Object o = client.get("status_1");
         JsonNode jsonNode = objectMapper.readTree(o.toString());
-        ProductStatus productStatus = ProductStatus.valueOf(jsonNode.get("productStatus").asText());
-
-      return  ProductStatusCacheDto.builder()
-                .productStatus(String.valueOf(productStatus))
-                .productId(String.valueOf(UUID.fromString(productId)))
-                .build();
+        ProductStatus productStatus =  ProductStatus.valueOf(jsonNode.get("productStatus").asText());
+        String productId = jsonNode.get("productId").asText();
+        return productStatus.name() + " " + productId;
     }
+
 }
