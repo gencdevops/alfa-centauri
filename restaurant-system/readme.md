@@ -78,3 +78,12 @@ mikroservisi çağrılır.
 
 <img width="647" alt="resim" src="https://user-images.githubusercontent.com/52275789/223154829-54a50ed4-46d2-45af-ae7b-b486423d8779.png">
 
+<img width="1669" alt="image" src="https://user-images.githubusercontent.com/98235097/223166324-b8c92730-a038-4c1b-a02e-6263060a46bc.png">
+
+<img width="1666" alt="image" src="https://user-images.githubusercontent.com/98235097/223166481-9520eaa2-f4a3-4469-9e16-3482b0eb3502.png">
+
+<img width="1666" alt="image" src="https://user-images.githubusercontent.com/98235097/223166559-94d38fa6-bb57-4ead-9479-2583ed44151b.png">
+
+![image](https://user-images.githubusercontent.com/98235097/223166642-4fd4156f-c9d9-4049-abe6-3ba37444b8e8.png)
+
+
