@@ -99,6 +99,25 @@ public class OrderGlobalExceptionHandler {
     }
 
 
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    @ExceptionHandler(InConsistentProductPriceException.class)
+    public ResponseEntity<ErrorBody> OrderNotFoundException( InConsistentProductPriceException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ProductPriceNotFoundException.class)
+    public ResponseEntity<ErrorBody> OrderNotFoundException( ProductPriceNotFoundException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+
     @ApiResponses(value = {
             @ApiResponse(responseCode = "500",
                     description = "Order payload deserialize exception",

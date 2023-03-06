@@ -1,11 +1,13 @@
 package com.example.cgorder.service;
 
 
+import com.example.cgcommon.dto.response.OrderResponseDTO;
 import com.example.cgcommon.dto.response.ProductPriceResponseDto;
+import com.example.cgcommon.request.OrderItemRequestDTO;
+import com.example.cgcommon.request.PlaceOrderRequestDTO;
 import com.example.cgcommon.request.ProductPricesRequestDto;
-import com.example.cgorder.dto.OrderItemRequestDTO;
-import com.example.cgorder.dto.OrderResponseDto;
-import com.example.cgorder.dto.PlaceOrderRequestDTO;
+
+
 import com.example.cgorder.exception.InConsistentProductPriceException;
 import com.example.cgorder.exception.OrderPayloadDeserializeException;
 import com.example.cgorder.exception.ProductPriceNotFoundException;
@@ -49,14 +51,14 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public OrderResponseDto placeOrder(@NotNull PlaceOrderRequestDTO placeOrderRequestDTO) {
+    public OrderResponseDTO placeOrder(@NotNull PlaceOrderRequestDTO placeOrderRequestDTO) {
 
         validateProductPrice(placeOrderRequestDTO.getBranchId(), placeOrderRequestDTO.getOrderItems());
 
         var order = orderMapper.convertOrderFromPlaceOrderRequestDTO(placeOrderRequestDTO);
 
         var orderItemList = placeOrderRequestDTO.getOrderItems().stream()
-                .map(orderItemMapper::convertOrderItemFromOrderItemRequestDTO).toList();
+                .map( orderItemMapper::convertOrderItemFromOrderItemRequestDTO).toList();
 
         order.setOrderItems(orderItemList);
         order.setOrderStatus(OrderStatus.RECEIVED);
@@ -67,7 +69,6 @@ public class OrderServiceImpl implements OrderService {
             orderOutbox = OrderOutbox.builder()
                     .orderPayload(objectMapper.writeValueAsString(order))
                     .orderOutboxId(order.getOrderId())
-                    .transactionId("12345667899032")
                     .build();
             orderOutBoxService.saveOrderOutbox(orderOutbox);
         } catch (JsonProcessingException e) {
@@ -87,7 +88,7 @@ public class OrderServiceImpl implements OrderService {
 
         List<ProductPriceResponseDto>  productPrices = productFeignClient.getProductPrices(branchId,productPricesRequestDto);
 
-        //Performans iyilestirmesi icin map'e attik
+
         Map<UUID, ProductPriceResponseDto> productIdPriceMap = productPrices.stream()
                 .collect(Collectors.toMap(ProductPriceResponseDto::productId, Function.identity()));
 
@@ -105,8 +106,13 @@ public class OrderServiceImpl implements OrderService {
             if(!orderItem.getTotalPrice().equals(productPrice.price().multiply(BigDecimal.valueOf(orderItem.getQuantity())))) {
                 throw new InConsistentProductPriceException("Total price not match");
             }
+
+
         }
 
+    }
+    public void validateOrderStatus(UUID branchId, List<OrderItemRequestDTO> orderItems) {
+      // TODO : cache'den oku
     }
 
 }

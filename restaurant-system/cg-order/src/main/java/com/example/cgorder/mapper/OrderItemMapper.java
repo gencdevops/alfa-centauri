@@ -1,7 +1,8 @@
 package com.example.cgorder.mapper;
 
-import com.example.cgorder.dto.OrderItemRequestDTO;
-import com.example.cgorder.dto.OrderItemResponseDTO;
+
+import com.example.cgcommon.dto.response.OrderItemResponseDTO;
+import com.example.cgcommon.request.OrderItemRequestDTO;
 import com.example.cgorder.model.OrderItem;
 import org.mapstruct.Mapper;
 
@@ -13,5 +14,5 @@ public interface OrderItemMapper {
 
     OrderItemResponseDTO convertOrderItemResponseDTOFromOrderItem(OrderItem orderItem);
 
-    List<OrderItem> comvertOrderItemListFromOrderItemRequestDTOList(List<OrderItemRequestDTO> orderItemRequestDTOList);
+    List<OrderItem>comvertOrderItemListFromOrderItemRequestDTOList(List<OrderItemRequestDTO> orderItemRequestDTOList);
 }

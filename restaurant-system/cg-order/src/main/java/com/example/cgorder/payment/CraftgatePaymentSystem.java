@@ -1,6 +1,6 @@
 package com.example.cgorder.payment;
 
-import com.example.cgorder.dto.OrderItemRequestDTO;
+import com.example.cgcommon.request.OrderItemRequestDTO;
 import com.example.cgorder.model.Card;
 import io.craftgate.Craftgate;
 import io.craftgate.model.Currency;

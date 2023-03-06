@@ -1,9 +1,9 @@
 package com.example.cgorder.service;
 
+import com.example.cgcommon.dto.response.OrderResponseDTO;
 import com.example.cgcommon.model.CardInfoDto;
-import com.example.cgorder.dto.OrderItemRequestDTO;
-import com.example.cgorder.dto.OrderResponseDto;
-import com.example.cgorder.dto.PlaceOrderRequestDTO;
+import com.example.cgcommon.request.OrderItemRequestDTO;
+import com.example.cgcommon.request.PlaceOrderRequestDTO;
 import com.example.cgorder.mapper.OrderItemMapper;
 import com.example.cgorder.mapper.OrderMapper;
 import com.example.cgorder.model.Order;
@@ -75,7 +75,7 @@ class OrderServiceImplTest {
         when(orderRepository.save(order)).thenReturn(order);
         when(orderMapper.convertPlaceOrderRequestDTOFromOrder(order)).thenReturn(expectedOrderResponseDto);
 
-        OrderResponseDto actualOrderResponseDto = orderService.placeOrder(placeOrderRequestDTO);
+        OrderResponseDTO actualOrderResponseDto = orderService.placeOrder(placeOrderRequestDTO);
 
         verify(orderRepository, times(1)).save(order);
         verify(producerService, times(1)).sendMessage(any(Order.class));

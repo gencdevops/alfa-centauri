@@ -1,4 +1,4 @@
-package com.example.cgorder.config;
+package com.example.cgorder.configuration;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

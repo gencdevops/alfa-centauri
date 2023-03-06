@@ -4,7 +4,6 @@ import com.example.cgcommon.dto.response.OrderResponseDTO;
 import com.example.cgcommon.model.CardInfoDto;
 import com.example.cgrestaurant.dto.request.RestaurantOrderItemRequestDto;
 import com.example.cgrestaurant.dto.request.RestaurantOrderRequestDto;
-import com.example.cgrestaurant.dto.request.order.OrderItemRequestDTO;
 import com.example.cgrestaurant.dto.request.order.PlaceOrderRequestDTO;
 import com.example.cgrestaurant.exception.ProductNotFoundException;
 import com.example.cgrestaurant.feign.OrderFeignClient;

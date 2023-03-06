@@ -1,18 +1,23 @@
-package com.example.cgorder.dto;
+package com.example.cgcommon.request;
 
 import com.example.cgcommon.model.CardInfoDto;
-import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
-import lombok.Data;
 
-import javax.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.*;
+
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class PlaceOrderRequestDTO {
+public class PlaceOrderRequestDTO implements Serializable {
     @NotNull
     private List<OrderItemRequestDTO> orderItems;
 
@@ -27,3 +32,4 @@ public class PlaceOrderRequestDTO {
     @NotNull
     private UUID branchId;
 }
+

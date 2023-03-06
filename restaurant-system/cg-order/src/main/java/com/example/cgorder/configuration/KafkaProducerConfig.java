@@ -1,4 +1,4 @@
-package com.example.cgorder.config;
+package com.example.cgorder.configuration;
 
 
 import org.apache.kafka.clients.producer.ProducerConfig;

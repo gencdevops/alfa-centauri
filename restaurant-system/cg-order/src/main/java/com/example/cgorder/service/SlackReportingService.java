@@ -6,6 +6,7 @@ import com.example.cgorder.dto.SlackDetailMessage;
 import com.example.cgorder.dto.SlackMessage;
 import com.example.cgorder.dto.SlackMessageBlock;
 import io.micrometer.core.instrument.util.IOUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.logging.log4j.util.Strings;
@@ -29,17 +30,19 @@ import java.util.Objects;
 
 
 @Component
+@Slf4j
 public class SlackReportingService {
     @Value("${slack.web.hook.base.url}")
     private String webHookBaseUrl;
     @Value("${slack.backend.errors.channel}")
     private String errorsChannel;
 
-    private final RestTemplate restTemplate = getInstance(); // todo rest template kullanılmalı mı ?
+    private final RestTemplate restTemplate = getInstance();
 
-    private final Logger logger = LoggerFactory.getLogger(SlackReportingService.class);
 
-    @Async
+
+
+
     public void sendErrorMessage(String subject, Throwable e) {
         restTemplate.postForEntity(webHookBaseUrl + errorsChannel, getSlackMessage(subject, null, e), String.class);
     }
@@ -78,8 +81,8 @@ public class SlackReportingService {
         template.setErrorHandler(new DefaultResponseErrorHandler() {
             @Override
             public void handleError(ClientHttpResponse response) throws IOException {
-                logger.error("ERROR TEXT: {} {}", response.getRawStatusCode(), response.getStatusText());
-                logger.error("response body: {} ", IOUtils.toString(response.getBody(), StandardCharsets.UTF_8));
+                log.error("ERROR TEXT: {} {}", response.getRawStatusCode(), response.getStatusText());
+                log.error("response body: {} ", IOUtils.toString(response.getBody(), StandardCharsets.UTF_8));
                 super.handleError(response);
             }
         });

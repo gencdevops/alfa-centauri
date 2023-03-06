@@ -1,6 +1,7 @@
 package com.example.cgrestaurant.controller;
 
 import com.example.cgcommon.dto.response.ProductPriceResponseDto;
+import com.example.cgcommon.model.ProductStatus;
 import com.example.cgcommon.request.ProductPricesRequestDto;
 import com.example.cgrestaurant.dto.CreateProductPriceRequestDto;
 import com.example.cgrestaurant.dto.request.CreateProductRequestDto;
@@ -87,11 +88,17 @@ public class ProductController {
     }
 
 
-    @GetMapping("/branches/{branchId}/product-prices")
+    @PostMapping("/branches/{branchId}/product-prices")
     @ResponseStatus(value = HttpStatus.OK)
     public List<ProductPriceResponseDto> getProductPrices(@Valid  @PathVariable UUID branchId,
                                                           @RequestBody ProductPricesRequestDto productPricesRequestDto) {
         return productService.getProductPrices( branchId , productPricesRequestDto);
+    }
+
+    @PostMapping("/status-list")
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<ProductStatus> getProductPrices(@Valid  @PathVariable ProductPricesRequestDto productPricesRequestDto) {
+        return productService.getProductStatus( productPricesRequestDto);
     }
 
     @Operation(summary = "Update  Branch")

@@ -17,16 +17,8 @@ public class OrderOutbox {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID orderOutboxId;
-    private String transactionId;
-
-
     @Lob
     private String orderPayload;
-
-
-
-
-
     private String paymentId;
 
 

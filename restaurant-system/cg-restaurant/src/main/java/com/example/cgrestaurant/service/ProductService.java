@@ -1,6 +1,7 @@
 package com.example.cgrestaurant.service;
 
 import com.example.cgcommon.dto.response.ProductPriceResponseDto;
+import com.example.cgcommon.model.ProductStatus;
 import com.example.cgcommon.request.ProductPricesRequestDto;
 import com.example.cgrestaurant.dto.CreateProductPriceRequestDto;
 import com.example.cgrestaurant.dto.request.CreateProductRequestDto;
@@ -13,6 +14,7 @@ import com.example.cgrestaurant.mapper.ProductMapper;
 import com.example.cgrestaurant.model.Branch;
 import com.example.cgrestaurant.model.Product;
 import com.example.cgrestaurant.model.ProductPrice;
+
 import com.example.cgrestaurant.repository.BranchRepository;
 import com.example.cgrestaurant.repository.ProductPriceRepository;
 import com.example.cgrestaurant.repository.ProductRepository;
@@ -123,4 +125,13 @@ public class ProductService {
         return Stream.concat(branchProductPrices.stream(), productPrices.stream())
                 .map(productMapper::convertProductPriceResponseDtoFromProductPrice).toList();
     }
+
+
+    public List<ProductStatus> getProductStatus(ProductPricesRequestDto productPricesRequestDto) {
+        // TODO: Product Id ve ProductStatus cache at
+
+        return null;
+    }
+
+
 }

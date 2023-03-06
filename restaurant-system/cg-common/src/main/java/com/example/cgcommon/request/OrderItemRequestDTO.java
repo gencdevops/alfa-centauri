@@ -1,20 +1,21 @@
-package com.example.cgorder.dto;
+package com.example.cgcommon.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.cgcommon.model.ProductStatus;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import lombok.*;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class OrderItemRequestDTO {
+public class OrderItemRequestDTO implements Serializable {
     @NotNull(message = "productId field is mandatory")
     private UUID productId;
 
@@ -26,8 +27,11 @@ public class OrderItemRequestDTO {
     @PositiveOrZero(message = "unitPrice field must be positive or zero")
     private BigDecimal unitPrice;
 
-    @NotNull(message = "totalPrice field is mandatory")
-    @PositiveOrZero(message = "totalPrice field must be positive or zero")
+   @NotNull(message = "totalPrice field is mandatory")
+   @PositiveOrZero(message = "totalPrice field must be positive or zero")
     private BigDecimal totalPrice;
+
+   @NotNull
+   private ProductStatus productStatus;
 
 }

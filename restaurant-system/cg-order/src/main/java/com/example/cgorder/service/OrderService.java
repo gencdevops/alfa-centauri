@@ -1,12 +1,12 @@
 package com.example.cgorder.service;
 
 
-import com.example.cgorder.dto.OrderResponseDto;
-import com.example.cgorder.dto.PlaceOrderRequestDTO;
+import com.example.cgcommon.dto.response.OrderResponseDTO;
+import com.example.cgcommon.request.PlaceOrderRequestDTO;
 import jakarta.validation.constraints.NotNull;
 
 
 public interface OrderService {
-    OrderResponseDto placeOrder(@NotNull PlaceOrderRequestDTO placeOrderRequestDTO);
+    OrderResponseDTO placeOrder(@NotNull PlaceOrderRequestDTO placeOrderRequestDTO);
 
 }

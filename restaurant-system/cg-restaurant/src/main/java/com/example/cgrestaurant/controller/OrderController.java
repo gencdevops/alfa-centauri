@@ -3,6 +3,7 @@ package com.example.cgrestaurant.controller;
 import com.example.cgcommon.dto.response.OrderResponseDTO;
 
 import com.example.cgrestaurant.dto.request.RestaurantOrderRequestDto;
+import com.example.cgrestaurant.feign.OrderFeignClient;
 import com.example.cgrestaurant.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,12 +22,18 @@ import static com.example.cgrestaurant.contants.RestaurantConstants.*;
 public class OrderController {
 
     private final OrderService orderService;
+    private final OrderFeignClient feignClient;
 
     @Operation(summary = "Order Operations")
     @PostMapping("/place-order")
     @ResponseStatus(value = HttpStatus.OK)
     public OrderResponseDTO placeOrder(@Valid @RequestBody RestaurantOrderRequestDto restaurantOrderRequestDto) {
         return orderService.placeOrder(restaurantOrderRequestDto);
-    }
+
+}
+
+
+
+
 
 }

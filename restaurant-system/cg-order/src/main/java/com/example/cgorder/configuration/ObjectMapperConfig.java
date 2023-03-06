@@ -1,4 +1,4 @@
-package com.example.cgorder.config;
+package com.example.cgorder.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;

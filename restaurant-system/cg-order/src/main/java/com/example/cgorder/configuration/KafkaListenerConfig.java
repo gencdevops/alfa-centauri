@@ -1,4 +1,4 @@
-package com.example.cgorder.config;
+package com.example.cgorder.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
