@@ -98,7 +98,14 @@ public class OrderServiceImpl implements OrderService {
         OrderIdempotent orderIdempotent = OrderIdempotent.builder()
                 .key(UUID.randomUUID().toString())
                 .build();
-        idempotentRepository.save(orderIdempotent);
+
+        Optional<OrderIdempotent> orderIdempotentDb = idempotentRepository.findByKey(orderIdempotent.getKey());
+
+       if(orderIdempotentDb.isEmpty()) {
+           idempotentRepository.save(orderIdempotent);
+           return orderIdempotent.getKey();
+        }
+        return orderIdempotentDb.get().getKey();
     };
 
     public void validateProductPrice(UUID branchId, List<OrderItemRequestDTO> orderItems) {

@@ -37,7 +37,7 @@ public class OrderService {
 
         String idempotentKey = orderFeignClient.createIdempotentKey();
 
-       
+
         PlaceOrderRequestDTO placeOrderRequestDTO = PlaceOrderRequestDTO.builder()
                 .orderItems(orderItemRequestDTOS)
                 .totalPrice(totalPrice)

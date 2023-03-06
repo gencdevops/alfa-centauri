@@ -1,7 +1,6 @@
 package com.example.cgrestaurant.controller;
 
 import com.example.cgcommon.dto.response.ProductPriceResponseDto;
-import com.example.cgcommon.model.ProductStatus;
 import com.example.cgcommon.request.ProductPricesRequestDto;
 import com.example.cgrestaurant.dto.CreateProductPriceRequestDto;
 import com.example.cgrestaurant.dto.request.CreateProductRequestDto;
@@ -95,13 +94,8 @@ public class ProductController {
         return productService.getProductPrices( branchId , productPricesRequestDto);
     }
 
-    @PostMapping("/status-list")
-    @ResponseStatus(value = HttpStatus.OK)
-    public List<ProductStatus> getProductPrices(@Valid  @PathVariable ProductPricesRequestDto productPricesRequestDto) {
-        return productService.getProductStatus( productPricesRequestDto);
-    }
 
-    @Operation(summary = "Update  Branch")
+    @Operation(summary = "Delete product")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully Branch Updated"),
             @ApiResponse(responseCode = "404", description = "Not Found"),

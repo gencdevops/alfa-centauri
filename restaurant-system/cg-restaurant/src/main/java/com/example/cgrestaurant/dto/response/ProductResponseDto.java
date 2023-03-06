@@ -1,5 +1,6 @@
 package com.example.cgrestaurant.dto.response;
 
+import com.example.cgcommon.model.ProductStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

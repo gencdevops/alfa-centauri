@@ -136,11 +136,7 @@ public class ProductService {
     }
 
 
-    public List<ProductStatus> getProductStatus() {
-        // TODO: Product Id ve ProductStatus cache at
 
-        return null;
-    }
 
 
 }
