@@ -1,6 +1,8 @@
 package com.example.cgrestaurant.service;
 
+import com.example.cgcommon.configuration.CacheClient;
 import com.example.cgcommon.dto.response.ProductPriceResponseDto;
+import com.example.cgcommon.dto.response.ProductStatusCacheDto;
 import com.example.cgcommon.model.ProductStatus;
 import com.example.cgcommon.request.ProductPricesRequestDto;
 import com.example.cgrestaurant.dto.CreateProductPriceRequestDto;
@@ -37,12 +39,19 @@ public class ProductService {
     private final ProductMapper productMapper;
     private final SupplierService supplierService;
     private final BranchRepository branchRepository;
+    private final CacheClient cacheClient;
 
     private final ProductPriceRepository productPriceRepository;
 
     public ProductResponseDto createProduct(CreateProductRequestDto createProductRequestDto) {
         Product createdProduct = productMapper.convertProductFromCreateProductRequestDto(createProductRequestDto);
         createdProduct = productRepository.save(createdProduct);
+
+   ProductStatusCacheDto productStatusCacheDto = ProductStatusCacheDto.builder()
+           .productId(createdProduct.getId())
+           .productStatus(createdProduct.getProductStatus())
+           .build();
+        cacheClient.set("status" ,productStatusCacheDto);
 
         ProductPrice productPrice = ProductPrice.builder()
                 .productId(createdProduct.getId())
@@ -127,7 +136,7 @@ public class ProductService {
     }
 
 
-    public List<ProductStatus> getProductStatus(ProductPricesRequestDto productPricesRequestDto) {
+    public List<ProductStatus> getProductStatus() {
         // TODO: Product Id ve ProductStatus cache at
 
         return null;

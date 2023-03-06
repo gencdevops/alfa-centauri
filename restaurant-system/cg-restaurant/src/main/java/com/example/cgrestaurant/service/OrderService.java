@@ -35,14 +35,16 @@ public class OrderService {
                 .map(OrderItemRequestDTO::getTotalPrice)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        //  Product  --> order items
+        String idempotentKey = orderFeignClient.createIdempotentKey();
+
+       
         PlaceOrderRequestDTO placeOrderRequestDTO = PlaceOrderRequestDTO.builder()
                 .orderItems(orderItemRequestDTOS)
                 .totalPrice(totalPrice)
                 .branchId(restaurantOrderRequestDto.branchId())
                 .cardInfo(restaurantOrderRequestDto.cardInfoDto())
                 .build();
-        return orderFeignClient.placeOrder(placeOrderRequestDTO);
+        return orderFeignClient.placeOrder(idempotentKey,placeOrderRequestDTO);
     }
 
 

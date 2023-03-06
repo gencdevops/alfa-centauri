@@ -30,18 +30,27 @@ public class OrderController {
     @Operation(summary = "Create order")
     @ApiResponses(value =
     @ApiResponse(
-            responseCode = "200",
+            responseCode = "201",
             description = "Place order",
             content = @Content(
                     schema = @Schema(implementation = OrderResponseDTO.class),
                     mediaType = "application/json")))
     @PostMapping("/place-order")
     @ResponseStatus(HttpStatus.CREATED)
-    public OrderResponseDTO placeOrder(@RequestBody @Valid PlaceOrderRequestDTO placeOrderRequestDTO) {
+    public OrderResponseDTO placeOrder(
+            @RequestParam String idempotentKey,
+            @RequestBody @Valid PlaceOrderRequestDTO placeOrderRequestDTO) {
 
-        return orderService.placeOrder(placeOrderRequestDTO);
+        return orderService.placeOrder(placeOrderRequestDTO, idempotentKey);
     }
 
+    @Operation(summary = "Create idempotent key")
+    @GetMapping("/idempotent-key")
+    @ResponseStatus(HttpStatus.CREATED)
+    public String createIdempotentKey() {
+
+        return orderService.createIdempotentKey();
+    }
 
 
 }

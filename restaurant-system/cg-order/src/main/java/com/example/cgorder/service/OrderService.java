@@ -7,6 +7,6 @@ import jakarta.validation.constraints.NotNull;
 
 
 public interface OrderService {
-    OrderResponseDTO placeOrder(@NotNull PlaceOrderRequestDTO placeOrderRequestDTO);
-
+    OrderResponseDTO placeOrder(@NotNull PlaceOrderRequestDTO placeOrderRequestDTO, String idempotentKey);
+    String createIdempotentKey();
 }

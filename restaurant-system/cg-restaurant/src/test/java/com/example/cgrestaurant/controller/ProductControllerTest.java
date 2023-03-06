@@ -4,7 +4,6 @@ import com.example.cgrestaurant.BaseIntegrationTest;
 import com.example.cgrestaurant.dto.request.CreateProductRequestDto;
 import com.example.cgrestaurant.dto.request.UpdateProductRequestDto;
 import com.example.cgrestaurant.model.Product;
-import com.example.cgrestaurant.model.enums.ProductStatus;
 import com.example.cgrestaurant.repository.ProductRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;

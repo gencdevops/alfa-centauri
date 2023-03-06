@@ -9,9 +9,7 @@ import com.example.cgrestaurant.dto.request.RestaurantOrderRequestDto;
 import com.example.cgrestaurant.dto.request.order.PlaceOrderRequestDTO;
 import com.example.cgrestaurant.feign.OrderFeignClient;
 import com.example.cgrestaurant.model.Product;
-import com.example.cgrestaurant.model.enums.ProductStatus;
 import com.example.cgrestaurant.repository.ProductRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,11 +19,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;

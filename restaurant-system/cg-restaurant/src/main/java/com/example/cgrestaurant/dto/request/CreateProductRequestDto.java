@@ -1,6 +1,5 @@
 package com.example.cgrestaurant.dto.request;
 
-import com.example.cgrestaurant.model.enums.ProductStatus;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
