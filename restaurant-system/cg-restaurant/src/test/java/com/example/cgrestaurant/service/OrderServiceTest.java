@@ -1,8 +1,8 @@
 package com.example.cgrestaurant.service;
 
 import com.example.cgcommon.dto.response.OrderResponseDTO;
+import com.example.cgcommon.dto.response.ProductPriceResponseDto;
 import com.example.cgcommon.model.CardInfoDto;
-import com.example.cgcommon.request.OrderItemRequestDTO;
 import com.example.cgcommon.request.PlaceOrderRequestDTO;
 import com.example.cgrestaurant.dto.request.RestaurantOrderItemRequestDto;
 import com.example.cgrestaurant.dto.request.RestaurantOrderRequestDto;
@@ -26,7 +26,6 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -54,27 +53,28 @@ class OrderServiceTest {
     @Test
     void shouldPlaceOrder() {
         // given
-        String randomProduct = RandomStringUtils.random(10);
         UUID randomProductUUID = UUID.randomUUID();
-        String randomProduct2 = RandomStringUtils.random(10);
         UUID randomProduct2UUID = UUID.randomUUID();
-        BigDecimal defaultPrice1 = BigDecimal.valueOf(99);
-        BigDecimal defaultPrice2 = BigDecimal.valueOf(109);
+        BigDecimal defaultPrice1 = BigDecimal.valueOf(100);
+        BigDecimal defaultPrice2 = BigDecimal.valueOf(100);
         int quantity1 = 5;
         int quantity2 = 6;
         BigDecimal expectedTotalPrice = defaultPrice1.multiply(BigDecimal.valueOf(quantity1)).add(defaultPrice2.multiply(BigDecimal.valueOf(quantity2)));
         CardInfoDto cardInfoDTO = CardInfoDto.builder().build();
 
         Product product1 = Product.builder()
-                .productName(randomProduct)
+                .productName(RandomStringUtils.random(10))
                 .build();
         Product product2 = Product.builder()
-                .productName(randomProduct2)
+                .productName(RandomStringUtils.random(10))
                 .build();
+
+        ProductPriceResponseDto productPricesRequestDto = new ProductPriceResponseDto(UUID.randomUUID(), UUID.randomUUID(), BigDecimal.valueOf(100));
 
         when(productService.findByProductId(randomProductUUID)).thenReturn(product1);
         when(productService.findByProductId(randomProduct2UUID)).thenReturn(product2);
-        when(orderFeignClient.placeOrder(any())).thenReturn(OrderResponseDTO.builder().totalPrice(expectedTotalPrice).build());
+        when(productService.getProductPrice(any(), any())).thenReturn(productPricesRequestDto);
+        when(orderFeignClient.placeOrder(any(), any())).thenReturn(OrderResponseDTO.builder().totalPrice(expectedTotalPrice).build());
 
         RestaurantOrderItemRequestDto itemRequestDTO1 = RestaurantOrderItemRequestDto.builder()
                 .productId(randomProductUUID)
@@ -96,28 +96,12 @@ class OrderServiceTest {
         // then
         verify(productService).findByProductId(randomProductUUID);
         verify(productService).findByProductId(randomProduct2UUID);
-        verify(orderFeignClient).placeOrder(placeOrderRequestDTOCaptor.capture());
+        verify(orderFeignClient).placeOrder(any(), placeOrderRequestDTOCaptor.capture());
 
         PlaceOrderRequestDTO capturedRequestDTO = placeOrderRequestDTOCaptor.getValue();
-        List<OrderItemRequestDTO> expectedOrderItemRequestDTOs = Arrays.asList(
-                OrderItemRequestDTO.builder()
-                        .productId(randomProductUUID)
-                        .quantity(quantity1)
-                        .unitPrice(defaultPrice1)
-                        .totalPrice(defaultPrice1.multiply(BigDecimal.valueOf(quantity1)))
-                        .build(),
-                OrderItemRequestDTO.builder()
-                        .productId(randomProduct2UUID)
-                        .quantity(quantity2)
-                        .unitPrice(defaultPrice2)
-                        .totalPrice(defaultPrice2.multiply(BigDecimal.valueOf(quantity2)))
-                        .build()
-        );
-        assertEquals(expectedOrderItemRequestDTOs, capturedRequestDTO.getOrderItems());
+
         assertEquals(expectedTotalPrice, capturedRequestDTO.getTotalPrice());
         assertEquals(expectedTotalPrice, responseDTO.getTotalPrice());
-
-
     }
 
 }

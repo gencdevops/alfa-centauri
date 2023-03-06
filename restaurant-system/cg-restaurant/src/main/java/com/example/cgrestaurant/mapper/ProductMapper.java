@@ -10,7 +10,6 @@ import org.mapstruct.Mapper;
 @Mapper(implementationName = "ProductMapperImpl", componentModel = "spring", imports = Product.class)
 public interface ProductMapper {
 
-
     Product convertProductFromCreateProductRequestDto(CreateProductRequestDto request);
 
     ProductResponseDto convertProductResponseDtoFromProduct(Product product);
