@@ -73,3 +73,8 @@ mikroservisi çağrılır.
     cg-config-server
     cg-restaurant
     cg-order
+
+<img width="647" alt="resim" src="https://user-images.githubusercontent.com/52275789/223154162-9d039051-d90c-4fe2-a31b-bb473be92a7c.png">
+
+<img width="647" alt="resim" src="https://user-images.githubusercontent.com/52275789/223154829-54a50ed4-46d2-45af-ae7b-b486423d8779.png">
+
