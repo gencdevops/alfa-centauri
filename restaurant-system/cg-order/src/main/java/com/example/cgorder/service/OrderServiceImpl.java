@@ -137,12 +137,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public void validateOrderStatus(List<OrderItemRequestDTO> orderItems) {
-        List<ProductStatusCacheDto> cacheStatus = orderItems.stream().map(item -> {
-          return getProductStatusFromCache(item.getProductId().toString());
-        }).toList();
+        List<ProductStatusCacheDto> cacheStatus = orderItems.stream()
+                .map(item -> getProductStatusFromCache(item.getProductId().toString())).toList();
 
         for (ProductStatusCacheDto status : cacheStatus) {
-            if(status.getProductStatus().equals(ProductStatus.PASSIVE))
+            if(status.getProductStatus().equals(ProductStatus.PASSIVE.toString()))
                 throw new ProductPriceNotFoundException("Products status passive");
         }
 

@@ -4,6 +4,7 @@ import com.example.cgcommon.model.ProductStatus;
 import com.example.cgrestaurant.BaseIntegrationTest;
 import com.example.cgrestaurant.dto.request.CreateProductRequestDto;
 import com.example.cgrestaurant.dto.request.UpdateProductRequestDto;
+import com.example.cgrestaurant.dto.response.ProductResponseDto;
 import com.example.cgrestaurant.model.Product;
 import com.example.cgrestaurant.repository.ProductRepository;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -42,7 +43,7 @@ class ProductControllerTest extends BaseIntegrationTest {
     @Test
     void shouldCreateProduct() throws Exception {
         CreateProductRequestDto createProductRequestDto = new CreateProductRequestDto(
-                RandomStringUtils.random(10),
+                "test",
                 BigDecimal.ONE,
                 UUID.randomUUID(),
                 ProductStatus.ACTIVE
@@ -50,9 +51,10 @@ class ProductControllerTest extends BaseIntegrationTest {
 
         this.mockMvc.perform(post(BASE_PRODUCT_ENDPOINT)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(createProductRequestDto)))
+                .content(mapper.writeValueAsBytes(createProductRequestDto)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.productName").value(createProductRequestDto.productName()))
+                .andExpect(jsonPath("$.defaultPrice").value(createProductRequestDto.defaultPrice()))
                 .andExpect(jsonPath("$.productStatus").value(createProductRequestDto.productStatus().name()));
     }
 

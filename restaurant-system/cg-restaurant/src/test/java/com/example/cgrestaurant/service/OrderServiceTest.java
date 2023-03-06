@@ -42,8 +42,9 @@ class OrderServiceTest {
     @Test
     void shouldThrowExceptionWhenProductNotFound() {
         List<RestaurantOrderItemRequestDto> dtoList = new ArrayList<>();
+
         dtoList.add(RestaurantOrderItemRequestDto.builder().quantity(1).build());
-        RestaurantOrderRequestDto restaurantOrderRequestDto = new RestaurantOrderRequestDto(dtoList, null, null);
+        RestaurantOrderRequestDto restaurantOrderRequestDto = new RestaurantOrderRequestDto(dtoList, UUID.randomUUID().toString(), UUID.randomUUID(), null);
 
         when(productService.findByProductId(any())).thenThrow(new ProductNotFoundException("Product not found"));
 
@@ -88,7 +89,7 @@ class OrderServiceTest {
         ArgumentCaptor<PlaceOrderRequestDTO> placeOrderRequestDTOCaptor = ArgumentCaptor.forClass(PlaceOrderRequestDTO.class);
         List<RestaurantOrderItemRequestDto> itemRequestDTOs = Arrays.asList(itemRequestDTO1, itemRequestDTO2);
 
-        RestaurantOrderRequestDto requestDto = new RestaurantOrderRequestDto(itemRequestDTOs, UUID.randomUUID(), cardInfoDTO);
+        RestaurantOrderRequestDto requestDto = new RestaurantOrderRequestDto(itemRequestDTOs, UUID.randomUUID().toString(), UUID.randomUUID(), cardInfoDTO);
 
         // when
         OrderResponseDTO responseDTO = orderService.placeOrder(requestDto);

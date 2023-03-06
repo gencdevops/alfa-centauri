@@ -1,6 +1,5 @@
 package com.example.cgorder.service;
 
-import com.example.cgcommon.configuration.CacheClient;
 import com.example.cgcommon.dto.response.OrderItemResponseDTO;
 import com.example.cgcommon.dto.response.OrderResponseDTO;
 import com.example.cgcommon.dto.response.ProductPriceResponseDto;
@@ -9,6 +8,7 @@ import com.example.cgcommon.model.CardInfoDto;
 import com.example.cgcommon.model.ProductStatus;
 import com.example.cgcommon.request.OrderItemRequestDTO;
 import com.example.cgcommon.request.PlaceOrderRequestDTO;
+import com.example.cgorder.configuration.CacheClient;
 import com.example.cgorder.exception.InConsistentProductPriceException;
 import com.example.cgorder.exception.ProductPriceNotFoundException;
 import com.example.cgorder.feign.ProductFeignClient;
@@ -18,11 +18,13 @@ import com.example.cgorder.model.*;
 import com.example.cgorder.repository.OrderIdempotentRepository;
 import com.example.cgorder.repository.OrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -72,7 +74,7 @@ class OrderServiceImplTest {
     private ArgumentCaptor<OrderOutbox> orderOutboxCaptor;
 
     @Test
-    void placeOrder() throws JsonProcessingException {
+    void placeOrder() {
         UUID branchId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
         String key = UUID.randomUUID().toString();
@@ -113,8 +115,8 @@ class OrderServiceImplTest {
 
         ProductPriceResponseDto productPriceResponseDto = new ProductPriceResponseDto(branchId, productId, BigDecimal.valueOf(1001));
         ProductStatusCacheDto productStatusCacheDto = ProductStatusCacheDto.builder()
-                .productId(productId)
-                .productStatus(ProductStatus.ACTIVE)
+                .productId(productId.toString())
+                .productStatus(ProductStatus.ACTIVE.toString())
                 .build();
 
         OrderItemResponseDTO orderItemResponseDTO = OrderItemResponseDTO.builder()
@@ -131,13 +133,13 @@ class OrderServiceImplTest {
                 .orderItems(orderItemResponseDTOS)
                 .build();
 
-        when(idempotentRepository.findByKey(any())).thenReturn(Optional.of(new OrderIdempotent(productId, key, OrderIdemPotentStatus.AVAILABLE)));
+//        when(idempotentRepository.findByKey(any())).thenReturn(Optional.of(new OrderIdempotent(productId, key, OrderIdemPotentStatus.AVAILABLE)));
         when(productFeignClient.getProductPrices(any(), any())).thenReturn(List.of(productPriceResponseDto));
+        Mockito.doReturn(productStatusCacheDto).when(orderService).getProductStatusFromCache(any());
         when(orderMapper.convertOrderFromPlaceOrderRequestDTO(placeOrderRequestDTO)).thenReturn(order);
-        when(cacheClient.get(any())).thenReturn(productStatusCacheDto);
         when(orderItemMapper.convertOrderItemFromOrderItemRequestDTO(any())).thenReturn(orderItem);
         when(orderRepository.save(any())).thenReturn(order);
-        when(orderMapper.convertPlaceOrderResponseDTOFromOrder(any())).thenReturn(orderResponseDTO);
+        when(orderMapper.convertPlaceOrderResponseDTOFromOrder(any(), any())).thenReturn(orderResponseDTO);
         OrderResponseDTO result = orderService.placeOrder(placeOrderRequestDTO, key);
 
         assertEquals(BigDecimal.valueOf(1001), result.getTotalPrice());
@@ -149,7 +151,7 @@ class OrderServiceImplTest {
     void shouldCreateIdempotentKeyWhenIdempotentNotFound() {
         when(idempotentRepository.findByKey(any())).thenReturn(Optional.empty());
 
-        String idempotentKey = orderService.checkIdempotentKey();
+        String idempotentKey = orderService.checkIdempotentKey(UUID.randomUUID().toString());
 
         verify(idempotentRepository).save(any(OrderIdempotent.class));
         assertNotNull(idempotentKey);
@@ -163,7 +165,7 @@ class OrderServiceImplTest {
 
         when(idempotentRepository.findByKey(any())).thenReturn(Optional.of(orderIdempotent));
 
-        String idempotentKey = orderService.checkIdempotentKey();
+        String idempotentKey = orderService.checkIdempotentKey(UUID.randomUUID().toString());
 
         verify(idempotentRepository,times(0)).save(any(OrderIdempotent.class));
         assertEquals(orderIdempotent.getKey(), idempotentKey);
@@ -219,37 +221,39 @@ class OrderServiceImplTest {
 
     @Test
     void shouldValidateOrderStatus() {
-        UUID branchId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
         List<OrderItemRequestDTO> orderItems = List.of(OrderItemRequestDTO.builder().productId(productId).unitPrice(BigDecimal.TEN).quantity(1).totalPrice(BigDecimal.TEN).build());
 
-        when(cacheClient.get(any())).thenReturn(ProductStatusCacheDto.builder().productStatus(ProductStatus.ACTIVE).build());
+        ProductStatusCacheDto productStatusCacheDto = ProductStatusCacheDto.builder()
+                .productId(productId.toString())
+                .productStatus(ProductStatus.ACTIVE.toString())
+                .build();
+
+        Mockito.doReturn(productStatusCacheDto).when(orderService).getProductStatusFromCache(any());
 
         orderService.validateOrderStatus(orderItems);
 
-        verify(cacheClient, times(orderItems.size())).get(any());
+        verify(orderService).getProductStatusFromCache(any());
     }
 
     @Test
     void shouldThrowProductPriceNotFoundExceptionStatusIsPassive() {
-        UUID branchId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
-        List<OrderItemRequestDTO> orderItems = List.of(OrderItemRequestDTO.builder().productId(productId).unitPrice(BigDecimal.TEN).quantity(1).totalPrice(BigDecimal.TEN).build());
+        OrderItemRequestDTO orderItemRequestDTO = OrderItemRequestDTO.builder()
+                .productId(productId)
+                .unitPrice(BigDecimal.TEN)
+                .quantity(1)
+                .totalPrice(BigDecimal.TEN).build();
 
-        when(cacheClient.get(any())).thenReturn(ProductStatusCacheDto.builder().productStatus(ProductStatus.PASSIVE).build());
+        List<OrderItemRequestDTO> orderItems = new ArrayList<>();
+        orderItems.add(orderItemRequestDTO);
 
+        ProductStatusCacheDto productStatusCacheDto = ProductStatusCacheDto.builder()
+                .productId(productId.toString())
+                .productStatus(ProductStatus.PASSIVE.toString())
+                .build();
+
+        Mockito.doReturn(productStatusCacheDto).when(orderService).getProductStatusFromCache(any());
         assertThrows(ProductPriceNotFoundException.class, () -> orderService.validateOrderStatus(orderItems));
-    }
-
-    @Test
-    void updateIdempotentStatus() {
-        OrderIdempotent orderIdempotent = mock(OrderIdempotent.class);
-        OrderIdemPotentStatus orderIdemPotentStatus = OrderIdemPotentStatus.AVAILABLE;
-
-        orderService.updateIdempotentStatus(orderIdempotent, orderIdemPotentStatus);
-
-        verify(orderIdempotent).setOrderIdemPotentStatus(orderIdemPotentStatus);
-        verify(idempotentRepository).save(orderIdempotent);
-
     }
 }

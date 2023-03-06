@@ -16,13 +16,11 @@ import com.example.cgrestaurant.mapper.ProductMapper;
 import com.example.cgrestaurant.model.Branch;
 import com.example.cgrestaurant.model.Product;
 import com.example.cgrestaurant.model.ProductPrice;
-
 import com.example.cgrestaurant.repository.BranchRepository;
 import com.example.cgrestaurant.repository.ProductPriceRepository;
 import com.example.cgrestaurant.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 

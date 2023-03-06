@@ -58,7 +58,7 @@ class OrderControllerTest extends BaseIntegrationTest {
 
         CardInfoDto cardInfoDto = CardInfoDto.builder().build();
         RestaurantOrderRequestDto restaurantOrderRequestDto = new RestaurantOrderRequestDto(
-                List.of(restaurantOrderItemRequestDto), UUID.randomUUID(), cardInfoDto
+                List.of(restaurantOrderItemRequestDto), UUID.randomUUID().toString(), UUID.randomUUID(), cardInfoDto
         );
 
         OrderItemResponseDTO orderItemResponseDTO = OrderItemResponseDTO.builder()
