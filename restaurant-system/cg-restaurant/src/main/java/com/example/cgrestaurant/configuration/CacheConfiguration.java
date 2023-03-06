@@ -1,9 +1,6 @@
 package com.example.cgrestaurant.configuration;
 
 
-
-
-import com.example.cgcommon.configuration.CacheClient;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;

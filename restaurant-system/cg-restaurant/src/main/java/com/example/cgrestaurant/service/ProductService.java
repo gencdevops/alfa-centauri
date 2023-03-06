@@ -1,10 +1,10 @@
 package com.example.cgrestaurant.service;
 
-import com.example.cgcommon.configuration.CacheClient;
+
 import com.example.cgcommon.dto.response.ProductPriceResponseDto;
 import com.example.cgcommon.dto.response.ProductStatusCacheDto;
-import com.example.cgcommon.model.ProductStatus;
 import com.example.cgcommon.request.ProductPricesRequestDto;
+import com.example.cgrestaurant.configuration.CacheClient;
 import com.example.cgrestaurant.dto.CreateProductPriceRequestDto;
 import com.example.cgrestaurant.dto.request.CreateProductRequestDto;
 import com.example.cgrestaurant.dto.request.UpdateProductRequestDto;
@@ -48,10 +48,10 @@ public class ProductService {
         createdProduct = productRepository.save(createdProduct);
 
    ProductStatusCacheDto productStatusCacheDto = ProductStatusCacheDto.builder()
-           .productId(createdProduct.getId())
-           .productStatus(createdProduct.getProductStatus())
+           .productId(createdProduct.getId().toString())
+           .productStatus(createdProduct.getProductStatus().toString())
            .build();
-        cacheClient.set("status" ,productStatusCacheDto);
+        cacheClient.set(createdProduct.getId().toString() ,productStatusCacheDto);
 
         ProductPrice productPrice = ProductPrice.builder()
                 .productId(createdProduct.getId())
