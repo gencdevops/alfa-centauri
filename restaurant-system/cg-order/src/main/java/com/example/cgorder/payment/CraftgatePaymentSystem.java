@@ -20,12 +20,7 @@ import java.util.UUID;
 public class CraftgatePaymentSystem implements PaymentSystem {
 
     private Currency CURRENCY = Currency.TRY;
-    private Craftgate craftgate;
-
-    @PostConstruct
-    public void initPaymentSystem() {
-        this.craftgate = new Craftgate("sandbox-MkOuIWzmHFxsIKCaDzSVsARStdmJqlrc", "sandbox-JsgPbznSePymfcSiDHelyQzMknDqAYNJ", "https://sandbox-api.craftgate.io");
-    }
+    private Craftgate craftgate = new Craftgate("sandbox-MkOuIWzmHFxsIKCaDzSVsARStdmJqlrc", "sandbox-JsgPbznSePymfcSiDHelyQzMknDqAYNJ", "https://sandbox-api.craftgate.io");
 
     @Override
     public Object pay(List<OrderItemRequestDTO> orderItemRequestDTOList, Card card) {
