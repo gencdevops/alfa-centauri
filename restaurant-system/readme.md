@@ -84,6 +84,6 @@ mikroservisi çağrılır.
 
 <img width="1666" alt="image" src="https://user-images.githubusercontent.com/98235097/223166559-94d38fa6-bb57-4ead-9479-2583ed44151b.png">
 
-![image](https://user-images.githubusercontent.com/98235097/223166642-4fd4156f-c9d9-4049-abe6-3ba37444b8e8.png)
+<img width="1666" alt="image" src="https://user-images.githubusercontent.com/98235097/223166642-4fd4156f-c9d9-4049-abe6-3ba37444b8e8.png)">
 
 
