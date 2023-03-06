@@ -45,7 +45,7 @@ class BranchControllerTest extends BaseIntegrationTest{
     @Test
     void shouldCreateBranch() throws Exception {
         CreateBranchRequestDto request = new CreateBranchRequestDto(
-                RandomStringUtils.randomAlphabetic(10), BigDecimal.ONE, UUID.randomUUID()
+                RandomStringUtils.randomAlphabetic(10), UUID.randomUUID()
         );
 
         this.mockMvc.perform(post(BASE_BRANCH_ENDPOINT)
@@ -60,7 +60,7 @@ class BranchControllerTest extends BaseIntegrationTest{
     @Test
     void shouldReturnBranchWhenBranchExists() throws Exception {
         CreateBranchRequestDto request = new CreateBranchRequestDto(
-                RandomStringUtils.randomAlphabetic(10), BigDecimal.ONE, UUID.randomUUID()
+                RandomStringUtils.randomAlphabetic(10), UUID.randomUUID()
         );
 
         this.mockMvc.perform(get(BASE_BRANCH_ENDPOINT + "/" + alreadyCreatedBranch.getId())
@@ -75,7 +75,7 @@ class BranchControllerTest extends BaseIntegrationTest{
     @Test
     void shouldReturn404WhenBranchDoesNotExist() throws Exception {
         CreateBranchRequestDto request = new CreateBranchRequestDto(
-                RandomStringUtils.randomAlphabetic(10), BigDecimal.ONE, UUID.randomUUID()
+                RandomStringUtils.randomAlphabetic(10), UUID.randomUUID()
         );
 
         this.mockMvc.perform(get(BASE_BRANCH_ENDPOINT + "/" + UUID.randomUUID())

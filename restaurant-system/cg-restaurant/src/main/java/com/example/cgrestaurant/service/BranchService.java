@@ -7,7 +7,6 @@ import com.example.cgrestaurant.exception.BranchNotFoundException;
 import com.example.cgrestaurant.mapper.BranchMapper;
 import com.example.cgrestaurant.model.Branch;
 import com.example.cgrestaurant.repository.BranchRepository;
-import com.example.cgrestaurant.repository.SupplierRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

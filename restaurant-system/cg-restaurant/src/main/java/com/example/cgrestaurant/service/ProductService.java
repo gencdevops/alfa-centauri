@@ -37,7 +37,6 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
-    private final SupplierService supplierService;
     private final BranchRepository branchRepository;
     private final CacheClient cacheClient;
 

@@ -3,12 +3,13 @@ package com.example.cgrestaurant.controller;
 import com.example.cgcommon.dto.response.OrderItemResponseDTO;
 import com.example.cgcommon.dto.response.OrderResponseDTO;
 import com.example.cgcommon.model.CardInfoDto;
+import com.example.cgcommon.request.PlaceOrderRequestDTO;
 import com.example.cgrestaurant.BaseIntegrationTest;
 import com.example.cgrestaurant.dto.request.RestaurantOrderItemRequestDto;
 import com.example.cgrestaurant.dto.request.RestaurantOrderRequestDto;
-import com.example.cgrestaurant.dto.request.order.PlaceOrderRequestDTO;
 import com.example.cgrestaurant.feign.OrderFeignClient;
 import com.example.cgrestaurant.model.Product;
+import com.example.cgrestaurant.model.enums.ProductStatus;
 import com.example.cgrestaurant.repository.ProductRepository;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +42,7 @@ class OrderControllerTest extends BaseIntegrationTest {
     void setUp() {
         alreadyExistProduct = productRepository.save(
                 Product.builder()
+                        .id(UUID.randomUUID())
                         .productName(RandomStringUtils.random(10))
                         .productStatus(ProductStatus.ACTIVE)
                         .build());
@@ -49,7 +51,7 @@ class OrderControllerTest extends BaseIntegrationTest {
     @Test
     void placeOrder() throws Exception {
         RestaurantOrderItemRequestDto restaurantOrderItemRequestDto = new RestaurantOrderItemRequestDto(
-                alreadyExistProduct.getProductName(), 5
+                alreadyExistProduct.getId(), 5
         );
 
         CardInfoDto cardInfoDto = CardInfoDto.builder().build();
@@ -58,7 +60,7 @@ class OrderControllerTest extends BaseIntegrationTest {
         );
 
         OrderItemResponseDTO orderItemResponseDTO = OrderItemResponseDTO.builder()
-                .productName(restaurantOrderItemRequestDto.getProductName())
+                .orderItemId(restaurantOrderItemRequestDto.getProductId())
                 .quantity(restaurantOrderItemRequestDto.getQuantity())
                 .build();
 
@@ -71,7 +73,7 @@ class OrderControllerTest extends BaseIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(restaurantOrderRequestDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.orderItems[0].productName").value(restaurantOrderRequestDto.restaurantOrderItemRequestDtos().get(0).getProductName()));
+                .andExpect(jsonPath("$.orderItems[0].productId").value(restaurantOrderRequestDto.restaurantOrderItemRequestDtos().get(0).getProductId()));
 
     }
 
