@@ -137,7 +137,7 @@ class OrderServiceImplTest {
         when(cacheClient.get(any())).thenReturn(productStatusCacheDto);
         when(orderItemMapper.convertOrderItemFromOrderItemRequestDTO(any())).thenReturn(orderItem);
         when(orderRepository.save(any())).thenReturn(order);
-        when(orderMapper.convertPlaceOrderRequestDTOFromOrder(any())).thenReturn(orderResponseDTO);
+        when(orderMapper.convertPlaceOrderResponseDTOFromOrder(any())).thenReturn(orderResponseDTO);
         OrderResponseDTO result = orderService.placeOrder(placeOrderRequestDTO, key);
 
         assertEquals(BigDecimal.valueOf(1001), result.getTotalPrice());
@@ -149,7 +149,7 @@ class OrderServiceImplTest {
     void shouldCreateIdempotentKeyWhenIdempotentNotFound() {
         when(idempotentRepository.findByKey(any())).thenReturn(Optional.empty());
 
-        String idempotentKey = orderService.createIdempotentKey();
+        String idempotentKey = orderService.checkIdempotentKey();
 
         verify(idempotentRepository).save(any(OrderIdempotent.class));
         assertNotNull(idempotentKey);
@@ -163,7 +163,7 @@ class OrderServiceImplTest {
 
         when(idempotentRepository.findByKey(any())).thenReturn(Optional.of(orderIdempotent));
 
-        String idempotentKey = orderService.createIdempotentKey();
+        String idempotentKey = orderService.checkIdempotentKey();
 
         verify(idempotentRepository,times(0)).save(any(OrderIdempotent.class));
         assertEquals(orderIdempotent.getKey(), idempotentKey);

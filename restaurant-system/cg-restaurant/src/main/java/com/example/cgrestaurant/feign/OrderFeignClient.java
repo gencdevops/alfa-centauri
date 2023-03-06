@@ -18,6 +18,6 @@ public interface OrderFeignClient{
                                  @RequestBody  PlaceOrderRequestDTO placeOrderRequestDTO);
 
 
-    @GetMapping("/api/v1/orders/idempotent-key")
-    String createIdempotentKey();
+    @GetMapping("/api/v1/orders/idempotent")
+    String createIdempotentKey(@RequestParam String idempotentKey);
 }

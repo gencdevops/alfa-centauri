@@ -9,6 +9,8 @@ import java.util.UUID;
 public record RestaurantOrderRequestDto(
         List<RestaurantOrderItemRequestDto> restaurantOrderItemRequestDtos,
 
+        String idempotentKey,
+
         @NotNull(message = "Branch Id  cannot be null")
         UUID branchId,
         CardInfoDto cardInfoDto) {

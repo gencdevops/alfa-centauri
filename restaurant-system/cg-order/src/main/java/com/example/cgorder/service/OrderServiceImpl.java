@@ -30,19 +30,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.apache.kafka.common.protocol.types.Field;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import static com.example.cgorder.model.OrderIdemPotentStatus.NOT_AVAILABLE;
 
 @AllArgsConstructor
 @Service
@@ -67,13 +61,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public OrderResponseDTO placeOrder(@NotNull PlaceOrderRequestDTO placeOrderRequestDTO, String idempotentKey) {
-       OrderIdempotent orderIdempotent = idempotentRepository.findByKey(idempotentKey).get();
-
-        if(orderIdempotent.getOrderIdemPotentStatus().equals(NOT_AVAILABLE)){
-            throw new OrderTooManyRequestException("Too many request");
-        }
-        updateIdempotentStatus(orderIdempotent, NOT_AVAILABLE);
-
         validateProductPrice(placeOrderRequestDTO.getBranchId(), placeOrderRequestDTO.getOrderItems());
         validateOrderStatus(placeOrderRequestDTO.getOrderItems());
 
@@ -101,27 +88,21 @@ public class OrderServiceImpl implements OrderService {
         orderOutBoxService.deleteOrderOutbox(orderOutbox.getOrderOutboxId());
 
 
-        return orderMapper.convertPlaceOrderRequestDTOFromOrder(orderRepository.save(order));
+        return orderMapper.convertPlaceOrderResponseDTOFromOrder(orderRepository.save(order), idempotentKey);
     }
 
-    public String createIdempotentKey() {
-        OrderIdempotent orderIdempotent = OrderIdempotent.builder()
-                .key(UUID.randomUUID().toString())
-                .orderIdemPotentStatus(OrderIdemPotentStatus.AVAILABLE)
-                .build();
-
-        Optional<OrderIdempotent> orderIdempotentDb = idempotentRepository.findByKey(orderIdempotent.getKey());
+    public String checkIdempotentKey(String idempotentKey) {
+        Optional<OrderIdempotent> orderIdempotentDb = idempotentRepository.findByKey(idempotentKey);
 
        if(orderIdempotentDb.isEmpty()) {
+           OrderIdempotent orderIdempotent = OrderIdempotent.builder()
+                   .key(UUID.randomUUID().toString())
+                   .orderIdemPotentStatus(OrderIdemPotentStatus.AVAILABLE)
+                   .build();
            idempotentRepository.save(orderIdempotent);
            return orderIdempotent.getKey();
         }
         return orderIdempotentDb.get().getKey();
-    }
-
-    public void updateIdempotentStatus(OrderIdempotent orderIdempotent, OrderIdemPotentStatus orderIdemPotentStatus) {
-        orderIdempotent.setOrderIdemPotentStatus(orderIdemPotentStatus);
-        idempotentRepository.save(orderIdempotent);
     }
 
     public void validateProductPrice(UUID branchId, List<OrderItemRequestDTO> orderItems) {
@@ -154,10 +135,11 @@ public class OrderServiceImpl implements OrderService {
         }
 
     }
+
     public void validateOrderStatus(List<OrderItemRequestDTO> orderItems) {
-     List<ProductStatusCacheDto> cacheStatus = orderItems.stream().map(orderItemRequestDTO ->
-             (ProductStatusCacheDto) cacheClient.get("status"))
-             .toList();
+        List<ProductStatusCacheDto> cacheStatus = orderItems.stream().map(item -> {
+          return getProductStatusFromCache(item.getProductId().toString());
+        }).toList();
 
         for (ProductStatusCacheDto status : cacheStatus) {
             if(status.getProductStatus().equals(ProductStatus.PASSIVE))
@@ -165,27 +147,18 @@ public class OrderServiceImpl implements OrderService {
         }
 
 
-
     }
 
-}
 
-@RequestMapping("/or")
-@RestController
-@RequiredArgsConstructor
-class Rest {
-
-    private final CacheClient client;
-
-    @GetMapping("/cache")
-    public String cache() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        client.set("status_1", new ProductStatusCacheDto(UUID.randomUUID().toString(), ProductStatus.ACTIVE.name()));
-        Object o = client.get("status_1");
+    @SneakyThrows
+    public ProductStatusCacheDto getProductStatusFromCache(String productId) {
+        Object o = cacheClient.get(productId);
         JsonNode jsonNode = objectMapper.readTree(o.toString());
-        ProductStatus productStatus =  ProductStatus.valueOf(jsonNode.get("productStatus").asText());
-        String productId = jsonNode.get("productId").asText();
-        return productStatus.name() + " " + productId;
-    }
+        ProductStatus productStatus = ProductStatus.valueOf(jsonNode.get("productStatus").asText());
 
+      return  ProductStatusCacheDto.builder()
+                .productStatus(productStatus.toString())
+                .productId(UUID.fromString(productId).toString())
+                .build();
+    }
 }

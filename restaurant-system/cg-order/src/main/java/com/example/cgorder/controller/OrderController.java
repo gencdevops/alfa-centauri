@@ -45,11 +45,11 @@ public class OrderController {
     }
 
     @Operation(summary = "Create idempotent key")
-    @GetMapping("/idempotent-key")
+    @GetMapping("/idempotent")
     @ResponseStatus(HttpStatus.CREATED)
-    public String createIdempotentKey() {
+    public String createIdempotentKey(@RequestParam(required = false) String idempotentKey) {
 
-        return orderService.createIdempotentKey();
+        return orderService.checkIdempotentKey(idempotentKey);
     }
 
 
