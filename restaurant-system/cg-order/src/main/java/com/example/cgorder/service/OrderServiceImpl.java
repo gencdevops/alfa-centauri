@@ -18,6 +18,7 @@ import com.example.cgorder.exception.ProductPriceNotFoundException;
 import com.example.cgorder.feign.ProductFeignClient;
 import com.example.cgorder.mapper.OrderItemMapper;
 import com.example.cgorder.mapper.OrderMapper;
+import com.example.cgorder.model.OrderIdemPotentStatus;
 import com.example.cgorder.model.OrderIdempotent;
 import com.example.cgorder.model.OrderOutbox;
 import com.example.cgorder.model.OrderStatus;
@@ -34,6 +35,8 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static com.example.cgorder.model.OrderIdemPotentStatus.NOT_AVAILABLE;
 
 @AllArgsConstructor
 @Service
@@ -60,10 +63,10 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponseDTO placeOrder(@NotNull PlaceOrderRequestDTO placeOrderRequestDTO, String idempotentKey) {
         Optional<OrderIdempotent> orderIdempotent = idempotentRepository.findByKey(idempotentKey);
 
-        if(orderIdempotent.isPresent()){
-            throw new OrderTooManyRequestException("Too Many Request");
+        if(orderIdempotent.isPresent() && orderIdempotent.get().getOrderIdemPotentStatus().equals(NOT_AVAILABLE)){
+            throw new OrderTooManyRequestException("Too many request");
         }
-
+        updateIdempotentStatus(orderIdempotent, OrderIdemPotentStatus.AVAILABLE);
 
         validateProductPrice(placeOrderRequestDTO.getBranchId(), placeOrderRequestDTO.getOrderItems());
         validateOrderStatus(placeOrderRequestDTO.getOrderItems());
@@ -91,12 +94,14 @@ public class OrderServiceImpl implements OrderService {
 
         orderOutBoxService.deleteOrderOutbox(orderOutbox.getOrderOutboxId());
 
+
         return orderMapper.convertPlaceOrderRequestDTOFromOrder(orderRepository.save(order));
     }
 
     public String createIdempotentKey() {
         OrderIdempotent orderIdempotent = OrderIdempotent.builder()
                 .key(UUID.randomUUID().toString())
+                .orderIdemPotentStatus(OrderIdemPotentStatus.AVAILABLE)
                 .build();
 
         Optional<OrderIdempotent> orderIdempotentDb = idempotentRepository.findByKey(orderIdempotent.getKey());
@@ -107,6 +112,11 @@ public class OrderServiceImpl implements OrderService {
         }
         return orderIdempotentDb.get().getKey();
     };
+
+    public void updateIdempotentStatus(OrderIdempotent orderIdempotent, OrderIdemPotentStatus orderIdemPotentStatus) {
+        orderIdempotent.setOrderIdemPotentStatus(orderIdemPotentStatus);
+        idempotentRepository.save(orderIdempotent);
+    }
 
     public void validateProductPrice(UUID branchId, List<OrderItemRequestDTO> orderItems) {
         ProductPricesRequestDto productPricesRequestDto = ProductPricesRequestDto.builder()
