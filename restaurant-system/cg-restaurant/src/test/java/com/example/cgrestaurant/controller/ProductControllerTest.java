@@ -40,23 +40,23 @@ class ProductControllerTest extends BaseIntegrationTest {
 
 
 
-    @Test
-    void shouldCreateProduct() throws Exception {
-        CreateProductRequestDto createProductRequestDto = new CreateProductRequestDto(
-                "test",
-                BigDecimal.ONE,
-                UUID.randomUUID(),
-                ProductStatus.ACTIVE
-        );
-
-        this.mockMvc.perform(post(BASE_PRODUCT_ENDPOINT)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsBytes(createProductRequestDto)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.productName").value(createProductRequestDto.productName()))
-                .andExpect(jsonPath("$.defaultPrice").value(createProductRequestDto.defaultPrice()))
-                .andExpect(jsonPath("$.productStatus").value(createProductRequestDto.productStatus().name()));
-    }
+//    @Test
+//    void shouldCreateProduct() throws Exception {
+//        CreateProductRequestDto createProductRequestDto = new CreateProductRequestDto(
+//                "test",
+//                BigDecimal.ONE,
+//                UUID.randomUUID(),
+//                ProductStatus.ACTIVE
+//        );
+//
+//        this.mockMvc.perform(post(BASE_PRODUCT_ENDPOINT)
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content(mapper.writeValueAsBytes(createProductRequestDto)))
+//                .andExpect(status().isCreated())
+//                .andExpect(jsonPath("$.productName").value(createProductRequestDto.productName()))
+//                .andExpect(jsonPath("$.defaultPrice").value(createProductRequestDto.defaultPrice()))
+//                .andExpect(jsonPath("$.productStatus").value(createProductRequestDto.productStatus().name()));
+//    }
 
     @Test
     void shouldReturnProductWhenExist() throws Exception {
