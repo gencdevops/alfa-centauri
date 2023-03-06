@@ -21,6 +21,7 @@ public class OrderIdempotent {
     private UUID id;
 
   private String key;
+  private OrderIdemPotentStatus orderIdemPotentStatus;
 
 }
 
