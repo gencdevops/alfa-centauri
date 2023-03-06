@@ -1,9 +1,9 @@
 package com.example.cgrestaurant.service;
 
-import com.example.cgcommon.configuration.CacheClient;
 import com.example.cgcommon.dto.response.ProductPriceResponseDto;
 import com.example.cgcommon.model.ProductStatus;
 import com.example.cgcommon.request.ProductPricesRequestDto;
+import com.example.cgrestaurant.configuration.CacheClient;
 import com.example.cgrestaurant.dto.CreateProductPriceRequestDto;
 import com.example.cgrestaurant.dto.request.CreateProductRequestDto;
 import com.example.cgrestaurant.dto.request.UpdateProductRequestDto;
@@ -62,6 +62,7 @@ class ProductServiceTest {
 
         when(productMapper.convertProductFromCreateProductRequestDto(createProductRequestDto)).thenReturn(product);
         when(productPriceRepository.save(any(ProductPrice.class))).thenReturn(new ProductPrice());
+        product.setId(UUID.randomUUID());
         when(productRepository.save(any(Product.class))).thenReturn(product);
         when(productMapper.convertProductResponseDtoFromProduct(any(Product.class))).thenReturn(new ProductResponseDto(productName, defaultPrice, ProductStatus.ACTIVE));
 
