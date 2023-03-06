@@ -1,7 +1,6 @@
 package com.example.cgorder.service;
 
 
-import com.example.cgcommon.configuration.CacheClient;
 import com.example.cgcommon.dto.response.OrderResponseDTO;
 import com.example.cgcommon.dto.response.ProductPriceResponseDto;
 import com.example.cgcommon.dto.response.ProductStatusCacheDto;
@@ -11,6 +10,7 @@ import com.example.cgcommon.request.PlaceOrderRequestDTO;
 import com.example.cgcommon.request.ProductPricesRequestDto;
 
 
+import com.example.cgorder.configuration.CacheClient;
 import com.example.cgorder.exception.InConsistentProductPriceException;
 import com.example.cgorder.exception.OrderPayloadDeserializeException;
 import com.example.cgorder.exception.OrderTooManyRequestException;
@@ -25,11 +25,17 @@ import com.example.cgorder.model.OrderStatus;
 import com.example.cgorder.repository.OrderIdempotentRepository;
 import com.example.cgorder.repository.OrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.protocol.types.Field;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -160,6 +166,26 @@ public class OrderServiceImpl implements OrderService {
 
 
 
+    }
+
+}
+
+@RequestMapping("/or")
+@RestController
+@RequiredArgsConstructor
+class Rest {
+
+    private final CacheClient client;
+
+    @GetMapping("/cache")
+    public String cache() throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        client.set("status_1", new ProductStatusCacheDto(UUID.randomUUID().toString(), ProductStatus.ACTIVE.name()));
+        Object o = client.get("status_1");
+        JsonNode jsonNode = objectMapper.readTree(o.toString());
+        ProductStatus productStatus =  ProductStatus.valueOf(jsonNode.get("productStatus").asText());
+        String productId = jsonNode.get("productId").asText();
+        return productStatus.name() + " " + productId;
     }
 
 }

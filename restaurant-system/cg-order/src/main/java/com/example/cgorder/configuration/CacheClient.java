@@ -1,9 +1,10 @@
-package com.example.cgcommon.configuration;
+package com.example.cgorder.configuration;
 
 
 import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.List;
+import java.util.Objects;
 
 public interface CacheClient {
     void set(String key, Object value);
@@ -40,7 +41,17 @@ public interface CacheClient {
         }
 
         public CacheClient build() {
-            return new CacheManager(host, Integer.parseInt(port), failOnError, new JedisPoolConfig());
+            if (Objects.equals("redis", type)) {
+                JedisPoolConfig poolConfig = new JedisPoolConfig();
+
+                poolConfig.setTestOnBorrow(false);
+                poolConfig.setTestOnReturn(false);
+                poolConfig.setTestWhileIdle(true);
+                poolConfig.setMaxTotal(16);
+
+                return new CacheManager(host, Integer.parseInt(port), failOnError, poolConfig);
+            }
+            throw new IllegalStateException("Unknown cache type");
         }
     }
 }
