@@ -1,6 +1,7 @@
 package com.example.cgorder.service;
 
 import com.example.cgcommon.configuration.CacheClient;
+import com.example.cgcommon.dto.response.OrderItemResponseDTO;
 import com.example.cgcommon.dto.response.OrderResponseDTO;
 import com.example.cgcommon.dto.response.ProductPriceResponseDto;
 import com.example.cgcommon.dto.response.ProductStatusCacheDto;
@@ -18,7 +19,6 @@ import com.example.cgorder.repository.OrderIdempotentRepository;
 import com.example.cgorder.repository.OrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.weaver.ast.Or;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -71,84 +71,77 @@ class OrderServiceImplTest {
     @Captor
     private ArgumentCaptor<OrderOutbox> orderOutboxCaptor;
 
-//    @Test
-//    void placeOrder() throws JsonProcessingException {
-//        UUID branchId = UUID.randomUUID();
-//        UUID productId = UUID.randomUUID();
-//
-//        OrderItemRequestDTO orderItemRequestDTO = OrderItemRequestDTO.builder()
-//                .productId(UUID.randomUUID())
-//                .quantity(1)
-//                .build();
-//
-//        CardInfoDto cardInfoDto = CardInfoDto.builder()
-//                .cardNumber("123456789")
-//                .cvc("233")
-//                .build();
-//
-//        PlaceOrderRequestDTO placeOrderRequestDTO = PlaceOrderRequestDTO.builder()
-//                .totalPrice(BigDecimal.ONE)
-//                .orderItems(List.of(orderItemRequestDTO))
-//                .cardInfo(cardInfoDto)
-//                .build();
-//
-//        Order order = new Order();
-//        OrderResponseDTO expectedOrderResponseDto = new OrderResponseDTO();
-//
-//        List<ProductPriceResponseDto> productPriceResponseDtoList = List.of(new ProductPriceResponseDto(branchId, productId, BigDecimal.ONE));
-//
-//        when(orderMapper.convertOrderFromPlaceOrderRequestDTO(placeOrderRequestDTO)).thenReturn(order);
-//        when(orderItemMapper.convertOrderItemFromOrderItemRequestDTO(any())).thenReturn(new OrderItem());
-//        when(objectMapper.writeValueAsString(any(Order.class))).thenReturn("");
-//        doNothing().when(orderOutBoxService).saveOrderOutbox(any(OrderOutbox.class));
-//        doNothing().when(producerService).sendMessage(any(Order.class));
-//        when(orderRepository.save(order)).thenReturn(order);
-//        when(productFeignClient.getProductPrices(any(), any())).thenReturn(productPriceResponseDtoList);
-//        when(orderMapper.convertPlaceOrderRequestDTOFromOrder(order)).thenReturn(expectedOrderResponseDto);
-//        when(idempotentRepository.findByKey(any())).thenReturn(Optional.empty());
-//
-//        OrderResponseDTO actualOrderResponseDto = orderService.placeOrder(placeOrderRequestDTO, "test");
-//
-//        verify(orderRepository, times(1)).save(order);
-//        verify(producerService, times(1)).sendMessage(any(Order.class));
-//        verify(orderOutBoxService, times(1)).deleteOrderOutbox(any());
-//        verify(orderOutBoxService, times(1)).saveOrderOutbox(orderOutboxCaptor.capture());
-//
-//        assertEquals(expectedOrderResponseDto, actualOrderResponseDto);
-//        assertEquals(order.getOrderId(), orderOutboxCaptor.getValue().getOrderOutboxId());
-//    }
-
     @Test
     void placeOrder() throws JsonProcessingException {
         UUID branchId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
+        String key = UUID.randomUUID().toString();
 
         OrderItemRequestDTO orderItemRequestDTO = OrderItemRequestDTO.builder()
                 .productId(productId)
                 .quantity(1)
+                .unitPrice(BigDecimal.valueOf(1001))
+                .totalPrice(BigDecimal.valueOf(1001))
                 .build();
+        ArrayList<OrderItemRequestDTO> orderItemRequestDTOS = new ArrayList();
+        orderItemRequestDTOS.add(orderItemRequestDTO);
 
         CardInfoDto cardInfoDto = CardInfoDto.builder()
                 .cardNumber("123456789")
                 .cvc("233")
                 .build();
 
-        when(productFeignClient.getProductPrices(any(), any())).thenReturn(List.of(new ProductPriceResponseDto(branchId, productId, BigDecimal.ONE)));
-        doNothing().when(orderService).validateOrderStatus(any());
-        doNothing().when(orderService).validateProductPrice(any(), any());
-        when(orderItemMapper.convertOrderItemFromOrderItemRequestDTO(any())).thenReturn(OrderItem.builder().build());
-        when(orderMapper.convertOrderFromPlaceOrderRequestDTO(any())).thenReturn(
-                Order.builder().orderItems(List.of(OrderItem.builder()
-                        .totalPrice(BigDecimal.ONE)
-                        .quantity(1)
-                        .unitPrice(BigDecimal.ONE)
-                        .productId(productId)
-                        .build())).orderStatus(OrderStatus.RECEIVED).build());
+        PlaceOrderRequestDTO placeOrderRequestDTO = PlaceOrderRequestDTO.builder()
+                .branchId(branchId)
+                .orderItems(orderItemRequestDTOS)
+                .cardInfo(cardInfoDto)
+                .totalPrice(BigDecimal.valueOf(1001))
+                .build();
 
+        OrderItem orderItem = OrderItem.builder()
+                .orderItemId(productId)
+                .totalPrice(BigDecimal.valueOf(1001))
+                .unitPrice(BigDecimal.valueOf(1001))
+                .quantity(1)
+                .productId(productId)
+                .build();
 
-        new PlaceOrderRequestDTO(List.of(orderItemRequestDTO), BigDecimal.ONE, cardInfoDto, branchId);
+        Order order = Order.builder()
+                .orderId(UUID.randomUUID())
+                .totalPrice(BigDecimal.valueOf(1001))
+                .build();
 
+        ProductPriceResponseDto productPriceResponseDto = new ProductPriceResponseDto(branchId, productId, BigDecimal.valueOf(1001));
+        ProductStatusCacheDto productStatusCacheDto = ProductStatusCacheDto.builder()
+                .productId(productId)
+                .productStatus(ProductStatus.ACTIVE)
+                .build();
 
+        OrderItemResponseDTO orderItemResponseDTO = OrderItemResponseDTO.builder()
+                .orderItemId(productId)
+                .unitPrice(BigDecimal.valueOf(1001))
+                .productId(productId)
+                .quantity(1)
+                .build();
+        List<OrderItemResponseDTO> orderItemResponseDTOS = new ArrayList<>();
+        orderItemResponseDTOS.add(orderItemResponseDTO);
+
+        OrderResponseDTO orderResponseDTO = OrderResponseDTO.builder()
+                .totalPrice(BigDecimal.valueOf(1001))
+                .orderItems(orderItemResponseDTOS)
+                .build();
+
+        when(idempotentRepository.findByKey(any())).thenReturn(Optional.of(new OrderIdempotent(productId, key, OrderIdemPotentStatus.AVAILABLE)));
+        when(productFeignClient.getProductPrices(any(), any())).thenReturn(List.of(productPriceResponseDto));
+        when(orderMapper.convertOrderFromPlaceOrderRequestDTO(placeOrderRequestDTO)).thenReturn(order);
+        when(cacheClient.get(any())).thenReturn(productStatusCacheDto);
+        when(orderItemMapper.convertOrderItemFromOrderItemRequestDTO(any())).thenReturn(orderItem);
+        when(orderRepository.save(any())).thenReturn(order);
+        when(orderMapper.convertPlaceOrderRequestDTOFromOrder(any())).thenReturn(orderResponseDTO);
+        OrderResponseDTO result = orderService.placeOrder(placeOrderRequestDTO, key);
+
+        assertEquals(BigDecimal.valueOf(1001), result.getTotalPrice());
+        assertEquals(orderItemResponseDTOS, result.getOrderItems());
     }
 
 

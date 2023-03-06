@@ -117,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
            return orderIdempotent.getKey();
         }
         return orderIdempotentDb.get().getKey();
-    };
+    }
 
     public void updateIdempotentStatus(OrderIdempotent orderIdempotent, OrderIdemPotentStatus orderIdemPotentStatus) {
         orderIdempotent.setOrderIdemPotentStatus(orderIdemPotentStatus);
