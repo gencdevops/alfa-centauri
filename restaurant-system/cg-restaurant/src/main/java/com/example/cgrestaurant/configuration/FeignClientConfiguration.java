@@ -2,7 +2,6 @@ package com.example.cgrestaurant.configuration;
 
 
 import com.example.cgrestaurant.feign.FeignErrorDecoder;
-import com.example.cgrestaurant.feign.RetreiveMessageErrorDecoder;
 import feign.Logger;
 import feign.codec.ErrorDecoder;
 import org.springframework.beans.factory.ObjectFactory;
@@ -12,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@EnableFeignClients(basePackages = {"com.example.cgrestaurant.feign", "com.example.cgrestaurant.service"})
+
 @Configuration
 public class FeignClientConfiguration {
 
@@ -25,10 +24,8 @@ public class FeignClientConfiguration {
         return new FeignErrorDecoder();
     }
 
-        @Bean
-        Logger.Level feignLoggerLevel() {
-            return Logger.Level.BASIC;
-        }
+    @Bean
+    Logger.Level feignLoggerLevel() {
+        return Logger.Level.BASIC;
     }
-
 }

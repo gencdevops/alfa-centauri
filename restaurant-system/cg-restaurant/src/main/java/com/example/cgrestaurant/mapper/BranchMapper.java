@@ -5,10 +5,10 @@ import com.example.cgrestaurant.dto.response.BranchResponseDto;
 import com.example.cgrestaurant.model.Branch;
 import org.mapstruct.Mapper;
 
-@Mapper(implementationName = "BranchMapperImpl", componentModel = "spring", imports = Branch.class)
+@Mapper(implementationName = "BranchMapperImpl", componentModel = "spring")
 public interface BranchMapper {
 
-    Branch toBranchFromCreateBranchRequest(CreateBranchRequestDto request);
+    Branch convertBranchFromCreateBranchRequestDto(CreateBranchRequestDto request);
 
-    BranchResponseDto toBranchDto(Branch branch);
+    BranchResponseDto convertBranchResponseDtoFromBranch(Branch branch);
 }

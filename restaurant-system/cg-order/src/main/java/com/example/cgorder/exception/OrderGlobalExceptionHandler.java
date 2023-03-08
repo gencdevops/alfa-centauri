@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.MethodNotAllowedException;
@@ -77,6 +78,66 @@ public class OrderGlobalExceptionHandler {
     public ResponseEntity<ErrorBody> processMethodNotAllowedException(final Exception exception, final HttpServletRequest request) {
         return responseEntity(ErrorBody.builder()
                 .errorCode(HttpStatus.METHOD_NOT_ALLOWED.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404",
+                    description = "Method Not Found",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorBody.class),
+                            mediaType = "application/json"))})
+    @ExceptionHandler(OrderNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorBody> orderNotFoundException( OrderNotFoundException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    @ExceptionHandler(InConsistentProductPriceException.class)
+    public ResponseEntity<ErrorBody> orderNotFoundException( InConsistentProductPriceException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ProductPriceNotFoundException.class)
+    public ResponseEntity<ErrorBody> orderNotFoundException( ProductPriceNotFoundException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(OrderTooManyRequestException.class)
+    public ResponseEntity<ErrorBody> orderTooManyRequestException( OrderTooManyRequestException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "500",
+                    description = "Order payload deserialize exception",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorBody.class),
+                            mediaType = "application/json"))})
+    @ExceptionHandler(OrderPayloadDeserializeException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorBody> orderPayloadDeserializeException( OrderPayloadDeserializeException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
                 .errorDescription(exception.getMessage())
                 .build());
     }

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/custom-status-code" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/custom-status-code" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/custom-validation" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/custom-validation" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/custom-validation-without-throw" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/custom-validation-without-throw" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/kafka-logback-xml" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/kafka-logback-xml" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/kafka-logback-xml-v2" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/kafka-logback-xml-v2" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/kafka-ui" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/kafka-ui" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/property-encryption-with-jasypt" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/property-encryption-with-jasypt" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/redis-custom-serializer" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/redis-custom-serializer" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/restaurant-system/cg-config-server" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/restaurant-system/cg-config-server" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/restaurant-system/cg-order" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/restaurant-system/cg-order" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/restaurant-system/cg-registry" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/restaurant-system/cg-registry" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/restaurant-system/cg-restaurant" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/restaurant-system/cg-restaurant" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

@@ -1,16 +1,17 @@
 package com.example.cgrestaurant.mapper;
 
+import com.example.cgcommon.dto.response.ProductPriceResponseDto;
 import com.example.cgrestaurant.dto.request.CreateProductRequestDto;
 import com.example.cgrestaurant.dto.response.ProductResponseDto;
 import com.example.cgrestaurant.model.Product;
+import com.example.cgrestaurant.model.ProductPrice;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(implementationName = "ProductMapperImpl", componentModel = "spring", imports = Product.class)
 public interface ProductMapper {
 
-    @Mapping(target = "supplier", ignore = true)
-    Product toProductFromCreateProductRequest(CreateProductRequestDto request);
+    Product convertProductFromCreateProductRequestDto(CreateProductRequestDto request);
 
-    ProductResponseDto toProductDto(Product product);
+    ProductResponseDto convertProductResponseDtoFromProduct(Product product);
+    ProductPriceResponseDto convertProductPriceResponseDtoFromProductPrice(ProductPrice productPrice);
 }

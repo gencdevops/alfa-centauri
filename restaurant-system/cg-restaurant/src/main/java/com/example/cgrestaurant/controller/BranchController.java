@@ -8,11 +8,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,17 +28,16 @@ public class BranchController {
     private final BranchService service;
 
 
-
     @Operation(summary = "Create a Branch")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully Branch Created"),
+            @ApiResponse(responseCode = "201", description = "Successfully Branch Created"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    @PostMapping
+    @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
-    public String createBranch(@Validated  @RequestBody CreateBranchRequestDto request) {
-        return service.createBranch(request);
+    public BranchResponseDto createBranch(@Valid @RequestBody CreateBranchRequestDto createBranchRequestDto) {
+        return service.createBranch(createBranchRequestDto);
     }
 
     @Operation(summary = "Retrieve branch according to branch ID")
@@ -48,19 +47,21 @@ public class BranchController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping("/{id}")
-    public ResponseEntity<BranchResponseDto> getBranchById(@NotNull @PathVariable UUID id) {
-        return ResponseEntity.ok(service.getBranchById(id));
+    @ResponseStatus(value = HttpStatus.OK)
+    public BranchResponseDto getBranchById(@NotNull @PathVariable UUID id) {
+        return service.getBranchById(id);
     }
 
     @Operation(summary = "Get All Branch")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully Branch Created"),
+            @ApiResponse(responseCode = "200", description = "Successfully"),
             @ApiResponse(responseCode = "404", description = "Not Found"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @GetMapping
-    public ResponseEntity<List<BranchResponseDto>> getAllBranches() {
-        return ResponseEntity.ok(service.getAllBranch());
+    @ResponseStatus(value = HttpStatus.OK)
+    public List<BranchResponseDto> getAllBranches() {
+        return service.getAllBranch();
     }
 
 
@@ -71,9 +72,12 @@ public class BranchController {
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateBranchById(@Validated @PathVariable UUID id, @RequestBody UpdateBranchRequestDto request) {
-        return ResponseEntity.ok(service.updateBranch(id, request));
+    @ResponseStatus(value = HttpStatus.OK)
+    public BranchResponseDto updateBranchById(@Valid @PathVariable UUID id, @RequestBody UpdateBranchRequestDto request) {
+        return service.updateBranch(id, request);
+
     }
+
     @Operation(summary = "Delete Branch")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Successfully Branch Delete"),
@@ -82,7 +86,8 @@ public class BranchController {
     })
     @DeleteMapping("/{id}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public String deleteBranchById(@PathVariable UUID id) {
-        return service.deleteBranch(id);
+    public ResponseEntity<Void> deleteBranchById(@PathVariable UUID id) {
+        service.deleteBranch(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -11,9 +11,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.MethodNotAllowedException;
+import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -78,6 +80,51 @@ public class RestaurantGlobalExceptionHandler {
     public ResponseEntity<ErrorBody> processMethodNotAllowedException(final Exception exception, final HttpServletRequest request) {
         return responseEntity(ErrorBody.builder()
                 .errorCode(HttpStatus.METHOD_NOT_ALLOWED.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404",
+                    description = "Method Not Found",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorBody.class),
+                            mediaType = "application/json"))})
+    @ExceptionHandler(BranchNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorBody> branchNotFoundException( BranchNotFoundException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404",
+                    description = "Method Not Found",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorBody.class),
+                            mediaType = "application/json"))})
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorBody> productNotFoundException( ProductNotFoundException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "404",
+                    description = "Method Not Found",
+                    content = @Content(
+                            schema = @Schema(implementation = ErrorBody.class),
+                            mediaType = "application/json"))})
+    @ExceptionHandler(SupplierNotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    public ResponseEntity<ErrorBody> supplierNotFoundException(SupplierNotFoundException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
                 .errorDescription(exception.getMessage())
                 .build());
     }
