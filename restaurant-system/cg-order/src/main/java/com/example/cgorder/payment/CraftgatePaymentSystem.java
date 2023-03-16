@@ -1,6 +1,6 @@
 package com.example.cgorder.payment;
 
-import com.example.cgorder.dto.OrderItemRequestDTO;
+import com.example.cgcommon.request.OrderItemRequestDTO;
 import com.example.cgorder.model.Card;
 import io.craftgate.Craftgate;
 import io.craftgate.model.Currency;
@@ -20,12 +20,7 @@ import java.util.UUID;
 public class CraftgatePaymentSystem implements PaymentSystem {
 
     private Currency CURRENCY = Currency.TRY;
-    private Craftgate craftgate;
-
-    @PostConstruct
-    public void initPaymentSystem() {
-        this.craftgate = new Craftgate("sandbox-MkOuIWzmHFxsIKCaDzSVsARStdmJqlrc", "sandbox-JsgPbznSePymfcSiDHelyQzMknDqAYNJ", "https://sandbox-api.craftgate.io");
-    }
+    private Craftgate craftgate = new Craftgate("sandbox-MkOuIWzmHFxsIKCaDzSVsARStdmJqlrc", "sandbox-JsgPbznSePymfcSiDHelyQzMknDqAYNJ", "https://sandbox-api.craftgate.io");
 
     @Override
     public Object pay(List<OrderItemRequestDTO> orderItemRequestDTOList, Card card) {
@@ -47,7 +42,6 @@ public class CraftgatePaymentSystem implements PaymentSystem {
 
             paymentItems.add(
                     PaymentItem.builder()
-                            .name(orderItemRequestDTO.getProductName())
                             .price(orderItemRequestDTO.getUnitPrice())
                             .externalId(UUID.randomUUID().toString())
                             .build()

@@ -1,17 +1,10 @@
 package com.example.cgrestaurant.model;
 
-import com.example.cgrestaurant.model.enums.ProductStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.example.cgcommon.model.ProductStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -23,23 +16,15 @@ import java.util.UUID;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
+
 
     private String productName;
 
-    private BigDecimal defaultPrice;
-
-
     private UUID supplierId;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdDateTime;
 
-    @Column(columnDefinition = "TIMESTAMP")
-    @UpdateTimestamp
-    private LocalDateTime changeDayLastTime;
 
     @Enumerated(EnumType.STRING)
     private ProductStatus productStatus;

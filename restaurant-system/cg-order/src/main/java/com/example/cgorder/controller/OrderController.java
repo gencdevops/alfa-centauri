@@ -1,8 +1,8 @@
 package com.example.cgorder.controller;
 
 
-import com.example.cgorder.dto.OrderResponseDto;
-import com.example.cgorder.dto.PlaceOrderRequestDTO;
+import com.example.cgcommon.dto.response.OrderResponseDTO;
+import com.example.cgcommon.request.PlaceOrderRequestDTO;
 import com.example.cgorder.service.OrderService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,17 +30,28 @@ public class OrderController {
     @Operation(summary = "Create order")
     @ApiResponses(value =
     @ApiResponse(
-            responseCode = "200",
+            responseCode = "201",
             description = "Place order",
             content = @Content(
-                    schema = @Schema(implementation = OrderResponseDto.class),
+                    schema = @Schema(implementation = OrderResponseDTO.class),
                     mediaType = "application/json")))
     @PostMapping("/place-order")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<OrderResponseDto> placeOrder(@RequestBody @Valid PlaceOrderRequestDTO placeOrderRequestDTO) {
+    public OrderResponseDTO placeOrder(
+            @RequestParam String idempotentKey,
+            @RequestBody @Valid PlaceOrderRequestDTO placeOrderRequestDTO) {
 
-        return ResponseEntity.ok(orderService.placeOrder(placeOrderRequestDTO));
+        return orderService.placeOrder(placeOrderRequestDTO, idempotentKey);
     }
+
+    @Operation(summary = "Create idempotent key")
+    @GetMapping("/idempotent")
+    @ResponseStatus(HttpStatus.CREATED)
+    public String createIdempotentKey(@RequestParam(required = false) String idempotentKey) {
+
+        return orderService.checkIdempotentKey(idempotentKey);
+    }
+
 
 }
 

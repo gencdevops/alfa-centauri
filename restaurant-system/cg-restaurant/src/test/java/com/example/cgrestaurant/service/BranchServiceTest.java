@@ -39,27 +39,25 @@ class BranchServiceTest {
     @Test
     void shouldReturnBranchResponseWhenCreateBranch() {
         String branchName = RandomStringUtils.random(5);
-        CreateBranchRequestDto requestDto = new CreateBranchRequestDto(branchName, BigDecimal.ONE, UUID.randomUUID());
+        CreateBranchRequestDto requestDto = new CreateBranchRequestDto(branchName, UUID.randomUUID());
         Branch branch = new Branch();
-        Supplier supplier = new Supplier();
 
         when(branchMapper.convertBranchFromCreateBranchRequestDto(requestDto)).thenReturn(branch);
-        when(supplierService.getSupplierByID(requestDto.supplierId())).thenReturn(supplier);
         when(branchRepository.save(branch)).thenReturn(branch);
         when(branchMapper.convertBranchResponseDtoFromBranch(branch)).thenReturn(new BranchResponseDto(branchName));
 
         BranchResponseDto responseDto = branchService.createBranch(requestDto);
 
         verify(branchMapper).convertBranchFromCreateBranchRequestDto(requestDto);
-        verify(supplierService).getSupplierByID(requestDto.supplierId());
         verify(branchRepository).save(branch);
         verify(branchMapper).convertBranchResponseDtoFromBranch(branch);
         assertNotNull(responseDto);
         assertEquals(responseDto, branchMapper.convertBranchResponseDtoFromBranch(branch));
+        assertEquals(branchName, responseDto.branchName());
     }
 
     @Test
-    public void shouldThrowExceptionWhenBranchByIdNotFound() {
+    void shouldThrowExceptionWhenBranchByIdNotFound() {
         UUID branchId = UUID.randomUUID();
         when(branchRepository.findById(branchId)).thenReturn(Optional.empty());
         assertThrows(BranchNotFoundException.class, () -> branchService.getBranchById(branchId));
@@ -69,7 +67,7 @@ class BranchServiceTest {
     void shouldReturnBranchResponseWhenExistById() {
         UUID id = UUID.randomUUID();
         Branch branch = Branch.builder()
-                .branchId(id)
+                .id(id)
                 .branchName(RandomStringUtils.random(5))
                 .build();
 
@@ -100,7 +98,7 @@ class BranchServiceTest {
         UUID id = UUID.randomUUID();
         String branchName = RandomStringUtils.random(5);
         Branch branch = Branch.builder()
-                .branchId(id)
+                .id(id)
                 .branchName(branchName)
                 .build();
 
@@ -121,8 +119,10 @@ class BranchServiceTest {
     @Test
     void shouldThrowExceptionWhenUpdateBranch() {
         UUID id = UUID.randomUUID();
+        String branchName = RandomStringUtils.random(5);
+        UpdateBranchRequestDto updateBranchRequestDto = new UpdateBranchRequestDto(branchName);
         when(branchRepository.findById(id)).thenReturn(Optional.empty());
-        assertThrows(BranchNotFoundException.class, () -> branchService.updateBranch(id, new UpdateBranchRequestDto(RandomStringUtils.random(5))));
+        assertThrows(BranchNotFoundException.class, () -> branchService.updateBranch(id, updateBranchRequestDto));
     }
 
     @Test

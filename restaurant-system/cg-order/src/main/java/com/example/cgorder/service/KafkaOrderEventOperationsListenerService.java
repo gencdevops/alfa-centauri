@@ -38,7 +38,7 @@ public class KafkaOrderEventOperationsListenerService {
     @KafkaListener(topics = "${spring.kafka.consumer.topic}", groupId = "${spring.kafka.group.id}")
     public void handleMessage(String order, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) throws JsonProcessingException {
         Order orderString = objectMapper.readValue(order, Order.class);
-        log.info(")");
+        log.info("Order -> {}", order);
         Optional<Order> orderOptional = orderRepository.findById(orderString.getOrderId());
         orderOptional.ifPresent(this::updateOrderFromOrderOutboxRetryScheduler);
     }
@@ -46,8 +46,7 @@ public class KafkaOrderEventOperationsListenerService {
     @DltHandler
     public void handleDlt(String order, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         log.info("Message: {} handled by dlq topic: {}", order, topic);
-
-        //TODO : burada slacke gidecegiz
+        // TODO : Dead Letter queue'ya gelen Mongo'ya falan basilabilir
     }
 
 

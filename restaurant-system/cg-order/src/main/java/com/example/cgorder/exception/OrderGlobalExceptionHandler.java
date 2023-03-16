@@ -91,7 +91,35 @@ public class OrderGlobalExceptionHandler {
                             mediaType = "application/json"))})
     @ExceptionHandler(OrderNotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    public ResponseEntity<ErrorBody> OrderNotFoundException( OrderNotFoundException exception) {
+    public ResponseEntity<ErrorBody> orderNotFoundException( OrderNotFoundException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    @ExceptionHandler(InConsistentProductPriceException.class)
+    public ResponseEntity<ErrorBody> orderNotFoundException( InConsistentProductPriceException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ProductPriceNotFoundException.class)
+    public ResponseEntity<ErrorBody> orderNotFoundException( ProductPriceNotFoundException exception) {
+        return responseEntity(ErrorBody.builder()
+                .errorCode(HttpStatus.NOT_FOUND.value())
+                .errorDescription(exception.getMessage())
+                .build());
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(OrderTooManyRequestException.class)
+    public ResponseEntity<ErrorBody> orderTooManyRequestException( OrderTooManyRequestException exception) {
         return responseEntity(ErrorBody.builder()
                 .errorCode(HttpStatus.NOT_FOUND.value())
                 .errorDescription(exception.getMessage())

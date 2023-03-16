@@ -61,7 +61,7 @@ public class SupplierControllerTest extends BaseIntegrationTest {
 
     @Test
     void shouldReturnSupplierWhenExists() throws Exception {
-        this.mockMvc.perform(get(BASE_SUPPLIER_API_ENDPOINT + "/" + alreadyCreatedSupplier.getSupplierId()))
+        this.mockMvc.perform(get(BASE_SUPPLIER_API_ENDPOINT + "/" + alreadyCreatedSupplier.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.supplierName", Matchers.is(alreadyCreatedSupplier.getSupplierName())))
@@ -86,7 +86,7 @@ public class SupplierControllerTest extends BaseIntegrationTest {
 
     @Test
     void shouldDeleteSupplier() throws Exception {
-        this.mockMvc.perform(delete(BASE_SUPPLIER_API_ENDPOINT + "/" + alreadyCreatedSupplier.getSupplierId()))
+        this.mockMvc.perform(delete(BASE_SUPPLIER_API_ENDPOINT + "/" + alreadyCreatedSupplier.getId()))
                 .andExpect(status().isNoContent())
                 .andReturn();
     }

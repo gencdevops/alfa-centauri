@@ -1,13 +1,14 @@
 package com.example.cgcommon.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 
 @Builder
 @Getter
 @Setter
+@Data
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class ErrorBody {
     private Integer errorCode;
     private String errorDescription;

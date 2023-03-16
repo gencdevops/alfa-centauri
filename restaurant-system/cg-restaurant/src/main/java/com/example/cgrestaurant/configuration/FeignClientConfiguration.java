@@ -11,7 +11,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-@EnableFeignClients(basePackages = {"com.example.cgrestaurant.feign", "com.example.cgrestaurant.service"})
+
 @Configuration
 public class FeignClientConfiguration {
 

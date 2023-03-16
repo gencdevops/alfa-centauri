@@ -16,7 +16,7 @@ public class OrderItemResponseDTO {
 
     private UUID orderItemId;
 
-    private Long productId;
+    private UUID productId;
 
     private String productName;
 

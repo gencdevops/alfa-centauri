@@ -23,15 +23,16 @@ import java.util.UUID;
 public class Branch {
 
     // Starbucks
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID branchId;
+    private UUID id;
+
 
     @Column(unique=true)
     private String branchName;
 
-    @Nullable
-    private BigDecimal branchPrice;
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdDateTime;

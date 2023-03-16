@@ -1,22 +1,20 @@
 package com.example.cgcommon.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class OrderItemResponseDTO {
 
     private UUID orderItemId;
 
-    private Long productId;
+    private UUID productId;
 
     private String productName;
 

@@ -40,7 +40,7 @@ class SupplierServiceTest {
     void shouldReturnSupplierResponseWhenExistById() {
         UUID id = UUID.randomUUID();
         Supplier supplier = Supplier.builder()
-                .supplierId(id)
+                .id(id)
                 .supplierName("Test Supplier")
                 .build();
 
@@ -58,11 +58,10 @@ class SupplierServiceTest {
 
     @Test
     void shouldThrowExceptionWhenSupplierIdDoesNotExist() {
+        UUID id = UUID.randomUUID();
+        when(supplierRepository.findById(id)).thenReturn(Optional.empty());
 
-        when(supplierRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.empty());
-        when(supplierRepository.findById(any(UUID.class))).thenReturn(Optional.empty());
-
-        assertThrows(SupplierNotFoundException.class, () -> service.getSupplierByIdConvertedSupplierResponseDto(UUID.randomUUID()));
+        assertThrows(SupplierNotFoundException.class, () -> service.getSupplierByIdConvertedSupplierResponseDto(id));
     }
 
     @Test
@@ -71,7 +70,7 @@ class SupplierServiceTest {
         String updatedSupplierName = RandomStringUtils.randomAlphabetic(10);
         UpdateSupplierRequestDto updateSupplierRequestDto = new UpdateSupplierRequestDto(updatedSupplierName);
         Supplier supplier = Supplier.builder()
-                .supplierId(id)
+                .id(id)
                 .supplierName(RandomStringUtils.randomAlphabetic(10))
                 .build();
 
@@ -81,7 +80,7 @@ class SupplierServiceTest {
 
         SupplierResponseDto responseDto = service.updateSupplier(id, updateSupplierRequestDto);
 
-        assertEquals(id, supplier.getSupplierId());
+        assertEquals(id, supplier.getId());
         assertEquals(updatedSupplierName, supplier.getSupplierName());
         assertEquals(updatedSupplierName, responseDto.supplierName());
 
@@ -92,7 +91,7 @@ class SupplierServiceTest {
     @Test
     void shouldReturnGetAllSupplier() {
         Supplier supplier = Supplier.builder()
-                .supplierId(UUID.randomUUID())
+                .id(UUID.randomUUID())
                 .supplierName(RandomStringUtils.randomAlphabetic(10))
                 .build();
 

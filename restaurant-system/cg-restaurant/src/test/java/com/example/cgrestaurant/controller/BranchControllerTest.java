@@ -45,7 +45,7 @@ class BranchControllerTest extends BaseIntegrationTest{
     @Test
     void shouldCreateBranch() throws Exception {
         CreateBranchRequestDto request = new CreateBranchRequestDto(
-                RandomStringUtils.randomAlphabetic(10), BigDecimal.ONE, UUID.randomUUID()
+                RandomStringUtils.randomAlphabetic(10), UUID.randomUUID()
         );
 
         this.mockMvc.perform(post(BASE_BRANCH_ENDPOINT)
@@ -60,10 +60,10 @@ class BranchControllerTest extends BaseIntegrationTest{
     @Test
     void shouldReturnBranchWhenBranchExists() throws Exception {
         CreateBranchRequestDto request = new CreateBranchRequestDto(
-                RandomStringUtils.randomAlphabetic(10), BigDecimal.ONE, UUID.randomUUID()
+                RandomStringUtils.randomAlphabetic(10), UUID.randomUUID()
         );
 
-        this.mockMvc.perform(get(BASE_BRANCH_ENDPOINT + "/" + alreadyCreatedBranch.getBranchId())
+        this.mockMvc.perform(get(BASE_BRANCH_ENDPOINT + "/" + alreadyCreatedBranch.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writer().withDefaultPrettyPrinter().writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -75,7 +75,7 @@ class BranchControllerTest extends BaseIntegrationTest{
     @Test
     void shouldReturn404WhenBranchDoesNotExist() throws Exception {
         CreateBranchRequestDto request = new CreateBranchRequestDto(
-                RandomStringUtils.randomAlphabetic(10), BigDecimal.ONE, UUID.randomUUID()
+                RandomStringUtils.randomAlphabetic(10), UUID.randomUUID()
         );
 
         this.mockMvc.perform(get(BASE_BRANCH_ENDPOINT + "/" + UUID.randomUUID())
@@ -101,7 +101,7 @@ class BranchControllerTest extends BaseIntegrationTest{
                 RandomStringUtils.randomAlphabetic(10)
         );
 
-        this.mockMvc.perform(put(BASE_BRANCH_ENDPOINT + "/" + alreadyCreatedBranch.getBranchId())
+        this.mockMvc.perform(put(BASE_BRANCH_ENDPOINT + "/" + alreadyCreatedBranch.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writer().withDefaultPrettyPrinter().writeValueAsString(request)))
                 .andExpect(status().isOk())
@@ -112,7 +112,7 @@ class BranchControllerTest extends BaseIntegrationTest{
 
     @Test
     void shouldDeleteBranch() throws Exception {
-        this.mockMvc.perform(delete(BASE_BRANCH_ENDPOINT + "/" + alreadyCreatedBranch.getBranchId())
+        this.mockMvc.perform(delete(BASE_BRANCH_ENDPOINT + "/" + alreadyCreatedBranch.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andReturn();

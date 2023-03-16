@@ -1,87 +1,259 @@
 package com.example.cgorder.service;
 
+import com.example.cgcommon.dto.response.OrderItemResponseDTO;
+import com.example.cgcommon.dto.response.OrderResponseDTO;
+import com.example.cgcommon.dto.response.ProductPriceResponseDto;
+import com.example.cgcommon.dto.response.ProductStatusCacheDto;
 import com.example.cgcommon.model.CardInfoDto;
-import com.example.cgorder.dto.OrderItemRequestDTO;
-import com.example.cgorder.dto.OrderResponseDto;
-import com.example.cgorder.dto.PlaceOrderRequestDTO;
+import com.example.cgcommon.model.ProductStatus;
+import com.example.cgcommon.request.OrderItemRequestDTO;
+import com.example.cgcommon.request.PlaceOrderRequestDTO;
+import com.example.cgorder.configuration.CacheClient;
+import com.example.cgorder.exception.InConsistentProductPriceException;
+import com.example.cgorder.exception.ProductPriceNotFoundException;
+import com.example.cgorder.feign.ProductFeignClient;
 import com.example.cgorder.mapper.OrderItemMapper;
 import com.example.cgorder.mapper.OrderMapper;
-import com.example.cgorder.model.Order;
-import com.example.cgorder.model.OrderItem;
-import com.example.cgorder.model.OrderOutbox;
+import com.example.cgorder.model.*;
+import com.example.cgorder.repository.OrderIdempotentRepository;
 import com.example.cgorder.repository.OrderRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceImplTest {
 
-
     @InjectMocks
+    @Spy
     private OrderServiceImpl orderService;
-    @Mock private OrderRepository orderRepository;
 
-    @Mock private OrderMapper orderMapper;
+    @Mock
+    private OrderRepository orderRepository;
 
-    @Mock private OrderItemMapper orderItemMapper;
+    @Mock
+    private OrderMapper orderMapper;
 
-    @Mock private ObjectMapper objectMapper;
-    @Mock private ProducerService producerService;
+    @Mock
+    private OrderItemMapper orderItemMapper;
 
-    @Mock private OrderOutBoxService orderOutBoxService;
+    @Mock
+    private ObjectMapper objectMapper;
+
+    @Mock
+    private ProducerService producerService;
+
+    @Mock
+    private OrderOutBoxService orderOutBoxService;
+
+    @Mock
+    private ProductFeignClient productFeignClient;
+
+    @Mock
+    OrderIdempotentRepository idempotentRepository;
+
+    @Mock
+    CacheClient cacheClient;
+
     @Captor
     private ArgumentCaptor<OrderOutbox> orderOutboxCaptor;
 
     @Test
-    void placeOrder() throws JsonProcessingException {
+    void placeOrder() {
+        UUID branchId = UUID.randomUUID();
+        UUID productId = UUID.randomUUID();
+        String key = UUID.randomUUID().toString();
+
         OrderItemRequestDTO orderItemRequestDTO = OrderItemRequestDTO.builder()
-                .productId(1L)
+                .productId(productId)
                 .quantity(1)
+                .unitPrice(BigDecimal.valueOf(1001))
+                .totalPrice(BigDecimal.valueOf(1001))
                 .build();
+        ArrayList<OrderItemRequestDTO> orderItemRequestDTOS = new ArrayList();
+        orderItemRequestDTOS.add(orderItemRequestDTO);
 
         CardInfoDto cardInfoDto = CardInfoDto.builder()
                 .cardNumber("123456789")
                 .cvc("233")
                 .build();
+
         PlaceOrderRequestDTO placeOrderRequestDTO = PlaceOrderRequestDTO.builder()
-                .totalPrice(BigDecimal.ONE)
-                .orderItems(List.of(orderItemRequestDTO))
+                .branchId(branchId)
+                .orderItems(orderItemRequestDTOS)
                 .cardInfo(cardInfoDto)
+                .totalPrice(BigDecimal.valueOf(1001))
                 .build();
 
-        Order order = new Order();
-        OrderResponseDto expectedOrderResponseDto = new OrderResponseDto();
+        OrderItem orderItem = OrderItem.builder()
+                .orderItemId(productId)
+                .totalPrice(BigDecimal.valueOf(1001))
+                .unitPrice(BigDecimal.valueOf(1001))
+                .quantity(1)
+                .productId(productId)
+                .build();
 
+        Order order = Order.builder()
+                .orderId(UUID.randomUUID())
+                .totalPrice(BigDecimal.valueOf(1001))
+                .build();
+
+        ProductPriceResponseDto productPriceResponseDto = new ProductPriceResponseDto(branchId, productId, BigDecimal.valueOf(1001));
+        ProductStatusCacheDto productStatusCacheDto = ProductStatusCacheDto.builder()
+                .productId(productId.toString())
+                .productStatus(ProductStatus.ACTIVE.toString())
+                .build();
+
+        OrderItemResponseDTO orderItemResponseDTO = OrderItemResponseDTO.builder()
+                .orderItemId(productId)
+                .unitPrice(BigDecimal.valueOf(1001))
+                .productId(productId)
+                .quantity(1)
+                .build();
+        List<OrderItemResponseDTO> orderItemResponseDTOS = new ArrayList<>();
+        orderItemResponseDTOS.add(orderItemResponseDTO);
+
+        OrderResponseDTO orderResponseDTO = OrderResponseDTO.builder()
+                .totalPrice(BigDecimal.valueOf(1001))
+                .orderItems(orderItemResponseDTOS)
+                .build();
+
+//        when(idempotentRepository.findByKey(any())).thenReturn(Optional.of(new OrderIdempotent(productId, key, OrderIdemPotentStatus.AVAILABLE)));
+        when(productFeignClient.getProductPrices(any(), any())).thenReturn(List.of(productPriceResponseDto));
+        Mockito.doReturn(productStatusCacheDto).when(orderService).getProductStatusFromCache(any());
         when(orderMapper.convertOrderFromPlaceOrderRequestDTO(placeOrderRequestDTO)).thenReturn(order);
-        when(orderItemMapper.convertOrderItemFromOrderItemRequestDTO(any())).thenReturn(new OrderItem());
-        when(objectMapper.writeValueAsString(any(Order.class))).thenReturn("");
-        doNothing().when(orderOutBoxService).saveOrderOutbox(any(OrderOutbox.class));
-        doNothing().when(producerService).sendMessage(any(Order.class));
-        when(orderRepository.save(order)).thenReturn(order);
-        when(orderMapper.convertPlaceOrderRequestDTOFromOrder(order)).thenReturn(expectedOrderResponseDto);
+        when(orderItemMapper.convertOrderItemFromOrderItemRequestDTO(any())).thenReturn(orderItem);
+        when(orderRepository.save(any())).thenReturn(order);
+        when(orderMapper.convertPlaceOrderResponseDTOFromOrder(any(), any())).thenReturn(orderResponseDTO);
+        OrderResponseDTO result = orderService.placeOrder(placeOrderRequestDTO, key);
 
-        OrderResponseDto actualOrderResponseDto = orderService.placeOrder(placeOrderRequestDTO);
+        assertEquals(BigDecimal.valueOf(1001), result.getTotalPrice());
+        assertEquals(orderItemResponseDTOS, result.getOrderItems());
+    }
 
-        verify(orderRepository, times(1)).save(order);
-        verify(producerService, times(1)).sendMessage(any(Order.class));
-        verify(orderOutBoxService, times(1)).deleteOrderOutbox(any());
-        verify(orderOutBoxService, times(1)).saveOrderOutbox(orderOutboxCaptor.capture());
 
-        assertEquals(expectedOrderResponseDto, actualOrderResponseDto);
-        assertEquals(order.getOrderId(), orderOutboxCaptor.getValue().getOrderOutboxId());
+    @Test
+    void shouldCreateIdempotentKeyWhenIdempotentNotFound() {
+        when(idempotentRepository.findByKey(any())).thenReturn(Optional.empty());
+
+        String idempotentKey = orderService.checkIdempotentKey(UUID.randomUUID().toString());
+
+        verify(idempotentRepository).save(any(OrderIdempotent.class));
+        assertNotNull(idempotentKey);
+    }
+
+    @Test
+    void shouldReturnIdempotentKeyWhenIdempotentFound() {
+        OrderIdempotent orderIdempotent = OrderIdempotent.builder()
+                .key(UUID.randomUUID().toString())
+                .build();
+
+        when(idempotentRepository.findByKey(any())).thenReturn(Optional.of(orderIdempotent));
+
+        String idempotentKey = orderService.checkIdempotentKey(UUID.randomUUID().toString());
+
+        verify(idempotentRepository,times(0)).save(any(OrderIdempotent.class));
+        assertEquals(orderIdempotent.getKey(), idempotentKey);
+    }
+
+    @Test
+    void shouldValidateProductPriceWithoutAnyException() {
+        UUID branchId = UUID.randomUUID();
+        UUID productId = UUID.randomUUID();
+        List<ProductPriceResponseDto>  productPrices = List.of(new ProductPriceResponseDto(branchId, productId, BigDecimal.ONE));
+        List<OrderItemRequestDTO> orderItems = List.of(OrderItemRequestDTO.builder().productId(productId).unitPrice(BigDecimal.ONE).quantity(1).totalPrice(BigDecimal.ONE).build());
+
+        when(productFeignClient.getProductPrices(any(), any())).thenReturn(productPrices);
+
+        assertDoesNotThrow(() -> orderService.validateProductPrice(branchId, orderItems));
+    }
+
+    @Test
+    void shouldThrowProductPriceNotFoundExceptionWhenProductPriceNotFound() {
+        UUID branchId = UUID.randomUUID();
+        UUID productId = UUID.randomUUID();
+
+        List<OrderItemRequestDTO> orderItems = List.of(OrderItemRequestDTO.builder().productId(productId).unitPrice(BigDecimal.ONE).quantity(1).totalPrice(BigDecimal.ONE).build());
+
+        when(productFeignClient.getProductPrices(any(), any())).thenReturn(new ArrayList<>());
+
+        assertThrows(ProductPriceNotFoundException.class, () -> orderService.validateProductPrice(branchId, orderItems));
+    }
+
+    @Test
+    void shouldThrowInConsistentProductPriceExceptionWhenProductPriceDoesntMatch() {
+        UUID branchId = UUID.randomUUID();
+        UUID productId = UUID.randomUUID();
+        List<ProductPriceResponseDto>  productPrices = List.of(new ProductPriceResponseDto(branchId, productId, BigDecimal.ONE));
+        List<OrderItemRequestDTO> orderItems = List.of(OrderItemRequestDTO.builder().productId(productId).unitPrice(BigDecimal.TEN).quantity(1).totalPrice(BigDecimal.TEN).build());
+
+        when(productFeignClient.getProductPrices(any(), any())).thenReturn(productPrices);
+
+        assertThrows(InConsistentProductPriceException.class, () -> orderService.validateProductPrice(branchId, orderItems));
+    }
+
+    @Test
+    void shouldThrowInConsistentProductPriceExceptionWhenTotalPriceDoesntMatch() {
+        UUID branchId = UUID.randomUUID();
+        UUID productId = UUID.randomUUID();
+        List<ProductPriceResponseDto>  productPrices = List.of(new ProductPriceResponseDto(branchId, productId, BigDecimal.ONE));
+        List<OrderItemRequestDTO> orderItems = List.of(OrderItemRequestDTO.builder().productId(productId).unitPrice(BigDecimal.TEN).quantity(1).totalPrice(BigDecimal.TEN).build());
+
+        when(productFeignClient.getProductPrices(any(), any())).thenReturn(productPrices);
+
+        assertThrows(InConsistentProductPriceException.class, () -> orderService.validateProductPrice(branchId, orderItems));
+    }
+
+    @Test
+    void shouldValidateOrderStatus() {
+        UUID productId = UUID.randomUUID();
+        List<OrderItemRequestDTO> orderItems = List.of(OrderItemRequestDTO.builder().productId(productId).unitPrice(BigDecimal.TEN).quantity(1).totalPrice(BigDecimal.TEN).build());
+
+        ProductStatusCacheDto productStatusCacheDto = ProductStatusCacheDto.builder()
+                .productId(productId.toString())
+                .productStatus(ProductStatus.ACTIVE.toString())
+                .build();
+
+        Mockito.doReturn(productStatusCacheDto).when(orderService).getProductStatusFromCache(any());
+
+        orderService.validateOrderStatus(orderItems);
+
+        verify(orderService).getProductStatusFromCache(any());
+    }
+
+    @Test
+    void shouldThrowProductPriceNotFoundExceptionStatusIsPassive() {
+        UUID productId = UUID.randomUUID();
+        OrderItemRequestDTO orderItemRequestDTO = OrderItemRequestDTO.builder()
+                .productId(productId)
+                .unitPrice(BigDecimal.TEN)
+                .quantity(1)
+                .totalPrice(BigDecimal.TEN).build();
+
+        List<OrderItemRequestDTO> orderItems = new ArrayList<>();
+        orderItems.add(orderItemRequestDTO);
+
+        ProductStatusCacheDto productStatusCacheDto = ProductStatusCacheDto.builder()
+                .productId(productId.toString())
+                .productStatus(ProductStatus.PASSIVE.toString())
+                .build();
+
+        Mockito.doReturn(productStatusCacheDto).when(orderService).getProductStatusFromCache(any());
+        assertThrows(ProductPriceNotFoundException.class, () -> orderService.validateOrderStatus(orderItems));
     }
 }

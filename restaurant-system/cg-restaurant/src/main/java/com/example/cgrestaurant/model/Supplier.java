@@ -3,13 +3,10 @@ package com.example.cgrestaurant.model;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -23,9 +20,8 @@ public class Supplier {
 // SHAYA CHAIN
 
     @Id
-    @GeneratedValue(generator = "uuid2")
-    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-    private UUID supplierId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     private String supplierName;
 
