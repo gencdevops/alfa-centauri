@@ -40,7 +40,7 @@ public class WebclientErrorController {
     @GetMapping("/getError412")
     @ResponseStatus(code = HttpStatus.PRECONDITION_FAILED)
     public Mono<ResponseEntity<ErrorBody>> getError412(){
-        return Mono.just(new ResponseEntity(ErrorBody.builder().errorDescription("412 error").errorCode(412).build(), HttpStatus.PRECONDITION_REQUIRED));
+        return Mono.just(new ResponseEntity(ErrorBody.builder().errorDescription("412 error").errorCode(412).build(), HttpStatus.PRECONDITION_FAILED));
     }
 
     @GetMapping("/getError429")
