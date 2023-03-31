@@ -99,14 +99,16 @@ public class GeneralExceptionHandler {
         return ErrorBody.builder().errorCode(500).errorDescription(exception.getMessage()).build();
     }
 
-    @ApiResponse(responseCode = "502", description = "Bad Gateway Error",
+    @ApiResponse(responseCode = "434", description = "Bad Gateway Error",
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ErrorBody.class)))
     @ExceptionHandler(DCRequestedServiceDownException.class)
-    @ResponseStatus(HttpStatus.BAD_GATEWAY)
-    public ErrorBody catchDCServiceCallerException(DCRequestedServiceDownException exception) {
+    public ResponseEntity<ErrorBody> catchDCServiceCallerException(DCRequestedServiceDownException exception) {
         log.error("DC Service Exception {}", exception.toString());
-        return ErrorBody.builder().errorCode(502).errorDescription(exception.getMessage()).build();
+        return new ResponseEntity<>(
+                ErrorBody.builder().errorCode(434).errorDescription(exception.getMessage()).build(),
+                null,
+                434);
     }
 
 
