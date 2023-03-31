@@ -99,7 +99,7 @@ public class GeneralExceptionHandler {
         return ErrorBody.builder().errorCode(500).errorDescription(exception.getMessage()).build();
     }
 
-    @ApiResponse(responseCode = "434", description = "Bad Gateway Error",
+    @ApiResponse(responseCode = "434", description = "Requested Server Down Error",
             content = @Content(mediaType = "application/json",
                     schema = @Schema(implementation = ErrorBody.class)))
     @ExceptionHandler(DCRequestedServiceDownException.class)
