@@ -32,14 +32,16 @@ public class FeignErrorDecoder implements ErrorDecoder {
         }
 
         return switch (response.status()) {
-            case 400 -> new BadRequestException(message.getErrorDescription());
-            case 403 -> new ForbiddenException(message.getErrorDescription());
-            case 404 -> new NotFoundException(message.getErrorDescription());
-            case 409 -> new ConflictException(message.getErrorDescription());
-            case 412 -> new PreconditionException(message.getErrorDescription());
-            case 429 -> new TooManyRequestException(message.getErrorDescription());
+            case 400 -> new BadRequestException(message.getErrorDescription(), 100002);
+            case 403 -> new ForbiddenException(message.getErrorDescription(), message.getErrorCode());
+            case 404 -> new NotFoundException(message.getErrorDescription(), message.getErrorCode());
+            //TODO: Döndürülmesi istenilen özel status kodları eklenecek.
+            case 405 -> new MethodNotAllowedException(message.getErrorDescription(), message.getErrorCode());
+            case 409 -> new ConflictException(message.getErrorDescription(), message.getErrorCode());
+            case 412 -> new PreconditionException(message.getErrorDescription(), message.getErrorCode());
+            case 429 -> new TooManyRequestException(message.getErrorDescription(), message.getErrorCode());
             case 433 -> new DCBusinessException(message.getErrorDescription(), message.getErrorCode());
-            case 500 -> new InternalServerException(message.getErrorDescription());
+            case 500 -> new InternalServerException(message.getErrorDescription(), message.getErrorCode());
             case 502 -> new DCRequestedServiceDownException(message.getErrorDescription(), 434);
             default -> errorDecoder.decode(methodKey, response);
         };
