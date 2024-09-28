@@ -19,11 +19,6 @@ public class FeignErrorDecoder implements ErrorDecoder {
     @Override
     public Exception decode(String methodKey, Response response) {
         ErrorBody message = null;
-        try {
-            System.out.println(response.toString());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
         try (InputStream bodyIs = response.body().asInputStream()) {
             ObjectMapper mapper = new ObjectMapper();
             message = mapper.readValue(bodyIs, ErrorBody.class);
